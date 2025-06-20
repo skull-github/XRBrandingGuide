@@ -263,6 +263,7 @@ select option {
   flex-direction: column;
   align-items: center;
   margin-bottom: 1rem;
+  flex-shrink: 0;
 }
 
 .branding-color-swatch {
@@ -272,6 +273,8 @@ select option {
   border: 3px solid #fff;
   margin-bottom: 0.5rem;
   transition: transform 0.2s ease;
+  flex-shrink: 0;
+  aspect-ratio: 1;
 }
 
 .branding-color-swatch:hover {
