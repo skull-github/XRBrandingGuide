@@ -17,71 +17,97 @@ const capLogoVariants = [
 ];
 
 // Baseball-themed sound utility functions
+// Global audio context management
+let globalAudioContext = null;
+let audioEnabled = false;
+
+function initializeAudio() {
+  if (!globalAudioContext && (window.AudioContext || window.webkitAudioContext)) {
+    try {
+      globalAudioContext = new (window.AudioContext || window.webkitAudioContext)();
+      // Resume the context if it's suspended
+      if (globalAudioContext.state === 'suspended') {
+        globalAudioContext.resume();
+      }
+      audioEnabled = true;
+    } catch (e) {
+      audioEnabled = false;
+    }
+  }
+}
+
 function playHoverSound() {
+  if (!audioEnabled || !globalAudioContext) {
+    initializeAudio();
+    if (!audioEnabled || !globalAudioContext) return;
+  }
+  
   try {
     // Create a subtle "baseball glove catch" sound
-    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-    const oscillator = audioContext.createOscillator();
-    const gainNode = audioContext.createGain();
-    const filter = audioContext.createBiquadFilter();
+    const oscillator = globalAudioContext.createOscillator();
+    const gainNode = globalAudioContext.createGain();
+    const filter = globalAudioContext.createBiquadFilter();
     
     oscillator.connect(filter);
     filter.connect(gainNode);
-    gainNode.connect(audioContext.destination);
+    gainNode.connect(globalAudioContext.destination);
     
     // Simulate the "thunk" of a ball hitting leather
     oscillator.type = 'triangle';
-    oscillator.frequency.setValueAtTime(200, audioContext.currentTime);
-    oscillator.frequency.exponentialRampToValueAtTime(150, audioContext.currentTime + 0.05);
+    oscillator.frequency.setValueAtTime(200, globalAudioContext.currentTime);
+    oscillator.frequency.exponentialRampToValueAtTime(150, globalAudioContext.currentTime + 0.05);
     
     filter.type = 'lowpass';
-    filter.frequency.setValueAtTime(800, audioContext.currentTime);
+    filter.frequency.setValueAtTime(800, globalAudioContext.currentTime);
     
-    gainNode.gain.setValueAtTime(0.15, audioContext.currentTime);
-    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.08);
+    gainNode.gain.setValueAtTime(0.15, globalAudioContext.currentTime);
+    gainNode.gain.exponentialRampToValueAtTime(0.01, globalAudioContext.currentTime + 0.08);
     
-    oscillator.start(audioContext.currentTime);
-    oscillator.stop(audioContext.currentTime + 0.08);
+    oscillator.start(globalAudioContext.currentTime);
+    oscillator.stop(globalAudioContext.currentTime + 0.08);
   } catch (e) {
     // Fallback - no sound if Web Audio API not supported
   }
 }
 
 function playClickSound() {
+  if (!audioEnabled || !globalAudioContext) {
+    initializeAudio();
+    if (!audioEnabled || !globalAudioContext) return;
+  }
+  
   try {
     // Create a "bat hitting ball" crack sound
-    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-    
     // Create white noise for the "crack"
-    const bufferSize = audioContext.sampleRate * 0.2; // 0.2 seconds
-    const buffer = audioContext.createBuffer(1, bufferSize, audioContext.sampleRate);
+    const bufferSize = globalAudioContext.sampleRate * 0.2; // 0.2 seconds
+    const buffer = globalAudioContext.createBuffer(1, bufferSize, globalAudioContext.sampleRate);
     const output = buffer.getChannelData(0);
     
     // Generate white noise with envelope
     for (let i = 0; i < bufferSize; i++) {
-      const envelope = Math.exp(-i / (audioContext.sampleRate * 0.05)); // Decay
+      const envelope = Math.exp(-i / (globalAudioContext.sampleRate * 0.05)); // Decay
       output[i] = (Math.random() * 2 - 1) * envelope * 0.3;
     }
     
-    const whiteNoise = audioContext.createBufferSource();
+    const whiteNoise = globalAudioContext.createBufferSource();
     whiteNoise.buffer = buffer;
     
     // High-pass filter for the "crack" effect
-    const filter = audioContext.createBiquadFilter();
+    const filter = globalAudioContext.createBiquadFilter();
     filter.type = 'highpass';
-    filter.frequency.setValueAtTime(1000, audioContext.currentTime);
-    filter.Q.setValueAtTime(15, audioContext.currentTime);
+    filter.frequency.setValueAtTime(1000, globalAudioContext.currentTime);
+    filter.Q.setValueAtTime(15, globalAudioContext.currentTime);
     
-    const gainNode = audioContext.createGain();
-    gainNode.gain.setValueAtTime(0.25, audioContext.currentTime);
-    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.15);
+    const gainNode = globalAudioContext.createGain();
+    gainNode.gain.setValueAtTime(0.25, globalAudioContext.currentTime);
+    gainNode.gain.exponentialRampToValueAtTime(0.01, globalAudioContext.currentTime + 0.15);
     
     whiteNoise.connect(filter);
     filter.connect(gainNode);
-    gainNode.connect(audioContext.destination);
+    gainNode.connect(globalAudioContext.destination);
     
-    whiteNoise.start(audioContext.currentTime);
-    whiteNoise.stop(audioContext.currentTime + 0.15);
+    whiteNoise.start(globalAudioContext.currentTime);
+    whiteNoise.stop(globalAudioContext.currentTime + 0.15);
   } catch (e) {
     // Fallback - no sound if Web Audio API not supported
   }
@@ -432,6 +458,26 @@ function AppV2() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [selectedPlayers, setSelectedPlayers] = useState({});
+
+  useEffect(() => {
+    // Initialize audio on first user interaction
+    const handleFirstInteraction = () => {
+      initializeAudio();
+      document.removeEventListener('click', handleFirstInteraction);
+      document.removeEventListener('touchstart', handleFirstInteraction);
+      document.removeEventListener('keydown', handleFirstInteraction);
+    };
+    
+    document.addEventListener('click', handleFirstInteraction);
+    document.addEventListener('touchstart', handleFirstInteraction);
+    document.addEventListener('keydown', handleFirstInteraction);
+    
+    return () => {
+      document.removeEventListener('click', handleFirstInteraction);
+      document.removeEventListener('touchstart', handleFirstInteraction);
+      document.removeEventListener('keydown', handleFirstInteraction);
+    };
+  }, []);
 
   useEffect(() => {
     async function fetchBranding() {
