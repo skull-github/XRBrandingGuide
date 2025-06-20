@@ -1,2 +1,2 @@
-# XRBrandingGuide
-XR API Branding Elements
+# MLB XR Branding Guide
+MLB API driven branding assets
