@@ -1,0 +1,23 @@
+{
+  "name": "mlb-xr-branding-guide",
+  "version": 2,
+  "buildCommand": "cd App1_6 && npm ci && npm run build",
+  "outputDirectory": "App1_6/dist",
+  "installCommand": "cd App1_6 && npm ci",
+  "framework": "vite",
+  "builds": [
+    {
+      "src": "App1_6/package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "dist"
+      }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/App1_6/dist/index.html"
+    }
+  ]
+}
