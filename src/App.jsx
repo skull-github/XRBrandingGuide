@@ -16,12 +16,22 @@ const capLogoVariants = [
   { key: 'svgLightInactive', label: 'SVG Light Inactive' },
 ];
 
+const spotLogoVariants = [
+  { key: 'rasterActive', label: 'Spot Active' },
+  { key: 'rasterInactive', label: 'Spot Inactive' },
+  { key: 'svgActive', label: 'Spot SVG Active' },
+  { key: 'svgInactive', label: 'Spot SVG Inactive' },
+];
+
 // Baseball-themed sound utility functions
 // Global audio context management
 let globalAudioContext = null;
 let audioEnabled = false;
+let userHasInteracted = false;
 
 function initializeAudio() {
+  if (!userHasInteracted) return false;
+  
   if (!globalAudioContext && (window.AudioContext || window.webkitAudioContext)) {
     try {
       globalAudioContext = new (window.AudioContext || window.webkitAudioContext)();
@@ -30,16 +40,23 @@ function initializeAudio() {
         globalAudioContext.resume();
       }
       audioEnabled = true;
+      return true;
     } catch (e) {
       audioEnabled = false;
+      return false;
     }
   }
+  return audioEnabled;
 }
 
 function playHoverSound() {
+  // Disable hover sounds to prevent AudioContext warnings
+  return;
+  
+  if (!userHasInteracted) return;
+  
   if (!audioEnabled || !globalAudioContext) {
-    initializeAudio();
-    if (!audioEnabled || !globalAudioContext) return;
+    if (!initializeAudio()) return;
   }
   
   try {
@@ -71,9 +88,10 @@ function playHoverSound() {
 }
 
 function playClickSound() {
+  if (!userHasInteracted) return;
+  
   if (!audioEnabled || !globalAudioContext) {
-    initializeAudio();
-    if (!audioEnabled || !globalAudioContext) return;
+    if (!initializeAudio()) return;
   }
   
   try {
@@ -331,7 +349,14 @@ function PlayerCard({ player, teamColor }) {
           </div>
         </div>
       </div>
-      {/* Row 2: Player image assets */}
+      
+      {/* Row 2: Advanced Player Stats - Temporarily disabled */}
+      {/* <AdvancedPlayerStats playerId={player.person.id} teamId={player.parentTeamId} /> */}
+      
+      {/* Row 3: Player Heat Map - Temporarily disabled */}
+      {/* <PlayerHeatMap playerId={player.person.id} /> */}
+      
+      {/* Row 4: Player Image Gallery */}
       <div style={{ marginTop: 12 }}>
         <PlayerImageGallery playerID={player.person.id} />
       </div>
@@ -462,6 +487,7 @@ function AppV2() {
   useEffect(() => {
     // Initialize audio on first user interaction
     const handleFirstInteraction = () => {
+      userHasInteracted = true;
       initializeAudio();
       document.removeEventListener('click', handleFirstInteraction);
       document.removeEventListener('touchstart', handleFirstInteraction);
@@ -523,29 +549,70 @@ function AppV2() {
   try {
     return (
       <div className="App" style={{ padding: '2.5rem', maxWidth: 1200, margin: '0 auto', alignItems: 'flex-start', justifyContent: 'flex-start', minHeight: '100vh' }}>
-        <h1 style={{ fontSize: 32, fontWeight: 800, color: '#fff', margin: '0 0 2.5rem 0', letterSpacing: 1, textAlign: 'center', width: '100%' }}>MLB XR Branding Guide</h1>
-        {/* Anchor menu below site title */}
+        {/* Anchor menu moved to very top */}
         {teams.length > 0 && (
           <AnchorMenu teams={teams} />
         )}
-        {/* Each team in its own section */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '30px', width: '100%', marginBottom: '3rem', alignItems: 'flex-start' }}>
-          {teams.map(team => (
-            <section key={team.teamID || team.clubFullName} style={{ width: '100%', marginBottom: 0, padding: '32px 0', alignItems: 'flex-start', display: 'flex', flexDirection: 'column' }}>
-              <TeamCard
-                team={team}
-                opts={{ showPlayer: true }}
-                selectedPlayerId={selectedPlayers[team.teamID] || ''}
-                setSelectedPlayers={setSelectedPlayers}
-                colorPriority={colorPriority}
-              />
-            </section>
-          ))}
+        
+        {/* MLB Schedule below anchor menu */}
+        <MLBSchedule />
+        
+        {/* Teams organized by league and division */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '40px', width: '100%', marginBottom: '3rem', alignItems: 'flex-start' }}>
+          {(() => {
+            // Official MLB team divisions mapping - 2025 (from official spreadsheet)
+            const teamDivisions = {
+              'AL East': [110, 111, 147, 139, 141], // BAL, BOS, NYY, TB, TOR
+              'AL Central': [145, 114, 116, 118, 142], // CWS, CLE, DET, KC, MIN
+              'AL West': [117, 108, 133, 136, 140], // HOU, LAA, OAK, SEA, TEX
+              'NL East': [144, 146, 121, 143, 120], // ATL, MIA, NYM, PHI, WAS
+              'NL Central': [112, 113, 158, 134, 138], // CHC, CIN, MIL, PIT, STL
+              'NL West': [109, 115, 119, 135, 137] // ARI, COL, LAD, SD, SF
+            };
+
+            const leagues = [
+              { name: 'American League', divisions: ['AL East', 'AL Central', 'AL West'] },
+              { name: 'National League', divisions: ['NL East', 'NL Central', 'NL West'] }
+            ];
+
+            return leagues.map(league => (
+              <div key={league.name} style={{ width: '100%' }}>
+                <h2 style={{ color: '#4fd1c5', fontSize: 28, fontWeight: 800, marginBottom: '1rem', textAlign: 'left', letterSpacing: 1 }}>
+                  {league.name}
+                </h2>
+                
+                {league.divisions.map(division => (
+                  <div key={division} style={{ marginBottom: '2rem' }}>
+                    <h3 style={{ color: '#fff', fontSize: 20, fontWeight: 600, marginBottom: '1rem', textAlign: 'left' }}>
+                      {division}
+                    </h3>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '30px' }}>
+                      {teams.filter(team => teamDivisions[division]?.includes(parseInt(team.teamID))).map(team => (
+                        <section 
+                          key={team.teamID || team.clubFullName} 
+                          id={`team-${team.teamID || team.clubFullName.replace(/\s+/g, '-').toLowerCase()}`}
+                          style={{ width: '100%', marginBottom: 0, padding: '32px 0', alignItems: 'flex-start', display: 'flex', flexDirection: 'column' }}
+                        >
+                          <TeamCard
+                            team={team}
+                            opts={{ showPlayer: true }}
+                            selectedPlayerId={selectedPlayers[team.teamID] || ''}
+                            setSelectedPlayers={setSelectedPlayers}
+                            colorPriority={colorPriority}
+                          />
+                        </section>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ));
+          })()}
         </div>
         {/* All-Star teams remain below, unchanged */}
         <div style={{ marginTop: '3rem', width: '100%', alignItems: 'flex-start' }}>
           <div id="al-allstars" style={{ minWidth: 320, marginBottom: '2.5rem' }}>
-            <h3 style={{ color: '#fff', fontWeight: 600, marginBottom: '0.5rem', textAlign: 'left' }}>American League All-Stars</h3>
+            <h3 style={{ color: '#fff', fontWeight: 600, marginBottom: '0.5rem', textAlign: 'center' }}>American League All-Stars</h3>
             <div className="branding-grid">
               {alAllStars.map(team => (
                 <TeamCard
@@ -560,7 +627,7 @@ function AppV2() {
             </div>
           </div>
           <div id="nl-allstars" style={{ minWidth: 320 }}>
-            <h3 style={{ color: '#fff', fontWeight: 600, marginBottom: '0.5rem', textAlign: 'left' }}>National League All-Stars</h3>
+            <h3 style={{ color: '#fff', fontWeight: 600, marginBottom: '0.5rem', textAlign: 'center' }}>National League All-Stars</h3>
             <div className="branding-grid">
               {nlAllStars.map(team => (
                 <TeamCard
@@ -576,34 +643,100 @@ function AppV2() {
           </div>
         </div>
         {/* JSON Index Section */}
-        <div style={{ marginTop: '3rem', padding: '2rem', background: '#18181b', borderRadius: 12, color: '#fff', maxWidth: 900, marginLeft: 'auto', marginRight: 'auto', textAlign: 'left' }}>
-          <h2 style={{ fontWeight: 700, fontSize: 22, marginBottom: 12, textAlign: 'left' }}>JSON Index</h2>
-          <ul style={{ fontSize: 16, lineHeight: 1.7, textAlign: 'left', paddingLeft: 0, listStylePosition: 'inside' }}>
-            <li>
-              <a href="https://storage.mobile.mlbinfra.com/atbatconfig/branding.json" target="_blank" rel="noopener noreferrer" style={{ color: '#4fd1c5', textDecoration: 'underline' }}>
-                MLB Branding JSON
-              </a>
-              : Team branding, colors, logos, wordmarks, MLB.TV assets, and All-Star teams.
-            </li>
-            <li>
-              <a href="https://statsapi.mlb.com/api/v1/teams/[TEAM_ID]/roster/Active" target="_blank" rel="noopener noreferrer" style={{ color: '#4fd1c5', textDecoration: 'underline' }}>
-                MLB Roster JSON
-              </a>
-              : Active player roster for each team (replace <code>[TEAM_ID]</code> with the team ID).
-            </li>
-            <li>
-              <a href="https://img.mlbstatic.com/mlb-photos/image/upload/" target="_blank" rel="noopener noreferrer" style={{ color: '#4fd1c5', textDecoration: 'underline' }}>
-                MLB Image CDN
-              </a>
-              : Player and team image assets (see code for URL patterns).
-            </li>
-            <li>
-              <a href="./README.md" target="_blank" rel="noopener noreferrer" style={{ color: '#4fd1c5', textDecoration: 'underline' }}>
-                Project README
-              </a>
-              : App usage, features, and internal notes.
-            </li>
-          </ul>
+        <div style={{ marginTop: '3rem', padding: '2rem', background: '#18181b', borderRadius: 12, color: '#fff', maxWidth: 1200, marginLeft: 'auto', marginRight: 'auto', textAlign: 'left' }}>
+          <h2 style={{ fontWeight: 700, fontSize: 22, marginBottom: 20, textAlign: 'left' }}>MLB API Endpoints & JSON Index</h2>
+          
+          {/* MLB Branding API */}
+          <div style={{ marginBottom: '2rem', padding: '1.5rem', background: '#1f1f23', borderRadius: 8, border: '1px solid #333' }}>
+            <h3 style={{ color: '#4fd1c5', fontSize: 18, marginBottom: '1rem' }}>MLB Branding API</h3>
+            <p style={{ color: '#ccc', fontSize: 14, marginBottom: '1rem' }}>Team branding, colors, logos, wordmarks, MLB.TV assets, and All-Star teams.</p>
+            <ul style={{ paddingLeft: '1rem', lineHeight: 1.6, fontSize: 14 }}>
+              <li><code style={{ background: '#333', padding: '2px 6px', borderRadius: 4, color: '#4fd1c5' }}>https://storage.mobile.mlbinfra.com/atbatconfig/branding.json</code> - Complete branding data</li>
+            </ul>
+          </div>
+
+          {/* MLB Stats API */}
+          <div style={{ marginBottom: '2rem', padding: '1.5rem', background: '#1f1f23', borderRadius: 8, border: '1px solid #333' }}>
+            <h3 style={{ color: '#4fd1c5', fontSize: 18, marginBottom: '1rem' }}>MLB Stats API</h3>
+            <p style={{ color: '#ccc', fontSize: 14, marginBottom: '1rem' }}>Player statistics, team rosters, game data, and advanced metrics.</p>
+            <ul style={{ paddingLeft: '1rem', lineHeight: 1.8, fontSize: 13 }}>
+              <li><code style={{ background: '#333', padding: '2px 6px', borderRadius: 4, color: '#4fd1c5' }}>https://statsapi.mlb.com/api/v1/teams</code> - All teams list</li>
+              <li><code style={{ background: '#333', padding: '2px 6px', borderRadius: 4, color: '#4fd1c5' }}>https://statsapi.mlb.com/api/v1/teams/[TEAM_ID]/roster/Active</code> - Active team roster</li>
+              <li><code style={{ background: '#333', padding: '2px 6px', borderRadius: 4, color: '#4fd1c5' }}>https://statsapi.mlb.com/api/v1/people/[PLAYER_ID]</code> - Player details</li>
+              <li><code style={{ background: '#333', padding: '2px 6px', borderRadius: 4, color: '#4fd1c5' }}>https://statsapi.mlb.com/api/v1/people/[PLAYER_ID]/stats?stats=season&group=hitting&season=[YEAR]</code> - Season hitting stats</li>
+              <li><code style={{ background: '#333', padding: '2px 6px', borderRadius: 4, color: '#4fd1c5' }}>https://statsapi.mlb.com/api/v1/people/[PLAYER_ID]/stats?stats=statcast&group=hitting&season=[YEAR]</code> - Statcast metrics</li>
+              <li><code style={{ background: '#333', padding: '2px 6px', borderRadius: 4, color: '#4fd1c5' }}>https://statsapi.mlb.com/api/v1/people/[PLAYER_ID]/stats?stats=metricAverages&group=hitting&season=[YEAR]&metrics=launchSpeed,distance,launchAngle</code> - Advanced hitting metrics</li>
+              <li><code style={{ background: '#333', padding: '2px 6px', borderRadius: 4, color: '#4fd1c5' }}>https://statsapi.mlb.com/api/v1/people/[PLAYER_ID]/stats?stats=season&group=pitching&season=[YEAR]</code> - Season pitching stats</li>
+            </ul>
+          </div>
+
+          {/* MLB Schedule API */}
+          <div style={{ marginBottom: '2rem', padding: '1.5rem', background: '#1f1f23', borderRadius: 8, border: '1px solid #333' }}>
+            <h3 style={{ color: '#4fd1c5', fontSize: 18, marginBottom: '1rem' }}>MLB Schedule API</h3>
+            <p style={{ color: '#ccc', fontSize: 14, marginBottom: '1rem' }}>Game schedules, live game data, and calendar information.</p>
+            <ul style={{ paddingLeft: '1rem', lineHeight: 1.8, fontSize: 13 }}>
+              <li><code style={{ background: '#333', padding: '2px 6px', borderRadius: 4, color: '#4fd1c5' }}>https://statsapi.mlb.com/api/v1/schedule?sportId=1&startDate=[DATE]&endDate=[DATE]</code> - Games by date range</li>
+              <li><code style={{ background: '#333', padding: '2px 6px', borderRadius: 4, color: '#4fd1c5' }}>https://statsapi.mlb.com/api/v1/schedule?sportId=1&teamId=[TEAM_ID]&startDate=[DATE]&endDate=[DATE]</code> - Team schedule</li>
+              <li><code style={{ background: '#333', padding: '2px 6px', borderRadius: 4, color: '#4fd1c5' }}>https://statsapi.mlb.com/api/v1/schedule/games/?sportId=1&startDate=[DATE]&endDate=[DATE]&teamId=[TEAM_ID]&hydrate=linescore,team</code> - Live game context</li>
+              <li><code style={{ background: '#333', padding: '2px 6px', borderRadius: 4, color: '#4fd1c5' }}>https://statsapi.mlb.com/api/v1/game/[GAME_PK]/linescore</code> - Live game score</li>
+              <li><code style={{ background: '#333', padding: '2px 6px', borderRadius: 4, color: '#4fd1c5' }}>https://statsapi.mlb.com/api/v1/game/[GAME_PK]/playByPlay</code> - Play-by-play data</li>
+            </ul>
+          </div>
+
+          {/* MLB Image CDN */}
+          <div style={{ marginBottom: '2rem', padding: '1.5rem', background: '#1f1f23', borderRadius: 8, border: '1px solid #333' }}>
+            <h3 style={{ color: '#4fd1c5', fontSize: 18, marginBottom: '1rem' }}>MLB Image CDN</h3>
+            <p style={{ color: '#ccc', fontSize: 14, marginBottom: '1rem' }}>Player photos, team logos, and branded assets with dynamic sizing and formats.</p>
+            <ul style={{ paddingLeft: '1rem', lineHeight: 1.8, fontSize: 13 }}>
+              <li><strong style={{ color: '#fff' }}>Player Images:</strong></li>
+              <li style={{ marginLeft: '1rem' }}><code style={{ background: '#333', padding: '2px 6px', borderRadius: 4, color: '#4fd1c5' }}>https://img.mlbstatic.com/mlb-photos/image/upload/w_[WIDTH],q_auto/v1/people/[PLAYER_ID]/headshot/silo/current</code> - Player headshot</li>
+              <li style={{ marginLeft: '1rem' }}><code style={{ background: '#333', padding: '2px 6px', borderRadius: 4, color: '#4fd1c5' }}>https://img.mlbstatic.com/mlb-photos/image/upload/h_1080,w_1920,c_auto,g_auto:subject/v1/people/[PLAYER_ID]/action/hero/current</code> - Player action shot</li>
+              <li style={{ marginLeft: '1rem' }}><code style={{ background: '#333', padding: '2px 6px', borderRadius: 4, color: '#4fd1c5' }}>https://img.mlbstatic.com/mlb-photos/image/upload/w_720,f_png,q_auto/v1/people/[PLAYER_ID]/pressbox/current</code> - Pressbox photo</li>
+              <li><strong style={{ color: '#fff' }}>Team Logos:</strong></li>
+              <li style={{ marginLeft: '1rem' }}><code style={{ background: '#333', padding: '2px 6px', borderRadius: 4, color: '#4fd1c5' }}>https://img.mlbstatic.com/mlb-photos/image/upload/w_[WIDTH],f_png,q_auto/v1/team/[TEAM_ID]/logo/spot/current</code> - Team spot logo</li>
+              <li style={{ marginLeft: '1rem' }}><code style={{ background: '#333', padding: '2px 6px', borderRadius: 4, color: '#4fd1c5' }}>https://img.mlbstatic.com/mlb-photos/image/upload/w_[WIDTH],f_png,q_auto/v1/team/[TEAM_ID]/logo/cap/dark/current</code> - Cap logo dark</li>
+              <li style={{ marginLeft: '1rem' }}><code style={{ background: '#333', padding: '2px 6px', borderRadius: 4, color: '#4fd1c5' }}>https://img.mlbstatic.com/mlb-photos/image/upload/w_[WIDTH],f_png,q_auto/v1/team/[TEAM_ID]/logo/cap/light/current</code> - Cap logo light</li>
+              <li style={{ marginLeft: '1rem' }}><code style={{ background: '#333', padding: '2px 6px', borderRadius: 4, color: '#4fd1c5' }}>https://img.mlbstatic.com/mlb-photos/image/upload/w_[WIDTH],f_png,q_auto/v1/team/[TEAM_ID]/fill/spot</code> - Team fill color</li>
+              <li><strong style={{ color: '#fff' }}>Team Backgrounds:</strong></li>
+              <li style={{ marginLeft: '1rem' }}><code style={{ background: '#333', padding: '2px 6px', borderRadius: 4, color: '#4fd1c5' }}>https://img.mlbstatic.com/mlb-photos/image/upload/w_1280,f_png,q_auto/v1/team/[TEAM_ID]/action/hero/current</code> - Team hero background</li>
+            </ul>
+          </div>
+
+          {/* MLB Standings API */}
+          <div style={{ marginBottom: '2rem', padding: '1.5rem', background: '#1f1f23', borderRadius: 8, border: '1px solid #333' }}>
+            <h3 style={{ color: '#4fd1c5', fontSize: 18, marginBottom: '1rem' }}>MLB Standings API</h3>
+            <p style={{ color: '#ccc', fontSize: 14, marginBottom: '1rem' }}>League standings, division records, and playoff positioning.</p>
+            <ul style={{ paddingLeft: '1rem', lineHeight: 1.8, fontSize: 13 }}>
+              <li><code style={{ background: '#333', padding: '2px 6px', borderRadius: 4, color: '#4fd1c5' }}>https://statsapi.mlb.com/api/v1/standings?leagueId=103,104&season=[YEAR]</code> - League standings</li>
+              <li><code style={{ background: '#333', padding: '2px 6px', borderRadius: 4, color: '#4fd1c5' }}>https://statsapi.mlb.com/api/v1/standings/regularSeason?leagueId=103&season=[YEAR]</code> - AL standings</li>
+              <li><code style={{ background: '#333', padding: '2px 6px', borderRadius: 4, color: '#4fd1c5' }}>https://statsapi.mlb.com/api/v1/standings/regularSeason?leagueId=104&season=[YEAR]</code> - NL standings</li>
+              <li><code style={{ background: '#333', padding: '2px 6px', borderRadius: 4, color: '#4fd1c5' }}>https://statsapi.mlb.com/api/v1/standings/wildCard?leagueId=103,104&season=[YEAR]</code> - Wild card standings</li>
+            </ul>
+          </div>
+
+          {/* MLB Venues API */}
+          <div style={{ marginBottom: '2rem', padding: '1.5rem', background: '#1f1f23', borderRadius: 8, border: '1px solid #333' }}>
+            <h3 style={{ color: '#4fd1c5', fontSize: 18, marginBottom: '1rem' }}>MLB Venues API</h3>
+            <p style={{ color: '#ccc', fontSize: 14, marginBottom: '1rem' }}>Stadium information, venue details, and ballpark data.</p>
+            <ul style={{ paddingLeft: '1rem', lineHeight: 1.8, fontSize: 13 }}>
+              <li><code style={{ background: '#333', padding: '2px 6px', borderRadius: 4, color: '#4fd1c5' }}>https://statsapi.mlb.com/api/v1/venues</code> - All venues list</li>
+              <li><code style={{ background: '#333', padding: '2px 6px', borderRadius: 4, color: '#4fd1c5' }}>https://statsapi.mlb.com/api/v1/venues/[VENUE_ID]</code> - Specific venue details</li>
+            </ul>
+          </div>
+
+          {/* Common Parameters */}
+          <div style={{ padding: '1.5rem', background: '#1f1f23', borderRadius: 8, border: '1px solid #333' }}>
+            <h3 style={{ color: '#4fd1c5', fontSize: 18, marginBottom: '1rem' }}>Common Parameters</h3>
+            <ul style={{ paddingLeft: '1rem', lineHeight: 1.8, fontSize: 13 }}>
+              <li><strong style={{ color: '#fff' }}>[TEAM_ID]:</strong> Team ID (e.g., 147 for Yankees, 119 for Dodgers)</li>
+              <li><strong style={{ color: '#fff' }}>[PLAYER_ID]:</strong> Player ID (e.g., 545361 for Mike Trout)</li>
+              <li><strong style={{ color: '#fff' }}>[GAME_PK]:</strong> Game primary key from schedule API</li>
+              <li><strong style={{ color: '#fff' }}>[DATE]:</strong> Date in YYYY-MM-DD format</li>
+              <li><strong style={{ color: '#fff' }}>[YEAR]:</strong> Season year (e.g., 2025)</li>
+              <li><strong style={{ color: '#fff' }}>[WIDTH]:</strong> Image width in pixels</li>
+              <li><strong style={{ color: '#fff' }}>[VENUE_ID]:</strong> Venue ID from venues API</li>
+            </ul>
+          </div>
         </div>
         {/* Footer with version and legal line */}
         <footer style={{ marginTop: '3rem', padding: '2rem', textAlign: 'center', color: '#888', fontSize: 14, borderTop: '1px solid #333' }}>
@@ -616,14 +749,14 @@ function AppV2() {
       </div>
     );
   } catch (renderError) {
-    console.error('Render error in AppV2:', renderError);
-    return (
-      <div className="App" style={{ background: '#fff', color: '#e74c3c', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column' }}>
-        <h2 style={{ color: '#e74c3c', marginBottom: 16 }}>Render Error in App 2</h2>
-        <p style={{ color: '#e74c3c', fontSize: 18, fontWeight: 600 }}>{String(renderError)}</p>
-      </div>
-    );
-  }
+      console.error('Render error in AppV2:', renderError);
+      return (
+        <div className="App" style={{ background: '#fff', color: '#e74c3c', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column' }}>
+          <h2 style={{ color: '#e74c3c', marginBottom: 16 }}>Render Error in App 2</h2>
+          <p style={{ color: '#e74c3c', fontSize: 18, fontWeight: 600 }}>{String(renderError)}</p>
+        </div>
+      );
+    }
 }
 
 // Get the BigPapi spot color for use as a background for logo assets
@@ -693,7 +826,6 @@ function MLBTVGallery({ mlbtv }) {
   if (assets.length === 0) return null;
   
   const handleMouseEnter = (e, assetLabel) => {
-    playHoverSound();
     e.target.style.transform = 'scale(1.1)';
     setTooltip({ visible: true, x: e.clientX, y: e.clientY, label: assetLabel });
   };
@@ -819,6 +951,491 @@ function LogoImageGallery({ assets, teamColor, darkActiveKey, lightActiveKey, te
   );
 }
 
+// MLB Schedule component
+function MLBSchedule() {
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [games, setGames] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [showCalendar, setShowCalendar] = useState(false);
+
+  // Format date for MLB API (YYYY-MM-DD)
+  const formatDateForAPI = (date) => {
+    return date.toISOString().split('T')[0];
+  };
+
+  // Format date for display
+  const formatDateForDisplay = (date) => {
+    return date.toLocaleDateString('en-US', { 
+      weekday: 'short', 
+      month: 'short', 
+      day: 'numeric' 
+    });
+  };
+
+  // Format time for display
+  const formatTime = (dateTimeString) => {
+    if (!dateTimeString) return 'TBD';
+    try {
+      const date = new Date(dateTimeString);
+      return date.toLocaleTimeString('en-US', { 
+        hour: 'numeric', 
+        minute: '2-digit',
+        timeZoneName: 'short'
+      });
+    } catch (e) {
+      return 'TBD';
+    }
+  };
+
+  // Team abbreviation mapping
+  const getTeamAbbr = (teamId) => {
+    const teamAbbrMap = {
+      108: 'LAA', 109: 'ARI', 110: 'BAL', 111: 'BOS', 112: 'CHC', 113: 'CIN', 114: 'CLE',
+      115: 'COL', 116: 'DET', 117: 'HOU', 118: 'KC', 119: 'LAD', 120: 'WAS', 121: 'NYM',
+      133: 'OAK', 134: 'PIT', 135: 'SD', 136: 'SEA', 137: 'SF', 138: 'STL', 139: 'TB',
+      140: 'TEX', 141: 'TOR', 142: 'MIN', 143: 'PHI', 144: 'ATL', 145: 'CWS', 146: 'MIA',
+      147: 'NYY', 158: 'MIL'
+    };
+    return teamAbbrMap[teamId] || 'TBD';
+  };
+
+  // Fetch games for selected date
+  useEffect(() => {
+    const fetchGames = async () => {
+      setLoading(true);
+      try {
+        const dateStr = formatDateForAPI(selectedDate);
+        const response = await fetch(`https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=${dateStr}&hydrate=team,linescore`);
+        const data = await response.json();
+        
+        if (data.dates && data.dates.length > 0) {
+          setGames(data.dates[0].games || []);
+        } else {
+          setGames([]);
+        }
+      } catch (error) {
+        console.error('Error fetching games:', error);
+        setGames([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchGames();
+  }, [selectedDate]);
+
+  // Calendar component
+  const Calendar = () => {
+    const today = new Date();
+    const currentMonth = selectedDate.getMonth();
+    const currentYear = selectedDate.getFullYear();
+    const firstDayOfMonth = new Date(currentYear, currentMonth, 1);
+    const lastDayOfMonth = new Date(currentYear, currentMonth + 1, 0);
+    const startDate = new Date(firstDayOfMonth);
+    startDate.setDate(startDate.getDate() - firstDayOfMonth.getDay());
+
+    const days = [];
+    const current = new Date(startDate);
+    
+    for (let i = 0; i < 42; i++) {
+      days.push(new Date(current));
+      current.setDate(current.getDate() + 1);
+    }
+
+    const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
+                       'July', 'August', 'September', 'October', 'November', 'December'];
+
+    return (
+      <div style={{
+        position: 'absolute',
+        top: '100%',
+        left: 0,
+        backgroundColor: 'rgba(0, 0, 0, 0.95)',
+        border: '1px solid rgba(255, 255, 255, 0.2)',
+        borderRadius: '12px',
+        padding: '16px',
+        zIndex: 1000,
+        minWidth: '300px',
+        backdropFilter: 'blur(10px)'
+      }}>
+        {/* Calendar Header */}
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+          <button
+            onClick={() => setSelectedDate(new Date(currentYear, currentMonth - 1, selectedDate.getDate()))}
+            style={{ background: 'none', border: 'none', color: '#fff', cursor: 'pointer', fontSize: '18px' }}
+          >
+            ‹
+          </button>
+          <span style={{ color: '#fff', fontWeight: 600 }}>
+            {monthNames[currentMonth]} {currentYear}
+          </span>
+          <button
+            onClick={() => setSelectedDate(new Date(currentYear, currentMonth + 1, selectedDate.getDate()))}
+            style={{ background: 'none', border: 'none', color: '#fff', cursor: 'pointer', fontSize: '18px' }}
+          >
+            ›
+          </button>
+        </div>
+
+        {/* Day Headers */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: '4px', marginBottom: '8px' }}>
+          {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map(day => (
+            <div key={day} style={{ textAlign: 'center', color: 'rgba(255, 255, 255, 0.7)', fontSize: '12px', padding: '4px' }}>
+              {day}
+            </div>
+          ))}
+        </div>
+
+        {/* Calendar Days */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: '2px' }}>
+          {days.map((day, index) => {
+            const isCurrentMonth = day.getMonth() === currentMonth;
+            const isToday = day.toDateString() === today.toDateString();
+            const isSelected = day.toDateString() === selectedDate.toDateString();
+
+            return (
+              <button
+                key={index}
+                onClick={() => {
+                  setSelectedDate(new Date(day));
+                  setShowCalendar(false);
+                  playClickSound();
+                }}
+                style={{
+                  padding: '8px 4px',
+                  border: 'none',
+                  backgroundColor: isSelected ? 'rgba(0, 123, 255, 0.8)' : 
+                                   isToday ? 'rgba(255, 255, 255, 0.2)' : 
+                                   'transparent',
+                  color: isCurrentMonth ? '#fff' : 'rgba(255, 255, 255, 0.4)',
+                  cursor: 'pointer',
+                  borderRadius: '4px',
+                  fontSize: '12px',
+                  transition: 'all 0.2s ease'
+                }}
+                onMouseEnter={(e) => {
+                  if (!isSelected && isCurrentMonth) {
+                    e.target.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (!isSelected) {
+                    e.target.style.backgroundColor = isToday ? 'rgba(255, 255, 255, 0.2)' : 'transparent';
+                  }
+                }}
+              >
+                {day.getDate()}
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Today Button */}
+        <button
+          onClick={() => {
+            setSelectedDate(new Date());
+            setShowCalendar(false);
+            playClickSound();
+          }}
+          style={{
+            marginTop: '12px',
+            width: '100%',
+            padding: '8px',
+            backgroundColor: 'rgba(0, 123, 255, 0.6)',
+            border: 'none',
+            borderRadius: '6px',
+            color: '#fff',
+            cursor: 'pointer',
+            fontSize: '12px',
+            fontWeight: '500'
+          }}
+        >
+          Today
+        </button>
+      </div>
+    );
+  };
+
+  return (
+    <div style={{
+      backgroundColor: 'transparent',
+      borderRadius: '12px',
+      padding: '16px',
+      marginBottom: '2rem',
+      border: 'none',
+      width: '100%'
+    }}>
+      {/* Header with Date Selector */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+        <div style={{ position: 'relative' }}>
+          <button
+            onClick={() => {
+              setShowCalendar(!showCalendar);
+              playClickSound();
+            }}
+            style={{
+              backgroundColor: 'rgba(255, 255, 255, 0.1)',
+              border: '1px solid rgba(255, 255, 255, 0.2)',
+              borderRadius: '6px',
+              color: '#fff',
+              padding: '6px 12px',
+              cursor: 'pointer',
+              fontSize: '12px',
+              fontWeight: '500'
+            }}
+          >
+            📅 Select Date
+          </button>
+          {showCalendar && <Calendar />}
+        </div>
+        <h2 style={{ color: '#4fd1c5', margin: 0, fontSize: '18px', fontWeight: 600 }}>
+          {formatDateForDisplay(selectedDate)}
+        </h2>
+      </div>
+
+      {/* Games Display */}
+      {loading ? (
+        <div style={{ color: 'rgba(255, 255, 255, 0.7)', textAlign: 'center', padding: '20px' }}>
+          Loading games...
+        </div>
+      ) : games.length === 0 ? (
+        <div style={{ color: 'rgba(255, 255, 255, 0.7)', textAlign: 'center', padding: '20px' }}>
+          No games scheduled for this date
+        </div>
+      ) : (
+        <div style={{ position: 'relative' }}>
+          <div 
+            className="schedule-scroll"
+            style={{ 
+              display: 'flex',
+              gap: '12px',
+              overflowX: 'auto',
+              overflowY: 'hidden',
+              paddingBottom: '8px',
+              scrollbarWidth: 'thin',
+              scrollbarColor: 'rgba(255, 255, 255, 0.3) transparent'
+            }}
+          >
+          {games.map((game, index) => (
+            <div
+              key={game.gamePk}
+              style={{
+                backgroundColor: '#23272f',
+                border: '1px solid rgba(255, 255, 255, 0.1)',
+                borderRadius: '12px',
+                padding: '12px',
+                cursor: 'pointer',
+                transition: 'all 0.2s ease',
+                minWidth: '260px',
+                flexShrink: 0,
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                textAlign: 'center',
+                gap: '8px',
+                boxShadow: '0 4px 32px 0 rgba(0,0,0,0.32)'
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.backgroundColor = '#2a2f38';
+                e.target.style.borderColor = 'rgba(255, 255, 255, 0.2)';
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.backgroundColor = '#23272f';
+                e.target.style.borderColor = 'rgba(255, 255, 255, 0.1)';
+              }}
+              onClick={() => playClickSound()}
+            >
+              {/* Teams Side by Side */}
+              <div style={{ 
+                display: 'flex', 
+                alignItems: 'center', 
+                justifyContent: 'center',
+                width: '100%',
+                gap: '20px',
+                minHeight: '60px'
+              }}>
+                {/* Away Team */}
+                <div style={{ 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  justifyContent: 'center',
+                  gap: '10px',
+                  flex: 1
+                }}>
+                  <div style={{ 
+                    display: 'flex', 
+                    flexDirection: 'column',
+                    alignItems: 'center', 
+                    justifyContent: 'center',
+                    gap: '2px'
+                  }}>
+                    <span style={{ 
+                      color: game.status.statusCode === 'F' && game.teams.away.score > game.teams.home.score ? '#4fd1c5' : '#fff', 
+                      fontSize: '11px', 
+                      fontWeight: game.status.statusCode === 'F' && game.teams.away.score > game.teams.home.score ? '800' : '700',
+                      lineHeight: '1'
+                    }}>
+                      {getTeamAbbr(game.teams.away.team.id)}
+                    </span>
+                    {game.linescore && (
+                      <span style={{ 
+                        color: game.status.statusCode === 'F' && game.teams.away.score > game.teams.home.score ? '#4fd1c5' : '#fff', 
+                        fontSize: '16px', 
+                        fontWeight: game.status.statusCode === 'F' && game.teams.away.score > game.teams.home.score ? '900' : '800',
+                        lineHeight: '1'
+                      }}>
+                        {game.teams.away.score || 0}
+                      </span>
+                    )}
+                  </div>
+                  <img
+                    src={game.status.statusCode === 'F' && game.teams.away.score < game.teams.home.score 
+                      ? `https://img.mlbstatic.com/mlb-photos/image/upload/w_50,f_png,q_auto/v1/team/${game.teams.away.team.id}/logo/cap/dark/inactive`
+                      : `https://img.mlbstatic.com/mlb-photos/image/upload/w_50,f_png,q_auto/v1/team/${game.teams.away.team.id}/logo/spot/current`
+                    }
+                    alt={`${game.teams.away.team.name} logo`}
+                    style={{ 
+                      width: '40px', 
+                      height: '40px', 
+                      objectFit: 'contain',
+                      display: 'block',
+                      opacity: game.status.statusCode === 'F' && game.teams.away.score < game.teams.home.score ? 0.4 : 1,
+                      filter: game.status.statusCode === 'F' && game.teams.away.score < game.teams.home.score ? 'grayscale(100%) brightness(0.7)' : 'none'
+                    }}
+                    onError={(e) => {
+                      // If inactive logo fails, fallback to regular logo with inactive styling
+                      if (e.target.src.includes('/inactive')) {
+                        e.target.src = `https://img.mlbstatic.com/mlb-photos/image/upload/w_50,f_png,q_auto/v1/team/${game.teams.away.team.id}/logo/spot/current`;
+                        e.target.style.filter = 'grayscale(100%) brightness(0.7) contrast(0.8)';
+                        e.target.style.opacity = '0.4';
+                      } else {
+                        // Hide image if all fallbacks fail
+                        e.target.style.display = 'none';
+                      }
+                    }}
+                  />
+                </div>
+
+                {/* Game Time, State & Inning in Center */}
+                <div style={{ 
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '2px',
+                  minWidth: '80px'
+                }}>
+                  {/* Game Time or Live Count - Hide time for final games */}
+                  {game.status.statusCode !== 'F' && (
+                    <div style={{ 
+                      color: 'rgba(255, 255, 255, 0.8)', 
+                      fontSize: '10px',
+                      fontWeight: '600',
+                      textAlign: 'center'
+                    }}>
+                      {game.status.statusCode === 'I' && game.linescore ? (
+                        // Show current count for live games
+                        `${game.linescore.balls || 0}-${game.linescore.strikes || 0}`
+                      ) : (
+                        // Show time for non-live, non-final games
+                        formatTime(game.gameDate)
+                      )}
+                    </div>
+                  )}
+
+                  {/* Game Status */}
+                  <div style={{ 
+                    fontSize: '9px', 
+                    color: 'rgba(255, 255, 255, 0.6)',
+                    fontWeight: '500',
+                    textAlign: 'center'
+                  }}>
+                    {game.status.detailedState}
+                  </div>
+
+                  {/* Inning Information */}
+                  {game.linescore && game.linescore.inningState && (
+                    <div style={{ 
+                      color: 'rgba(255, 255, 255, 0.6)', 
+                      fontSize: '9px',
+                      fontWeight: '500',
+                      textAlign: 'center'
+                    }}>
+                      {game.linescore.inningState} {game.linescore.currentInning}
+                    </div>
+                  )}
+                </div>
+
+                {/* Home Team */}
+                <div style={{ 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  justifyContent: 'center',
+                  gap: '10px',
+                  flex: 1
+                }}>
+                  <img
+                    src={game.status.statusCode === 'F' && game.teams.home.score < game.teams.away.score 
+                      ? `https://img.mlbstatic.com/mlb-photos/image/upload/w_50,f_png,q_auto/v1/team/${game.teams.home.team.id}/logo/cap/dark/inactive`
+                      : `https://img.mlbstatic.com/mlb-photos/image/upload/w_50,f_png,q_auto/v1/team/${game.teams.home.team.id}/logo/spot/current`
+                    }
+                    alt={`${game.teams.home.team.name} logo`}
+                    style={{ 
+                      width: '40px', 
+                      height: '40px', 
+                      objectFit: 'contain',
+                      display: 'block',
+                      opacity: game.status.statusCode === 'F' && game.teams.home.score < game.teams.away.score ? 0.4 : 1,
+                      filter: game.status.statusCode === 'F' && game.teams.home.score < game.teams.away.score ? 'grayscale(100%) brightness(0.7)' : 'none'
+                    }}
+                    onError={(e) => {
+                      // If inactive logo fails, fallback to regular logo with inactive styling
+                      if (e.target.src.includes('/inactive')) {
+                        e.target.src = `https://img.mlbstatic.com/mlb-photos/image/upload/w_50,f_png,q_auto/v1/team/${game.teams.home.team.id}/logo/spot/current`;
+                        e.target.style.filter = 'grayscale(100%) brightness(0.7) contrast(0.8)';
+                        e.target.style.opacity = '0.4';
+                      } else {
+                        e.target.style.display = 'none';
+                      }
+                    }}
+                  />
+                  <div style={{ 
+                    display: 'flex', 
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center', 
+                    gap: '2px'
+                  }}>
+                    <span style={{ 
+                      color: game.status.statusCode === 'F' && game.teams.home.score > game.teams.away.score ? '#4fd1c5' : '#fff', 
+                      fontSize: '11px', 
+                      fontWeight: game.status.statusCode === 'F' && game.teams.home.score > game.teams.away.score ? '800' : '700',
+                      lineHeight: '1'
+                    }}>
+                      {getTeamAbbr(game.teams.home.team.id)}
+                    </span>
+                    {game.linescore && (
+                      <span style={{ 
+                        color: game.status.statusCode === 'F' && game.teams.home.score > game.teams.away.score ? '#4fd1c5' : '#fff', 
+                        fontSize: '16px', 
+                        fontWeight: game.status.statusCode === 'F' && game.teams.home.score > game.teams.away.score ? '900' : '800',
+                        lineHeight: '1'
+                      }}>
+                        {game.teams.home.score || 0}
+                      </span>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 // Wrapper for TeamSpot that safely uses useTeamSpotColor
 function TeamSpotWithColor({ teamID, size, logoUrl, fallbackColor }) {
   const spotColor = useTeamSpotColor(teamID);
@@ -852,6 +1469,266 @@ function TeamSpot({ teamID, size = 80, color, logoUrl, spotColor }) {
         style={{ width: size * 0.8, height: size * 0.8, objectFit: 'contain', background: 'transparent', display: 'block', margin: 'auto', pointerEvents: 'none' }}
       />
     </div>
+  );
+}
+
+// AnchorMenu component for navigation
+function AnchorMenu({ teams }) {
+  if (!teams || teams.length === 0) return null;
+
+  // Official MLB team divisions mapping - 2025 (from official spreadsheet)
+  const teamDivisions = {
+    'AL East': [110, 111, 147, 139, 141], // BAL, BOS, NYY, TB, TOR
+    'AL Central': [145, 114, 116, 118, 142], // CWS, CLE, DET, KC, MIN
+    'AL West': [117, 108, 133, 136, 140], // HOU, LAA, OAK, SEA, TEX
+    'NL East': [144, 146, 121, 143, 120], // ATL, MIA, NYM, PHI, WAS
+    'NL Central': [112, 113, 158, 134, 138], // CHC, CIN, MIL, PIT, STL
+    'NL West': [109, 115, 119, 135, 137] // ARI, COL, LAD, SD, SF
+  };
+
+  // Team Button Component with spot color
+  const TeamButton = ({ team }) => {
+    const spotColor = useTeamSpotColor(team.teamID);
+    
+    return (
+      <a
+        key={team.teamID}
+        href={`#team-${team.teamID || team.clubFullName.replace(/\s+/g, '-').toLowerCase()}`}
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          textDecoration: 'none',
+          padding: '0',
+          borderRadius: '50%',
+          backgroundColor: spotColor,
+          transition: 'all 0.2s ease',
+          cursor: 'pointer',
+          border: '2px solid rgba(255, 255, 255, 0.2)',
+          width: '36px',
+          height: '36px',
+          boxShadow: '0 2px 8px rgba(0, 0, 0, 0.3)'
+        }}
+        onMouseEnter={(e) => {
+          e.target.style.transform = 'scale(1.15)';
+          e.target.style.borderColor = 'rgba(255, 255, 255, 0.5)';
+          e.target.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.4)';
+        }}
+        onMouseLeave={(e) => {
+          e.target.style.transform = 'scale(1)';
+          e.target.style.borderColor = 'rgba(255, 255, 255, 0.2)';
+          e.target.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.3)';
+        }}
+        onClick={() => playClickSound()}
+        title={team.clubFullName || team.teamName || `Team ${team.teamID}`}
+      >
+        <img
+          src={`https://img.mlbstatic.com/mlb-photos/image/upload/w_32,f_png,q_auto/v1/team/${team.teamID}/logo/spot/current`}
+          alt={`${team.clubFullName || team.teamName} logo`}
+          style={{ 
+            width: '24px', 
+            height: '24px', 
+            objectFit: 'contain',
+            display: 'block',
+            filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.3))'
+          }}
+          onError={(e) => {
+            e.target.style.display = 'none';
+            e.target.parentElement.innerHTML = `<span style="color: white; font-size: 10px; font-weight: 700; text-shadow: 0 1px 2px rgba(0,0,0,0.5);">${team.teamAbbr || team.teamID}</span>`;
+          }}
+        />
+      </a>
+    );
+  };
+
+  // Group teams by division
+  const organizedTeams = {};
+  Object.entries(teamDivisions).forEach(([division, teamIds]) => {
+    organizedTeams[division] = teams.filter(team => teamIds.includes(parseInt(team.teamID)));
+  });
+
+  return (
+    <div style={{
+      position: 'sticky',
+      top: '10px',
+      backgroundColor: 'rgba(0, 0, 0, 0.65)',
+      borderRadius: '12px',
+      padding: '12px 16px',
+      marginBottom: '1.5rem',
+      border: '1px solid rgba(255, 255, 255, 0.15)',
+      backdropFilter: 'blur(12px)',
+      zIndex: 1000,
+      width: '100%',
+      maxWidth: '100%',
+      boxSizing: 'border-box'
+    }}>
+      <div style={{
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '12px',
+        alignItems: 'flex-start'
+      }}>
+        {/* American League Row */}
+        <div style={{ 
+          display: 'flex', 
+          alignItems: 'center', 
+          gap: '16px',
+          width: '100%',
+          justifyContent: 'flex-start',
+          flexWrap: 'wrap'
+        }}>
+          <a 
+            href="#al-allstars"
+            style={{
+              color: '#4fd1c5',
+              fontSize: '12px',
+              fontWeight: '600',
+              letterSpacing: '0.5px',
+              minWidth: '80px',
+              textAlign: 'center',
+              textDecoration: 'none',
+              borderBottom: '1px solid transparent',
+              transition: 'all 0.2s ease',
+              cursor: 'pointer'
+            }}
+            onMouseEnter={(e) => {
+              e.target.style.borderBottomColor = '#4fd1c5';
+              e.target.style.color = '#ffffff';
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.borderBottomColor = 'transparent';
+              e.target.style.color = '#4fd1c5';
+            }}
+            onClick={() => playClickSound()}
+          >
+            AMERICAN
+          </a>
+          {['AL East', 'AL Central', 'AL West'].map(division => (
+            <div key={division} style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px'
+            }}>
+              <span style={{
+                color: 'rgba(255, 255, 255, 0.5)',
+                fontSize: '9px',
+                fontWeight: '500',
+                textTransform: 'uppercase',
+                letterSpacing: '0.5px',
+                minWidth: '30px'
+              }}>
+                {division.replace('AL ', '')}
+              </span>
+              <div style={{
+                display: 'flex',
+                gap: '5px'
+              }}>
+                {organizedTeams[division]?.map(team => (
+                  <TeamButton key={team.teamID} team={team} />
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* National League Row */}
+        <div style={{ 
+          display: 'flex', 
+          alignItems: 'center', 
+          gap: '16px',
+          width: '100%',
+          justifyContent: 'flex-start',
+          flexWrap: 'wrap'
+        }}>
+          <a 
+            href="#nl-allstars"
+            style={{
+              color: '#4fd1c5',
+              fontSize: '12px',
+              fontWeight: '600',
+              letterSpacing: '0.5px',
+              minWidth: '80px',
+              textAlign: 'center',
+              textDecoration: 'none',
+              borderBottom: '1px solid transparent',
+              transition: 'all 0.2s ease',
+              cursor: 'pointer'
+            }}
+            onMouseEnter={(e) => {
+              e.target.style.borderBottomColor = '#4fd1c5';
+              e.target.style.color = '#ffffff';
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.borderBottomColor = 'transparent';
+              e.target.style.color = '#4fd1c5';
+            }}
+            onClick={() => playClickSound()}
+          >
+            NATIONAL
+          </a>
+          {['NL East', 'NL Central', 'NL West'].map(division => (
+            <div key={division} style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px'
+            }}>
+              <span style={{
+                color: 'rgba(255, 255, 255, 0.5)',
+                fontSize: '9px',
+                fontWeight: '500',
+                textTransform: 'uppercase',
+                letterSpacing: '0.5px',
+                minWidth: '30px'
+              }}>
+                {division.replace('NL ', '')}
+              </span>
+              <div style={{
+                display: 'flex',
+                gap: '5px'
+              }}>
+                {organizedTeams[division]?.map(team => (
+                  <TeamButton key={team.teamID} team={team} />
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Tooltip component for hover information
+function Tooltip({ children, text, visible, position }) {
+  if (!visible || !text) return children;
+
+  return (
+    <>
+      {children}
+      <div
+        style={{
+          position: 'fixed',
+          left: position.x + 10,
+          top: position.y - 10,
+          backgroundColor: 'rgba(0, 0, 0, 0.9)',
+          color: '#fff',
+          padding: '6px 10px',
+          borderRadius: '6px',
+          fontSize: '12px',
+          fontWeight: '500',
+          zIndex: 10000,
+          pointerEvents: 'none',
+          border: '1px solid rgba(255, 255, 255, 0.2)',
+          backdropFilter: 'blur(4px)',
+          whiteSpace: 'nowrap',
+          maxWidth: '200px',
+          wordWrap: 'break-word',
+          boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3)'
+        }}
+      >
+        {text}
+      </div>
+    </>
   );
 }
 
@@ -892,7 +1769,6 @@ function TeamCard({ team, opts, selectedPlayerId, setSelectedPlayers, colorPrior
         borderRadius: 18,
         boxShadow: '0 4px 32px 0 rgba(0,0,0,0.32)',
         padding: '32px 36px',
-        margin: '0 auto',
         marginBottom: 0,
         width: 900,
         maxWidth: '100%',
@@ -970,7 +1846,30 @@ function TeamCard({ team, opts, selectedPlayerId, setSelectedPlayers, colorPrior
       </div>
       {revealed && (
         <div style={{ marginTop: 18, width: '100%' }}>
-          {/* Roster Section */}
+          {/* Live Game Context and Team Schedule Side by Side */}
+          <div style={{ 
+            display: 'flex', 
+            gap: '20px', 
+            marginBottom: '2rem',
+            flexWrap: 'wrap',
+            alignItems: 'stretch'
+          }}>
+            <div style={{ 
+              flex: '1', 
+              minWidth: '300px',
+              display: 'flex'
+            }}>
+              <LiveGameContext teamId={team.teamID} />
+            </div>
+            <div style={{ 
+              flex: '1', 
+              minWidth: '300px',
+              display: 'flex'
+            }}>
+              <TeamSchedule teamId={team.teamID} daysAhead={7} />
+            </div>
+          </div>
+          
           <h2 style={{ fontWeight: 800, fontSize: 24, margin: '1.5rem 0 0.5rem 0', color: '#4fd1c5', letterSpacing: 1, textAlign: 'left' }}>Team Roster</h2>
           {/* Player dropdown and card (only for regular teams, now below team name) */}
           {showPlayer && (
@@ -1024,6 +1923,50 @@ function TeamCard({ team, opts, selectedPlayerId, setSelectedPlayers, colorPrior
                 bgColor={bigpapiSpotColor}
               />
               <div style={{ textAlign: 'left', fontSize: 13, color: '#888', marginTop: 10, width: 100, whiteSpace: 'normal', overflow: 'visible', textOverflow: 'unset', boxSizing: 'border-box', paddingLeft: 10 }} title="Team Cap Logo - Dark">Team Cap Logo - Dark</div>
+            </div>
+          </div>
+          
+          {/* Inactive Logos Section */}
+          <h4 style={{ fontSize: 18, fontWeight: 700, color: '#fff', margin: '1.5rem 0 1.5rem 0', letterSpacing: 1, textAlign: 'left' }}>Inactive Logos</h4>
+          <div style={{ display: 'flex', alignItems: 'flex-start', gap: 40, flexWrap: 'wrap', marginBottom: 40 }}>
+            {/* Team Logo Spot - Inactive */}
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', width: 120 }}>
+              <InactiveLogoOverlay
+                src={`https://img.mlbstatic.com/mlb-photos/image/upload/w_512,f_png,q_auto/v1/team/${team.teamID}/logo/spot/inactive`}
+                fallbackSrc={`https://img.mlbstatic.com/mlb-photos/image/upload/w_512,f_png,q_auto/v1/team/${team.teamID}/logo/spot/current`}
+                alt="Team Logo Spot - Inactive"
+                url={`https://img.mlbstatic.com/mlb-photos/image/upload/w_512,f_png,q_auto/v1/team/${team.teamID}/logo/spot/inactive`}
+                title={null}
+                enableModal={true}
+                bgColor={'#444444'}
+              />
+              <div style={{ textAlign: 'left', fontSize: 13, color: '#888', marginTop: 10, width: 100, whiteSpace: 'normal', overflow: 'visible', textOverflow: 'unset', boxSizing: 'border-box', paddingLeft: 10 }} title="Team Logo Spot - Inactive">Team Logo Spot - Inactive</div>
+            </div>
+            {/* Team Cap Logo - Light - Inactive */}
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', width: 120 }}>
+              <InactiveLogoOverlay
+                src={`https://img.mlbstatic.com/mlb-photos/image/upload/w_512,f_png,q_auto/v1/team/${team.teamID}/logo/cap/light/inactive`}
+                fallbackSrc={`https://img.mlbstatic.com/mlb-photos/image/upload/w_512,f_png,q_auto/v1/team/${team.teamID}/logo/cap/light/current`}
+                alt="Team Cap Logo - Light - Inactive"
+                url={`https://img.mlbstatic.com/mlb-photos/image/upload/w_512,f_png,q_auto/v1/team/${team.teamID}/logo/cap/light/inactive`}
+                title={null}
+                enableModal={true}
+                bgColor={'#444444'}
+              />
+              <div style={{ textAlign: 'left', fontSize: 13, color: '#888', marginTop: 10, width: 100, whiteSpace: 'normal', overflow: 'visible', textOverflow: 'unset', boxSizing: 'border-box', paddingLeft: 10 }} title="Team Cap Logo - Light - Inactive">Team Cap Logo - Light - Inactive</div>
+            </div>
+            {/* Team Cap Logo - Dark - Inactive */}
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', width: 120 }}>
+              <InactiveLogoOverlay
+                src={`https://img.mlbstatic.com/mlb-photos/image/upload/w_512,f_png,q_auto/v1/team/${team.teamID}/logo/cap/dark/inactive`}
+                fallbackSrc={`https://img.mlbstatic.com/mlb-photos/image/upload/w_512,f_png,q_auto/v1/team/${team.teamID}/logo/cap/dark/current`}
+                alt="Team Cap Logo - Dark - Inactive"
+                url={`https://img.mlbstatic.com/mlb-photos/image/upload/w_512,f_png,q_auto/v1/team/${team.teamID}/logo/cap/dark/inactive`}
+                title={null}
+                enableModal={true}
+                bgColor={'#444444'}
+              />
+              <div style={{ textAlign: 'left', fontSize: 13, color: '#888', marginTop: 10, width: 100, whiteSpace: 'normal', overflow: 'visible', textOverflow: 'unset', boxSizing: 'border-box', paddingLeft: 10 }} title="Team Cap Logo - Dark - Inactive">Team Cap Logo - Dark - Inactive</div>
             </div>
           </div>
           {/* BIGPAPI Color Swatch Section */}
@@ -1161,7 +2104,6 @@ function ColorSwatch({ color }) {
   const [tooltip, setTooltip] = useState({ visible: false, x: 0, y: 0 });
   
   const handleMouseEnter = (e) => {
-    playHoverSound();
     setTooltip({ visible: true, x: e.clientX, y: e.clientY });
   };
   
@@ -1269,7 +2211,6 @@ function BigpapiColorSwatch({ teamID }) {
   }
   
   const handleMouseEnter = (e) => {
-    playHoverSound();
     setTooltip({ visible: true, x: e.clientX, y: e.clientY });
   };
   
@@ -1360,7 +2301,6 @@ function WordmarkOverlay({ src, alt, url, title, enableModal, bgColor }) {
   }
   
   const handleMouseEnter = (e) => {
-    playHoverSound();
     e.target.style.transform = 'scale(1.1)';
     setTooltip({ visible: true, x: e.clientX, y: e.clientY });
   };
@@ -1429,178 +2369,266 @@ function WordmarkOverlay({ src, alt, url, title, enableModal, bgColor }) {
   );
 }
 
-// Enhanced Anchor Menu component with animations, sounds, and tooltips
-function AnchorMenu({ teams }) {
-  const [tooltip, setTooltip] = useState({ visible: false, x: 0, y: 0, text: '' });
-
-  const handleTeamHover = (e, teamName) => {
-    playHoverSound();
-    e.target.style.transform = 'scale(1.2)';
-    setTooltip({ 
-      visible: true, 
-      x: e.clientX, 
-      y: e.clientY, 
-      text: `Jump to ${teamName}` 
-    });
+// Component for inactive logos with fallback
+function InactiveLogoOverlay({ src, fallbackSrc, alt, url, title, enableModal, bgColor }) {
+  const [open, setOpen] = useState(false);
+  const [copied, setCopied] = useState(false);
+  const [tooltip, setTooltip] = useState({ visible: false, x: 0, y: 0 });
+  const [imgSrc, setImgSrc] = useState(src);
+  const [usingFallback, setUsingFallback] = useState(false);
+  
+  function handleCopy() {
+    navigator.clipboard.writeText(url || imgSrc);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 1200);
+  }
+  
+  const handleMouseEnter = (e) => {
+    e.target.style.transform = 'scale(1.1)';
+    setTooltip({ visible: true, x: e.clientX, y: e.clientY });
   };
-
-  const handleTeamLeave = (e) => {
+  
+  const handleMouseLeave = (e) => {
     e.target.style.transform = 'scale(1)';
-    setTooltip({ visible: false, x: 0, y: 0, text: '' });
+    setTooltip({ visible: false, x: 0, y: 0 });
   };
 
-  const handleTeamClick = (e) => {
-    playClickSound();
-    // Add a brief "jump" animation
-    e.target.style.transform = 'scale(0.9)';
-    setTimeout(() => {
-      e.target.style.transform = 'scale(1)';
-    }, 100);
+  const handleImageError = () => {
+    if (!usingFallback && fallbackSrc) {
+      setImgSrc(fallbackSrc);
+      setUsingFallback(true);
+    }
   };
-
-  const handleAllStarHover = (e, leagueName) => {
-    playHoverSound();
-    e.target.style.transform = 'scale(1.2)';
-    e.target.style.boxShadow = '0 4px 16px rgba(0, 0, 0, 0.4)';
-    setTooltip({ 
-      visible: true, 
-      x: e.clientX, 
-      y: e.clientY, 
-      text: `Jump to ${leagueName} All-Stars` 
-    });
-  };
-
-  const handleAllStarLeave = (e) => {
-    e.target.style.transform = 'scale(1)';
-    e.target.style.boxShadow = '0 2px 8px #0003';
-    setTooltip({ visible: false, x: 0, y: 0, text: '' });
-  };
-
-  const handleAllStarClick = (e) => {
-    playClickSound();
-    e.target.style.transform = 'scale(0.9)';
-    setTimeout(() => {
-      e.target.style.transform = 'scale(1)';
-    }, 100);
-  };
-
+  
   return (
     <>
       <Tooltip 
-        text={tooltip.text} 
+        text={enableModal ? `Click to view ${alt}${usingFallback ? ' (Fallback)' : ''}` : alt} 
         visible={tooltip.visible} 
         position={{ x: tooltip.x, y: tooltip.y }}
       >
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, marginBottom: 40, alignItems: 'center', justifyContent: 'center', width: '100%', maxWidth: 900, marginLeft: 'auto', marginRight: 'auto' }}>
-          {teams.map(team => (
-            <a
-              key={team.teamID}
-              href={`#team-card-${team.teamID}`}
-              style={{ textDecoration: 'none', border: 'none', background: 'none', cursor: 'pointer', padding: 0, display: 'inline-block' }}
-              onClick={handleTeamClick}
-            >
-              <div
-                style={{ transition: 'transform 0.2s ease, box-shadow 0.2s ease' }}
-                onMouseEnter={e => handleTeamHover(e, team.clubFullName)}
-                onMouseLeave={handleTeamLeave}
-              >
-                <TeamSpotWithColor
-                  teamID={team.teamID}
-                  size={40}
-                  logoUrl={`https://img.mlbstatic.com/mlb-photos/image/upload/w_40,f_png,q_auto/v1/team/${team.teamID}/logo/spot/current`}
-                  fallbackColor={team.teamColors?.primaryLight || '#fff'}
-                />
-              </div>
-            </a>
-          ))}
-          {/* AL All-Star anchor button */}
-          <a
-            href="#al-allstars"
-            style={{ textDecoration: 'none', border: 'none', background: 'none', cursor: 'pointer', padding: 0, display: 'inline-block' }}
-            onClick={handleAllStarClick}
-          >
-            <div 
-              style={{ 
-                width: 40, 
-                height: 40, 
-                borderRadius: '50%', 
-                background: '#003263', 
-                display: 'flex', 
-                alignItems: 'center', 
-                justifyContent: 'center', 
-                boxShadow: '0 2px 8px #0003', 
-                fontWeight: 700, 
-                color: '#fff', 
-                fontSize: 18,
-                transition: 'transform 0.2s ease, box-shadow 0.2s ease'
-              }}
-              onMouseEnter={e => handleAllStarHover(e, 'American League')}
-              onMouseLeave={handleAllStarLeave}
-            >
-              AL
-            </div>
-          </a>
-          {/* NL All-Star anchor button */}
-          <a
-            href="#nl-allstars"
-            style={{ textDecoration: 'none', border: 'none', background: 'none', cursor: 'pointer', padding: 0, display: 'inline-block' }}
-            onClick={handleAllStarClick}
-          >
-            <div 
-              style={{ 
-                width: 40, 
-                height: 40, 
-                borderRadius: '50%', 
-                background: '#c41e3a', 
-                display: 'flex', 
-                alignItems: 'center', 
-                justifyContent: 'center', 
-                boxShadow: '0 2px 8px #0003', 
-                fontWeight: 700, 
-                color: '#fff', 
-                fontSize: 18,
-                transition: 'transform 0.2s ease, box-shadow 0.2s ease'
-              }}
-              onMouseEnter={e => handleAllStarHover(e, 'National League')}
-              onMouseLeave={handleAllStarLeave}
-            >
-              NL
-            </div>
-          </a>
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'flex-start',
+            justifyContent: 'center',
+            height: 120,
+          }}
+        >
+          <img
+            src={imgSrc}
+            alt={alt}
+            style={{
+              width: 120,
+              height: 120,
+              objectFit: 'contain',
+              cursor: enableModal ? 'pointer' : 'default',
+              borderRadius: 6,
+              padding: 10,
+              background: bgColor || '#fff',
+              display: 'block',
+              margin: 'auto',
+              transition: 'transform 0.2s ease',
+              filter: usingFallback ? 'grayscale(100%) brightness(0.7) contrast(0.8)' : 'none',
+              opacity: usingFallback ? 0.6 : 1,
+            }}
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+            onError={handleImageError}
+            onClick={enableModal ? () => { playClickSound(); setOpen(true); } : undefined}
+          />
+          {title && (
+            <div style={{ textAlign: 'left', fontSize: 13, color: '#888', marginTop: 10, width: 120, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', boxSizing: 'border-box' }}>{title}</div>
+          )}
         </div>
       </Tooltip>
+      {enableModal && open && (
+        <div
+          style={{
+            position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh',
+            background: 'rgba(0,0,0,0.85)', zIndex: 9999, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'
+          }}
+          onClick={() => setOpen(false)}
+        >
+          <img 
+            src={imgSrc} 
+            alt={alt} 
+            style={{ 
+              maxWidth: '90vw', 
+              maxHeight: '80vh', 
+              borderRadius: 12, 
+              boxShadow: '0 8px 32px #000a', 
+              marginBottom: 16, 
+              background: bgColor || '#fff',
+              filter: usingFallback ? 'grayscale(100%) brightness(0.7) contrast(0.8)' : 'none',
+              opacity: usingFallback ? 0.6 : 1,
+            }} 
+          />
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            <button onClick={e => { e.stopPropagation(); handleCopy(); }} style={{ padding: '6px 10px', borderRadius: 6, border: 'none', background: '#4fd1c5', color: '#222', fontWeight: 600, cursor: 'pointer' }}>{copied ? 'Copied!' : 'Copy link'}</button>
+            <a href={imgSrc} target="_blank" rel="noopener noreferrer" style={{ color: '#fff', background: '#222', padding: '6px 14px', borderRadius: 6, fontSize: 15, textDecoration: 'underline' }}>{imgSrc}</a>
+          </div>
+          {usingFallback && (
+            <div style={{ color: 'rgba(255, 255, 255, 0.7)', fontSize: '12px', marginTop: '8px', textAlign: 'center' }}>
+              Note: Inactive logo not available, showing regular logo with inactive styling
+            </div>
+          )}
+        </div>
+      )}
     </>
   );
 }
 
-// Tooltip component for enhanced hover interactions
-function Tooltip({ children, text, visible, position = { x: 0, y: 0 } }) {
-  if (!visible || !text) return children;
-  
+// Live Game Context Component (was missing)
+function LiveGameContext({ teamId }) {
+  const [gameContext, setGameContext] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (!teamId) return;
+    
+    const fetchGameContext = async () => {
+      setLoading(true);
+      try {
+        const today = new Date().toISOString().split('T')[0];
+        const scheduleUrl = `https://statsapi.mlb.com/api/v1/schedule/games/?sportId=1&startDate=${today}&endDate=${today}&teamId=${teamId}&hydrate=linescore,team`;
+        
+        const res = await fetch(scheduleUrl);
+        const data = await res.json();
+        
+        if (data.dates && data.dates.length > 0) {
+          const todaysGames = data.dates[0].games || [];
+          const teamGame = todaysGames.find(game => 
+            game.teams.away.team.id == teamId || game.teams.home.team.id == teamId
+          );
+          
+          if (teamGame) {
+            const context = {
+              gamePk: teamGame.gamePk,
+              gameDate: teamGame.gameDate,
+              teams: teamGame.teams,
+              status: teamGame.status,
+              inning: teamGame.linescore?.currentInning,
+              inningState: teamGame.linescore?.inningState,
+              outs: teamGame.linescore?.outs,
+              balls: teamGame.linescore?.balls,
+              strikes: teamGame.linescore?.strikes
+            };
+            setGameContext(context);
+          }
+        }
+      } catch (err) {
+        console.error('Game context error:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    fetchGameContext();
+    // Refresh every 30 seconds during games
+    const interval = setInterval(fetchGameContext, 30000);
+    return () => clearInterval(interval);
+  }, [teamId]);
+
+  if (loading && !gameContext) return <div style={{ color: '#888' }}>Loading game context...</div>;
+  if (!gameContext) return null;
+
   return (
-    <>
-      {children}
-      <div
-        style={{
-          position: 'fixed',
-          left: position.x + 10,
-          top: position.y - 30,
-          background: '#222',
-          color: '#fff',
-          padding: '6px 12px',
-          borderRadius: 6,
-          fontSize: 13,
-          fontWeight: 500,
-          zIndex: 10000,
-          pointerEvents: 'none',
-          boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3)',
-          whiteSpace: 'nowrap',
-          maxWidth: '200px',
-          wordWrap: 'break-word',
-        }}
-      >
-        {text}
+    <div style={{
+      background: '#1a1a1a',
+      borderRadius: 8,
+      padding: '1rem',
+      border: '1px solid #333',
+      marginBottom: '1rem',
+      width: '100%',
+      height: '100%',
+      display: 'flex',
+      flexDirection: 'column'
+    }}>
+      <h5 style={{ color: '#4fd1c5', marginBottom: '0.5rem', fontSize: 16 }}>Live Game Context</h5>
+      <div style={{ color: '#fff', fontSize: 14, lineHeight: 1.6, flex: 1 }}>
+        <div><strong>Game:</strong> {gameContext.teams.away.team.name} @ {gameContext.teams.home.team.name}</div>
+        <div><strong>Status:</strong> {gameContext.status.detailedState}</div>
+        {gameContext.inning && (
+          <>
+            <div><strong>Inning:</strong> {gameContext.inningState} {gameContext.inning}</div>
+            <div><strong>Count:</strong> {gameContext.balls}-{gameContext.strikes}, {gameContext.outs} outs</div>
+          </>
+        )}
+        <div><strong>Date:</strong> {new Date(gameContext.gameDate).toLocaleDateString()}</div>
       </div>
-    </>
+    </div>
+  );
+}
+
+// Team Schedule Component (was missing)
+function TeamSchedule({ teamId, daysAhead = 7 }) {
+  const [schedule, setSchedule] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (!teamId) return;
+    
+    const fetchSchedule = async () => {
+      setLoading(true);
+      try {
+        const today = new Date();
+        const endDate = new Date(today.getTime() + (daysAhead * 24 * 60 * 60 * 1000));
+        
+        const startDateStr = today.toISOString().split('T')[0];
+        const endDateStr = endDate.toISOString().split('T')[0];
+        
+        const scheduleUrl = `https://statsapi.mlb.com/api/v1/schedule/games/?sportId=1&startDate=${startDateStr}&endDate=${endDateStr}&teamId=${teamId}&hydrate=team`;
+        
+        const res = await fetch(scheduleUrl);
+        const data = await res.json();
+        
+        setSchedule({
+          games: data.dates || [],
+          totalGames: data.totalGames || 0,
+          totalItems: data.totalItems || 0
+        });
+      } catch (err) {
+        console.error('Schedule fetch error:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    fetchSchedule();
+  }, [teamId, daysAhead]);
+
+  if (loading) return <div style={{ color: '#888' }}>Loading schedule...</div>;
+  if (!schedule || !schedule.games.length) return null;
+
+  return (
+    <div style={{
+      background: '#1a1a1a',
+      borderRadius: 8,
+      padding: '1rem',
+      border: '1px solid #333',
+      marginBottom: '1rem',
+      width: '100%',
+      height: '100%',
+      display: 'flex',
+      flexDirection: 'column'
+    }}>
+      <h5 style={{ color: '#4fd1c5', marginBottom: '1rem', fontSize: 16 }}>Upcoming Games</h5>
+      <div style={{ maxHeight: '200px', overflowY: 'auto', flex: 1 }}>
+        {schedule.games.map((dateEntry, index) => (
+          <div key={index} style={{ marginBottom: '1rem' }}>
+            <div style={{ color: '#fff', fontWeight: 600, fontSize: 13, marginBottom: '0.5rem' }}>
+              {new Date(dateEntry.date).toLocaleDateString()}
+            </div>
+            {dateEntry.games.map(game => (
+              <div key={game.gamePk} style={{ color: '#ccc', fontSize: 12, marginLeft: '1rem', marginBottom: '0.25rem' }}>
+                {game.teams.away.team.name} @ {game.teams.home.team.name} - {game.status.detailedState}
+              </div>
+            ))}
+          </div>
+        ))}
+      </div>
+    </div>
   );
 }
