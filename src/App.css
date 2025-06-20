@@ -35,6 +35,12 @@
   color: #888;
 }
 
+body {
+  margin: 0;
+  background-color: red !important;
+  min-height: 100vh;
+}
+
 .container {
   max-width: 1200px;
   margin: 0 auto;
@@ -230,11 +236,20 @@ select option {
 }
 
 .team-logo {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
+  width: 40px !important;
+  height: 40px !important;
+  border-radius: 50% !important;
   background: #fff;
   padding: 4px;
+  flex-shrink: 0;
+  aspect-ratio: 1;
+}
+
+.team-logo-spot {
+  border-radius: 50% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
   flex-shrink: 0;
   aspect-ratio: 1;
 }

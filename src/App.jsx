@@ -790,7 +790,16 @@ function TeamSpotWithColor({ teamID, size, logoUrl, fallbackColor }) {
 function TeamSpot({ teamID, size = 80, color, logoUrl, spotColor }) {
   const bgColor = spotColor || color || '#fff';
   return (
-    <div style={{ width: size, height: size, background: bgColor, borderRadius: '50%', padding: size * 0.1875, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 8px #0003' }}>
+    <div 
+      className="team-logo-spot"
+      style={{ 
+        width: size, 
+        height: size, 
+        background: bgColor, 
+        padding: size * 0.1875, 
+        boxShadow: '0 2px 8px #0003' 
+      }}
+    >
       <img
         src={logoUrl || `https://img.mlbstatic.com/mlb-photos/image/upload/w_${size},f_png,q_auto/v1/team/${teamID}/logo/spot/current`}
         alt={`Default logo for team ${teamID}`}
