@@ -231,9 +231,11 @@ select option {
 .team-logo {
   width: 40px;
   height: 40px;
-  border-radius: 6px;
+  border-radius: 50%;
   background: #fff;
   padding: 4px;
+  flex-shrink: 0;
+  aspect-ratio: 1;
 }
 
 .team-name {
