@@ -522,7 +522,7 @@ function AppV2() {
 
   try {
     return (
-      <div className="App" style={{ padding: '2.5rem', maxWidth: 1200, margin: '0 auto', alignItems: 'flex-start', justifyContent: 'flex-start', background: '#1a1a1a', minHeight: '100vh' }}>
+      <div className="App" style={{ padding: '2.5rem', maxWidth: 1200, margin: '0 auto', alignItems: 'flex-start', justifyContent: 'flex-start', minHeight: '100vh' }}>
         <h1 style={{ fontSize: 32, fontWeight: 800, color: '#fff', margin: '0 0 2.5rem 0', letterSpacing: 1, textAlign: 'center', width: '100%' }}>MLB XR Branding Guide</h1>
         {/* Anchor menu below site title */}
         {teams.length > 0 && (
