@@ -160,9 +160,9 @@ function RosterDropdown({ teamID, value, onChange, autoSelectFirst }) {
   }, [teamID]);
 
   return (
-    <div>
+    <div style={{ textAlign: 'left', width: '100%' }}>
       {loading ? 'Loading...' : error ? error : (
-        <select style={{ minWidth: 440 }} value={value} onChange={onChange}>
+        <select style={{ minWidth: 440, width: '100%', maxWidth: 440, textAlign: 'left' }} value={value} onChange={onChange}>
           <option value="">Select Player</option>
           {roster.map(player => {
             const jersey = player.jerseyNumber ? `#${player.jerseyNumber}` : '';
@@ -859,9 +859,9 @@ function TeamCard({ team, opts, selectedPlayerId, setSelectedPlayers, colorPrior
           logoUrl={`https://img.mlbstatic.com/mlb-photos/image/upload/w_80,f_png,q_auto/v1/team/${team.teamID}/logo/spot/current`}
           fallbackColor={team.teamColors?.primaryLight || '#fff'}
         />
-        <div>
-          <h1 style={{ fontWeight: 800, fontSize: 28, color: '#fff', marginBottom: 6, letterSpacing: 1 }}>{team.clubFullName}</h1>
-          <div style={{ fontSize: 15, color: '#fff', marginTop: 2 }}>
+        <div style={{ textAlign: 'left', width: '100%' }}>
+          <h1 style={{ fontWeight: 800, fontSize: 28, color: '#fff', marginBottom: 6, letterSpacing: 1, textAlign: 'left' }}>{team.clubFullName}</h1>
+          <div style={{ fontSize: 15, color: '#fff', marginTop: 2, textAlign: 'left' }}>
             Team ID: {team.teamID} &nbsp;|&nbsp; Code: {team.teamCode}
             {teamExtras[team.teamID] && (
               <>
@@ -919,7 +919,7 @@ function TeamCard({ team, opts, selectedPlayerId, setSelectedPlayers, colorPrior
           <h2 style={{ fontWeight: 800, fontSize: 24, margin: '1.5rem 0 0.5rem 0', color: '#4fd1c5', letterSpacing: 1, textAlign: 'left' }}>Team Roster</h2>
           {/* Player dropdown and card (only for regular teams, now below team name) */}
           {showPlayer && (
-            <div style={{ margin: '0 0 2rem 0', width: '100%' }}>
+            <div style={{ margin: '0 0 2rem 0', width: '100%', textAlign: 'left' }}>
               <RosterDropdown
                 teamID={team.teamID}
                 value={selectedPlayerId}
