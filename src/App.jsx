@@ -617,102 +617,6 @@ function AppV2() {
             </div>
           </div>
         </div>
-        {/* JSON Index Section */}
-        <div style={{ marginTop: '3rem', padding: '2rem', background: '#18181b', borderRadius: 12, color: '#fff', maxWidth: 1200, marginLeft: 'auto', marginRight: 'auto', textAlign: 'left' }}>
-          <h2 style={{ fontWeight: 700, fontSize: 22, marginBottom: 20, textAlign: 'left' }}>MLB API Endpoints & JSON Index</h2>
-          
-          {/* MLB Branding API */}
-          <div style={{ marginBottom: '2rem', padding: '1.5rem', background: '#1f1f23', borderRadius: 8, border: '1px solid #333' }}>
-            <h3 style={{ color: '#4fd1c5', fontSize: 18, marginBottom: '1rem' }}>MLB Branding API</h3>
-            <p style={{ color: '#ccc', fontSize: 14, marginBottom: '1rem' }}>Team branding, colors, logos, wordmarks, MLB.TV assets, and All-Star teams.</p>
-            <ul style={{ paddingLeft: '1rem', lineHeight: 1.6, fontSize: 14 }}>
-              <li><code style={{ background: '#333', padding: '2px 6px', borderRadius: 4, color: '#4fd1c5' }}>https://storage.mobile.mlbinfra.com/atbatconfig/branding.json</code> - Complete branding data</li>
-            </ul>
-          </div>
-
-          {/* MLB Stats API */}
-          <div style={{ marginBottom: '2rem', padding: '1.5rem', background: '#1f1f23', borderRadius: 8, border: '1px solid #333' }}>
-            <h3 style={{ color: '#4fd1c5', fontSize: 18, marginBottom: '1rem' }}>MLB Stats API</h3>
-            <p style={{ color: '#ccc', fontSize: 14, marginBottom: '1rem' }}>Player statistics, team rosters, game data, and advanced metrics.</p>
-            <ul style={{ paddingLeft: '1rem', lineHeight: 1.8, fontSize: 13 }}>
-              <li><code style={{ background: '#333', padding: '2px 6px', borderRadius: 4, color: '#4fd1c5' }}>https://statsapi.mlb.com/api/v1/teams</code> - All teams list</li>
-              <li><code style={{ background: '#333', padding: '2px 6px', borderRadius: 4, color: '#4fd1c5' }}>https://statsapi.mlb.com/api/v1/teams/[TEAM_ID]/roster/Active</code> - Active team roster</li>
-              <li><code style={{ background: '#333', padding: '2px 6px', borderRadius: 4, color: '#4fd1c5' }}>https://statsapi.mlb.com/api/v1/people/[PLAYER_ID]</code> - Player details</li>
-              <li><code style={{ background: '#333', padding: '2px 6px', borderRadius: 4, color: '#4fd1c5' }}>https://statsapi.mlb.com/api/v1/people/[PLAYER_ID]/stats?stats=season&group=hitting&season=[YEAR]</code> - Season hitting stats</li>
-              <li><code style={{ background: '#333', padding: '2px 6px', borderRadius: 4, color: '#4fd1c5' }}>https://statsapi.mlb.com/api/v1/people/[PLAYER_ID]/stats?stats=statcast&group=hitting&season=[YEAR]</code> - Statcast metrics</li>
-              <li><code style={{ background: '#333', padding: '2px 6px', borderRadius: 4, color: '#4fd1c5' }}>https://statsapi.mlb.com/api/v1/people/[PLAYER_ID]/stats?stats=metricAverages&group=hitting&season=[YEAR]&metrics=launchSpeed,distance,launchAngle</code> - Advanced hitting metrics</li>
-              <li><code style={{ background: '#333', padding: '2px 6px', borderRadius: 4, color: '#4fd1c5' }}>https://statsapi.mlb.com/api/v1/people/[PLAYER_ID]/stats?stats=season&group=pitching&season=[YEAR]</code> - Season pitching stats</li>
-            </ul>
-          </div>
-
-          {/* MLB Schedule API */}
-          <div style={{ marginBottom: '2rem', padding: '1.5rem', background: '#1f1f23', borderRadius: 8, border: '1px solid #333' }}>
-            <h3 style={{ color: '#4fd1c5', fontSize: 18, marginBottom: '1rem' }}>MLB Schedule API</h3>
-            <p style={{ color: '#ccc', fontSize: 14, marginBottom: '1rem' }}>Game schedules, live game data, and calendar information.</p>
-            <ul style={{ paddingLeft: '1rem', lineHeight: 1.8, fontSize: 13 }}>
-              <li><code style={{ background: '#333', padding: '2px 6px', borderRadius: 4, color: '#4fd1c5' }}>https://statsapi.mlb.com/api/v1/schedule?sportId=1&startDate=[DATE]&endDate=[DATE]</code> - Games by date range</li>
-              <li><code style={{ background: '#333', padding: '2px 6px', borderRadius: 4, color: '#4fd1c5' }}>https://statsapi.mlb.com/api/v1/schedule?sportId=1&teamId=[TEAM_ID]&startDate=[DATE]&endDate=[DATE]</code> - Team schedule</li>
-              <li><code style={{ background: '#333', padding: '2px 6px', borderRadius: 4, color: '#4fd1c5' }}>https://statsapi.mlb.com/api/v1/schedule/games/?sportId=1&startDate=[DATE]&endDate=[DATE]&teamId=[TEAM_ID]&hydrate=linescore,team</code> - Live game context</li>
-              <li><code style={{ background: '#333', padding: '2px 6px', borderRadius: 4, color: '#4fd1c5' }}>https://statsapi.mlb.com/api/v1/game/[GAME_PK]/linescore</code> - Live game score</li>
-              <li><code style={{ background: '#333', padding: '2px 6px', borderRadius: 4, color: '#4fd1c5' }}>https://statsapi.mlb.com/api/v1/game/[GAME_PK]/playByPlay</code> - Play-by-play data</li>
-            </ul>
-          </div>
-
-          {/* MLB Image CDN */}
-          <div style={{ marginBottom: '2rem', padding: '1.5rem', background: '#1f1f23', borderRadius: 8, border: '1px solid #333' }}>
-            <h3 style={{ color: '#4fd1c5', fontSize: 18, marginBottom: '1rem' }}>MLB Image CDN</h3>
-            <p style={{ color: '#ccc', fontSize: 14, marginBottom: '1rem' }}>Player photos, team logos, and branded assets with dynamic sizing and formats.</p>
-            <ul style={{ paddingLeft: '1rem', lineHeight: 1.8, fontSize: 13 }}>
-              <li><strong style={{ color: '#fff' }}>Player Images:</strong></li>
-              <li style={{ marginLeft: '1rem' }}><code style={{ background: '#333', padding: '2px 6px', borderRadius: 4, color: '#4fd1c5' }}>https://img.mlbstatic.com/mlb-photos/image/upload/w_[WIDTH],q_auto/v1/people/[PLAYER_ID]/headshot/silo/current</code> - Player headshot</li>
-              <li style={{ marginLeft: '1rem' }}><code style={{ background: '#333', padding: '2px 6px', borderRadius: 4, color: '#4fd1c5' }}>https://img.mlbstatic.com/mlb-photos/image/upload/h_1080,w_1920,c_auto,g_auto:subject/v1/people/[PLAYER_ID]/action/hero/current</code> - Player action shot</li>
-              <li style={{ marginLeft: '1rem' }}><code style={{ background: '#333', padding: '2px 6px', borderRadius: 4, color: '#4fd1c5' }}>https://img.mlbstatic.com/mlb-photos/image/upload/w_720,f_png,q_auto/v1/people/[PLAYER_ID]/pressbox/current</code> - Pressbox photo</li>
-              <li><strong style={{ color: '#fff' }}>Team Logos:</strong></li>
-              <li style={{ marginLeft: '1rem' }}><code style={{ background: '#333', padding: '2px 6px', borderRadius: 4, color: '#4fd1c5' }}>https://img.mlbstatic.com/mlb-photos/image/upload/w_[WIDTH],f_png,q_auto/v1/team/[TEAM_ID]/logo/spot/current</code> - Team spot logo</li>
-              <li style={{ marginLeft: '1rem' }}><code style={{ background: '#333', padding: '2px 6px', borderRadius: 4, color: '#4fd1c5' }}>https://img.mlbstatic.com/mlb-photos/image/upload/w_[WIDTH],f_png,q_auto/v1/team/[TEAM_ID]/logo/cap/dark/current</code> - Cap logo dark</li>
-              <li style={{ marginLeft: '1rem' }}><code style={{ background: '#333', padding: '2px 6px', borderRadius: 4, color: '#4fd1c5' }}>https://img.mlbstatic.com/mlb-photos/image/upload/w_[WIDTH],f_png,q_auto/v1/team/[TEAM_ID]/logo/cap/light/current</code> - Cap logo light</li>
-              <li style={{ marginLeft: '1rem' }}><code style={{ background: '#333', padding: '2px 6px', borderRadius: 4, color: '#4fd1c5' }}>https://img.mlbstatic.com/mlb-photos/image/upload/w_[WIDTH],f_png,q_auto/v1/team/[TEAM_ID]/fill/spot</code> - Team fill color</li>
-              <li><strong style={{ color: '#fff' }}>Team Backgrounds:</strong></li>
-              <li style={{ marginLeft: '1rem' }}><code style={{ background: '#333', padding: '2px 6px', borderRadius: 4, color: '#4fd1c5' }}>https://img.mlbstatic.com/mlb-photos/image/upload/w_1280,f_png,q_auto/v1/team/[TEAM_ID]/action/hero/current</code> - Team hero background</li>
-            </ul>
-          </div>
-
-          {/* MLB Standings API */}
-          <div style={{ marginBottom: '2rem', padding: '1.5rem', background: '#1f1f23', borderRadius: 8, border: '1px solid #333' }}>
-            <h3 style={{ color: '#4fd1c5', fontSize: 18, marginBottom: '1rem' }}>MLB Standings API</h3>
-            <p style={{ color: '#ccc', fontSize: 14, marginBottom: '1rem' }}>League standings, division records, and playoff positioning.</p>
-            <ul style={{ paddingLeft: '1rem', lineHeight: 1.8, fontSize: 13 }}>
-              <li><code style={{ background: '#333', padding: '2px 6px', borderRadius: 4, color: '#4fd1c5' }}>https://statsapi.mlb.com/api/v1/standings?leagueId=103,104&season=[YEAR]</code> - League standings</li>
-              <li><code style={{ background: '#333', padding: '2px 6px', borderRadius: 4, color: '#4fd1c5' }}>https://statsapi.mlb.com/api/v1/standings/regularSeason?leagueId=103&season=[YEAR]</code> - AL standings</li>
-              <li><code style={{ background: '#333', padding: '2px 6px', borderRadius: 4, color: '#4fd1c5' }}>https://statsapi.mlb.com/api/v1/standings/regularSeason?leagueId=104&season=[YEAR]</code> - NL standings</li>
-              <li><code style={{ background: '#333', padding: '2px 6px', borderRadius: 4, color: '#4fd1c5' }}>https://statsapi.mlb.com/api/v1/standings/wildCard?leagueId=103,104&season=[YEAR]</code> - Wild card standings</li>
-            </ul>
-          </div>
-
-          {/* MLB Venues API */}
-          <div style={{ marginBottom: '2rem', padding: '1.5rem', background: '#1f1f23', borderRadius: 8, border: '1px solid #333' }}>
-            <h3 style={{ color: '#4fd1c5', fontSize: 18, marginBottom: '1rem' }}>MLB Venues API</h3>
-            <p style={{ color: '#ccc', fontSize: 14, marginBottom: '1rem' }}>Stadium information, venue details, and ballpark data.</p>
-            <ul style={{ paddingLeft: '1rem', lineHeight: 1.8, fontSize: 13 }}>
-              <li><code style={{ background: '#333', padding: '2px 6px', borderRadius: 4, color: '#4fd1c5' }}>https://statsapi.mlb.com/api/v1/venues</code> - All venues list</li>
-              <li><code style={{ background: '#333', padding: '2px 6px', borderRadius: 4, color: '#4fd1c5' }}>https://statsapi.mlb.com/api/v1/venues/[VENUE_ID]</code> - Specific venue details</li>
-            </ul>
-          </div>
-
-          {/* Common Parameters */}
-          <div style={{ padding: '1.5rem', background: '#1f1f23', borderRadius: 8, border: '1px solid #333' }}>
-            <h3 style={{ color: '#4fd1c5', fontSize: 18, marginBottom: '1rem' }}>Common Parameters</h3>
-            <ul style={{ paddingLeft: '1rem', lineHeight: 1.8, fontSize: 13 }}>
-              <li><strong style={{ color: '#fff' }}>[TEAM_ID]:</strong> Team ID (e.g., 147 for Yankees, 119 for Dodgers)</li>
-              <li><strong style={{ color: '#fff' }}>[PLAYER_ID]:</strong> Player ID (e.g., 545361 for Mike Trout)</li>
-              <li><strong style={{ color: '#fff' }}>[GAME_PK]:</strong> Game primary key from schedule API</li>
-              <li><strong style={{ color: '#fff' }}>[DATE]:</strong> Date in YYYY-MM-DD format</li>
-              <li><strong style={{ color: '#fff' }}>[YEAR]:</strong> Season year (e.g., 2025)</li>
-              <li><strong style={{ color: '#fff' }}>[WIDTH]:</strong> Image width in pixels</li>
-              <li><strong style={{ color: '#fff' }}>[VENUE_ID]:</strong> Venue ID from venues API</li>
-            </ul>
-          </div>
-        </div>
         {/* Footer with version and legal line */}
         <footer style={{ marginTop: '3rem', padding: '2rem', textAlign: 'center', color: '#888', fontSize: 14, borderTop: '1px solid #333' }}>
           <p style={{ margin: '0 0 1rem 0', fontWeight: 600 }}>MLB XR Branding Guide v1.6</p>
@@ -721,9 +625,9 @@ function AppV2() {
             Player images and team assets are sourced from MLB's official APIs and CDN.
           </p>
           <div style={{ marginTop: '1.5rem', padding: '1rem', background: '#1a1a1a', borderRadius: '8px', border: '1px solid #333' }}>
-            <p style={{ margin: '0 0 0.5rem 0', color: '#4fd1c5', fontWeight: 600, fontSize: '15px' }}>📚 Documentation</p>
+            <p style={{ margin: '0 0 0.5rem 0', color: '#4fd1c5', fontWeight: 600, fontSize: '15px' }}>Documentation</p>
             <p style={{ margin: '0 0 1rem 0', color: '#ccc', fontSize: '13px' }}>
-              View the complete interactive documentation site with team colors, usage examples, and development guides.
+              View the complete interactive documentation site with team colors, usage examples, development guides, and comprehensive MLB API endpoints.
             </p>
             <a 
               href="./docs/index.html" 
@@ -732,25 +636,25 @@ function AppV2() {
               style={{ 
                 display: 'inline-block',
                 padding: '10px 20px', 
-                background: 'linear-gradient(135deg, #132448, #005A9C)', 
+                background: '#132448', 
                 color: '#fff', 
                 textDecoration: 'none', 
                 borderRadius: '6px', 
                 fontWeight: 600,
                 fontSize: '14px',
                 transition: 'all 0.2s ease',
-                boxShadow: '0 2px 8px rgba(0, 0, 0, 0.3)'
+                border: '1px solid #4fd1c5'
               }}
               onMouseEnter={(e) => {
-                e.target.style.transform = 'translateY(-1px)';
-                e.target.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.4)';
+                e.target.style.background = '#4fd1c5';
+                e.target.style.color = '#000';
               }}
               onMouseLeave={(e) => {
-                e.target.style.transform = 'translateY(0)';
-                e.target.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.3)';
+                e.target.style.background = '#132448';
+                e.target.style.color = '#fff';
               }}
             >
-              🚀 Open Documentation Site
+              Open Documentation Site
             </a>
           </div>
         </footer>

@@ -31,7 +31,7 @@ class ReadmeToHtmlSync {
 
     async sync() {
         try {
-            console.log('🔄 Starting README to HTML sync...');
+            console.log('Starting README to HTML sync...');
             
             // Read and parse README
             await this.parseReadme();
@@ -42,17 +42,17 @@ class ReadmeToHtmlSync {
             // Generate HTML content
             await this.generateHtml();
             
-            console.log('✅ Documentation sync completed successfully!');
-            console.log(`📄 Updated: ${this.outputPath}`);
+            console.log('Documentation sync completed successfully!');
+            console.log(`Updated: ${this.outputPath}`);
             
         } catch (error) {
-            console.error('❌ Sync failed:', error);
+            console.error('Sync failed:', error);
             process.exit(1);
         }
     }
 
     async parseReadme() {
-        console.log('📖 Parsing README.md...');
+        console.log('Parsing README.md...');
         
         if (!fs.existsSync(this.readmePath)) {
             throw new Error(`README.md not found at ${this.readmePath}`);
@@ -102,11 +102,11 @@ class ReadmeToHtmlSync {
             };
         }
         
-        console.log(`📋 Parsed ${Object.keys(this.sections).length} sections`);
+        console.log(`Parsed ${Object.keys(this.sections).length} sections`);
     }
 
     async loadTeamColors() {
-        console.log('🎨 Loading team colors...');
+        console.log('Loading team colors...');
         
         const spotColorPath = path.join(this.rootDir, 'src', 'utils', 'spotColorMapping.js');
         const teamExtrasPath = path.join(this.rootDir, 'src', 'team-extras.json');
@@ -117,7 +117,7 @@ class ReadmeToHtmlSync {
             try {
                 const teamExtrasContent = fs.readFileSync(teamExtrasPath, 'utf8');
                 teamExtras = JSON.parse(teamExtrasContent);
-                console.log(`📋 Loaded team extras for ${Object.keys(teamExtras).length} teams`);
+                console.log(`Loaded team extras for ${Object.keys(teamExtras).length} teams`);
             } catch (error) {
                 console.warn('⚠️  Could not parse team extras:', error.message);
             }
@@ -143,7 +143,7 @@ class ReadmeToHtmlSync {
                     });
                 }
                 
-                console.log(`🎨 Loaded ${Object.keys(this.teamColors).length} team colors`);
+                console.log(`Loaded ${Object.keys(this.teamColors).length} team colors`);
             } catch (error) {
                 console.warn('⚠️  Could not parse spot color mapping:', error.message);
             }
@@ -151,7 +151,7 @@ class ReadmeToHtmlSync {
     }
 
     async generateHtml() {
-        console.log('🏗️  Generating HTML documentation...');
+        console.log('Generating HTML documentation...');
         
         // Create the complete HTML structure
         const htmlContent = this.buildCompleteHtml();
@@ -159,7 +159,7 @@ class ReadmeToHtmlSync {
         // Write to output file
         fs.writeFileSync(this.outputPath, htmlContent, 'utf8');
         
-        console.log('📝 HTML documentation generated');
+        console.log('HTML documentation generated');
     }
 
     buildCompleteHtml() {
@@ -178,6 +178,7 @@ class ReadmeToHtmlSync {
     <meta name="keywords" content="MLB, XR, Branding, React, Team Colors, API, Documentation">
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%23FF4444'/><text x='50' y='70' font-size='60' text-anchor='middle' fill='white'>⚾</text></svg>">
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="typography.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -187,7 +188,7 @@ class ReadmeToHtmlSync {
         <!-- Navigation -->
         <nav class="sidebar" id="sidebar">
             <div class="sidebar-header">
-                <h2>⚾ MLB XR Guide</h2>
+                <h2>MLB XR Guide</h2>
                 <button class="menu-toggle" id="menuToggle">☰</button>
             </div>
             <ul class="nav-menu" id="navMenu">
@@ -195,8 +196,8 @@ class ReadmeToHtmlSync {
             </ul>
             <div class="sidebar-footer">
                 <p>Last Updated: <span id="lastUpdated">${new Date().toLocaleDateString()}</span></p>
-                <p><a href="../README.md" target="_blank">📄 View README</a></p>
-                <p><small>🔄 Auto-synced from README.md</small></p>
+                <p><a href="../README.md" target="_blank">View README</a></p>
+                <p><small>Auto-synced from README.md</small></p>
             </div>
         </nav>
 
@@ -204,12 +205,12 @@ class ReadmeToHtmlSync {
         <main class="main-content" id="mainContent">
             <!-- Header -->
             <header class="header">
-                <h1>MLB XR Branding Guide</h1>
-                <p class="subtitle">Official MLB team branding assets for Extended Reality applications</p>
+                <h1 class="text-marquee">MLB XR Branding Guide</h1>
+                <p class="text-headline subtitle">Official MLB team branding assets for Extended Reality applications</p>
                 <div class="status-badges">
-                    <span class="badge badge-success">✅ Active</span>
+                    <span class="badge badge-success">Active</span>
                     <span class="badge badge-info">📚 Documentation</span>
-                    <span class="badge badge-warning">🔄 Auto-Sync</span>
+                    <span class="badge badge-warning">Auto-Sync</span>
                 </div>
             </header>
 
@@ -246,13 +247,24 @@ class ReadmeToHtmlSync {
     generateNavigation() {
         return Object.values(this.sections)
             .filter(section => section.level === 2)
-            .map(section => `<li><a href="#${section.id}" class="nav-link">${section.emoji} ${section.title.replace(/^[\w\s]*\s/, '')}</a></li>`)
+            .map(section => {
+                const cleanTitle = this.cleanEmojiContent(section.title);
+                // Add developer-standard emojis back for specific sections
+                let displayTitle = cleanTitle;
+                if (cleanTitle.includes('Quick Start')) displayTitle = '🚀 ' + cleanTitle;
+                if (cleanTitle.includes('API Endpoints')) displayTitle = '🔗 ' + cleanTitle;
+                return `<li><a href="#${section.id}" class="nav-link">${displayTitle}</a></li>`;
+            })
             .join('\n                ');
     }
 
     sectionToHtml(section) {
         let html = `<section id="${section.id}" class="section">`;
-        html += `<h2>${section.title}</h2>`;
+        const cleanTitle = this.cleanEmojiContent(section.title);
+        
+        // Apply typography classes based on section level
+        const titleClass = section.level === 2 ? 'text-title-bold' : 'text-headline-bold';
+        html += `<h2 class="${titleClass}">${cleanTitle}</h2>`;
         
         // Convert markdown content to HTML (simplified)
         const htmlContent = this.markdownToHtml(section.content);
@@ -265,28 +277,28 @@ class ReadmeToHtmlSync {
 
     markdownToHtml(markdown) {
         return markdown
-            // Headers
-            .replace(/^### (.+)$/gm, '<h3>$1</h3>')
-            .replace(/^#### (.+)$/gm, '<h4>$1</h4>')
+            // Headers with typography classes
+            .replace(/^### (.+)$/gm, '<h3 class="text-headline">$1</h3>')
+            .replace(/^#### (.+)$/gm, '<h4 class="text-subheadline">$1</h4>')
             
             // Code blocks
-            .replace(/```([\s\S]*?)```/g, '<div class="code-block"><pre>$1</pre></div>')
+            .replace(/```([\s\S]*?)```/g, '<div class="code-block"><pre class="text-code">$1</pre></div>')
             
             // Inline code
-            .replace(/`([^`]+)`/g, '<code class="inline-code">$1</code>')
+            .replace(/`([^`]+)`/g, '<code class="text-code inline-code">$1</code>')
             
             // Bold text
-            .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+            .replace(/\*\*(.+?)\*\*/g, '<strong class="text-body-bold">$1</strong>')
             
             // Lists
-            .replace(/^- (.+)$/gm, '<li>$1</li>')
-            .replace(/^\d+\. (.+)$/gm, '<li>$1</li>')
+            .replace(/^- (.+)$/gm, '<li class="text-body">$1</li>')
+            .replace(/^\d+\. (.+)$/gm, '<li class="text-body">$1</li>')
             
             // Wrap lists (simplified)
             .replace(/(<li>.*<\/li>)/g, '<ul>$1</ul>')
             
-            // Paragraphs
-            .replace(/^([^<\n\r].*)$/gm, '<p>$1</p>')
+            // Paragraphs with body text class
+            .replace(/^([^<\n\r].*)$/gm, '<p class="text-body">$1</p>')
             
             // Clean up
             .replace(/\n\s*\n/g, '\n')
@@ -306,12 +318,38 @@ class ReadmeToHtmlSync {
         return emojiMatch ? emojiMatch[1] : '📄';
     }
 
+    // Clean up emojis, keeping only developer-standard ones
+    cleanEmojiContent(text) {
+        // Keep only developer-standard emojis: 🚀 (deployment/launch), 📚 (documentation), 🔗 (links/APIs), ⚾ (baseball/project specific)
+        // Remove excessive/decorative emojis but preserve meaningful ones
+        return text
+            .replace(/🏗️\s*/g, '') // Remove construction emoji (not standard for dev)
+            .replace(/🎯\s*/g, '') // Remove target emoji
+            .replace(/🎨\s*/g, '') // Remove art emoji
+            .replace(/🌐\s*/g, '') // Remove globe emoji
+            .replace(/✨\s*/g, '') // Remove sparkles emoji
+            .replace(/🔧\s*/g, '') // Remove wrench emoji
+            .replace(/📦\s*/g, '') // Remove package emoji (keep for actual packages)
+            .replace(/📱\s*/g, '') // Remove mobile emoji
+            .replace(/📋\s*/g, '') // Remove clipboard emoji
+            .replace(/📊\s*/g, '') // Remove chart emoji
+            .replace(/🛡️\s*/g, '') // Remove shield emoji
+            .replace(/🎵\s*/g, '') // Remove music emoji
+            .replace(/✅\s*/g, '') // Remove checkmark emoji (not standard)
+            .replace(/🔄\s*/g, '') // Remove refresh emoji (not standard)
+            .replace(/⚠️\s*/g, '') // Remove warning emoji (not standard)
+            // Clean up duplicate spaces and markdown
+            .replace(/\*\*([^*]+)\*\*/g, '$1') // Clean markdown bold
+            .replace(/\s+/g, ' ') // Clean multiple spaces
+            .trim();
+    }
+
     // Watch for changes in README.md
     watchForChanges() {
-        console.log('👀 Watching for README.md changes...');
+        console.log('Watching for README.md changes...');
         
         fs.watchFile(this.readmePath, (curr, prev) => {
-            console.log('📝 README.md changed, syncing documentation...');
+            console.log('README.md changed, syncing documentation...');
             this.sync();
         });
     }

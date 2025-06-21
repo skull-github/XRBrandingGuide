@@ -280,6 +280,68 @@ This ensures consistent, official MLB branding throughout the entire application
    - Team metadata and configuration
    - CSV export for dynamic data updates
 
+## 🔗 **MLB API Endpoints & JSON Index**
+
+### **MLB Branding API**
+Team branding, colors, logos, wordmarks, MLB.TV assets, and All-Star teams.
+- `https://storage.mobile.mlbinfra.com/atbatconfig/branding.json` - Complete branding data
+
+### **MLB Stats API**
+Player statistics, team rosters, game data, and advanced metrics.
+- `https://statsapi.mlb.com/api/v1/teams` - All teams list
+- `https://statsapi.mlb.com/api/v1/teams/[TEAM_ID]/roster/Active` - Active team roster
+- `https://statsapi.mlb.com/api/v1/people/[PLAYER_ID]` - Player details
+- `https://statsapi.mlb.com/api/v1/people/[PLAYER_ID]/stats?stats=season&group=hitting&season=[YEAR]` - Season hitting stats
+- `https://statsapi.mlb.com/api/v1/people/[PLAYER_ID]/stats?stats=statcast&group=hitting&season=[YEAR]` - Statcast metrics
+- `https://statsapi.mlb.com/api/v1/people/[PLAYER_ID]/stats?stats=metricAverages&group=hitting&season=[YEAR]&metrics=launchSpeed,distance,launchAngle` - Advanced hitting metrics
+- `https://statsapi.mlb.com/api/v1/people/[PLAYER_ID]/stats?stats=season&group=pitching&season=[YEAR]` - Season pitching stats
+
+### **MLB Schedule API**
+Game schedules, live game data, and calendar information.
+- `https://statsapi.mlb.com/api/v1/schedule?sportId=1&startDate=[DATE]&endDate=[DATE]` - Games by date range
+- `https://statsapi.mlb.com/api/v1/schedule?sportId=1&teamId=[TEAM_ID]&startDate=[DATE]&endDate=[DATE]` - Team schedule
+- `https://statsapi.mlb.com/api/v1/schedule/games/?sportId=1&startDate=[DATE]&endDate=[DATE]&teamId=[TEAM_ID]&hydrate=linescore,team` - Live game context
+- `https://statsapi.mlb.com/api/v1/game/[GAME_PK]/linescore` - Live game score
+- `https://statsapi.mlb.com/api/v1/game/[GAME_PK]/playByPlay` - Play-by-play data
+
+### **MLB Image CDN**
+Player photos, team logos, and branded assets with dynamic sizing and formats.
+
+**Player Images:**
+- `https://img.mlbstatic.com/mlb-photos/image/upload/w_[WIDTH],q_auto/v1/people/[PLAYER_ID]/headshot/silo/current` - Player headshot
+- `https://img.mlbstatic.com/mlb-photos/image/upload/h_1080,w_1920,c_auto,g_auto:subject/v1/people/[PLAYER_ID]/action/hero/current` - Player action shot
+- `https://img.mlbstatic.com/mlb-photos/image/upload/w_720,f_png,q_auto/v1/people/[PLAYER_ID]/pressbox/current` - Pressbox photo
+
+**Team Logos:**
+- `https://img.mlbstatic.com/mlb-photos/image/upload/w_[WIDTH],f_png,q_auto/v1/team/[TEAM_ID]/logo/spot/current` - Team spot logo
+- `https://img.mlbstatic.com/mlb-photos/image/upload/w_[WIDTH],f_png,q_auto/v1/team/[TEAM_ID]/logo/cap/dark/current` - Cap logo dark
+- `https://img.mlbstatic.com/mlb-photos/image/upload/w_[WIDTH],f_png,q_auto/v1/team/[TEAM_ID]/logo/cap/light/current` - Cap logo light
+- `https://img.mlbstatic.com/mlb-photos/image/upload/w_[WIDTH],f_png,q_auto/v1/team/[TEAM_ID]/fill/spot` - Team fill color
+
+**Team Backgrounds:**
+- `https://img.mlbstatic.com/mlb-photos/image/upload/w_1280,f_png,q_auto/v1/team/[TEAM_ID]/action/hero/current` - Team hero background
+
+### **MLB Standings API**
+League standings, division records, and playoff positioning.
+- `https://statsapi.mlb.com/api/v1/standings?leagueId=103,104&season=[YEAR]` - League standings
+- `https://statsapi.mlb.com/api/v1/standings/regularSeason?leagueId=103&season=[YEAR]` - AL standings
+- `https://statsapi.mlb.com/api/v1/standings/regularSeason?leagueId=104&season=[YEAR]` - NL standings
+- `https://statsapi.mlb.com/api/v1/standings/wildCard?leagueId=103,104&season=[YEAR]` - Wild card standings
+
+### **MLB Venues API**
+Stadium information, venue details, and ballpark data.
+- `https://statsapi.mlb.com/api/v1/venues` - All venues list
+- `https://statsapi.mlb.com/api/v1/venues/[VENUE_ID]` - Specific venue details
+
+### **Common Parameters**
+- **[TEAM_ID]**: Team ID (e.g., 147 for Yankees, 119 for Dodgers)
+- **[PLAYER_ID]**: Player ID (e.g., 545361 for Mike Trout)
+- **[GAME_PK]**: Game primary key from schedule API
+- **[DATE]**: Date in YYYY-MM-DD format
+- **[YEAR]**: Season year (e.g., 2025)
+- **[WIDTH]**: Image width in pixels
+- **[VENUE_ID]**: Venue ID from venues API
+
 ### **📁 Custom Module System**
 
 #### **Utilities (`src/utils/`)**
