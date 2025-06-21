@@ -6,6 +6,17 @@ export function BoxScore({ gamePk, onClose, isVisible }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [activeTab, setActiveTab] = useState('away'); // 'away' or 'home'
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   useEffect(() => {
     if (gamePk && isVisible) {
@@ -157,93 +168,109 @@ export function BoxScore({ gamePk, onClose, isVisible }) {
     }, { ab: 0, r: 0, h: 0, rbi: 0, bb: 0, so: 0, k: 0, lob: 0 });
 
     return (
-      <div>
-        {/* Header */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: '200px 50px 40px 30px 30px 40px 40px 30px 30px 50px 50px',
-          gap: '4px',
-          backgroundColor: '#1a1a1a',
-          padding: '8px',
-          borderRadius: '4px',
-          fontSize: '11px',
-          fontWeight: '600',
-          color: '#ccc',
-          marginBottom: '2px'
-        }}>
-          <div>BATTING</div>
-          <div>POS</div>
-          <div>AB</div>
-          <div>R</div>
-          <div>H</div>
-          <div>RBI</div>
-          <div>BB</div>
-          <div>SO</div>
-          <div>K</div>
-          <div>LOB</div>
-          <div>AVG</div>
-          <div>OPS</div>
-        </div>
-
-        {/* Batting lineup */}
-        {batters.map((player, index) => (
-          <div
-            key={player.person.id}
-            style={{
-              display: 'grid',
-              gridTemplateColumns: '200px 50px 40px 30px 30px 40px 40px 30px 30px 50px 50px',
-              gap: '4px',
-              padding: '6px 8px',
-              backgroundColor: index % 2 === 0 ? '#2a2a2a' : '#242424',
-              fontSize: '12px',
-              color: '#fff',
-              alignItems: 'center'
-            }}
-          >
-            <div style={{ fontWeight: '400' }}>
-              {formatPlayerName(player)}
-            </div>
-            <div style={{ fontSize: '10px', color: '#ccc' }}>
-              {formatPosition(player.position)}
-            </div>
-            <div>{player.stats.ab}</div>
-            <div>{player.stats.r}</div>
-            <div>{player.stats.h}</div>
-            <div>{player.stats.rbi}</div>
-            <div>{player.stats.bb}</div>
-            <div>{player.stats.so}</div>
-            <div>{player.stats.k}</div>
-            <div>{player.stats.lob}</div>
-            <div style={{ fontSize: '10px' }}>{player.stats.avg}</div>
-            <div style={{ fontSize: '10px' }}>{player.stats.ops}</div>
+      <div style={{ 
+        overflowX: 'auto',
+        minWidth: '100%',
+        borderRadius: '4px',
+        border: '1px solid rgba(255, 255, 255, 0.1)'
+      }}>
+        <div style={{ minWidth: '720px' }}>
+          {/* Header */}
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: '1fr 50px 40px 35px 35px 40px 40px 35px 35px 50px 50px',
+            gap: '4px',
+            backgroundColor: '#1a1a1a',
+            padding: '8px 12px',
+            fontSize: '10px',
+            fontWeight: '600',
+            color: '#ccc',
+            textAlign: 'center',
+            borderBottom: '1px solid rgba(255, 255, 255, 0.1)'
+          }}>
+            <div style={{ textAlign: 'left', minWidth: '140px' }}>BATTING</div>
+            <div>POS</div>
+            <div>AB</div>
+            <div>R</div>
+            <div>H</div>
+            <div>RBI</div>
+            <div>BB</div>
+            <div>SO</div>
+            <div>K</div>
+            <div>LOB</div>
+            <div>AVG</div>
+            <div>OPS</div>
           </div>
-        ))}
 
-        {/* Team Totals */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: '200px 50px 40px 30px 30px 40px 40px 30px 30px 50px 50px',
-          gap: '4px',
-          padding: '8px',
-          backgroundColor: '#1a2a3a',
-          fontSize: '12px',
-          fontWeight: '600',
-          color: '#fff',
-          marginTop: '4px',
-          borderRadius: '4px'
-        }}>
-          <div>TOTALS</div>
-          <div>-</div>
-          <div>{teamTotals.ab}</div>
-          <div>{teamTotals.r}</div>
-          <div>{teamTotals.h}</div>
-          <div>{teamTotals.rbi}</div>
-          <div>{teamTotals.bb}</div>
-          <div>{teamTotals.so}</div>
-          <div>{teamTotals.k}</div>
-          <div>{teamTotals.lob}</div>
-          <div>-</div>
-          <div>-</div>
+          {/* Batting lineup */}
+          {batters.map((player, index) => (
+            <div
+              key={player.person.id}
+              style={{
+                display: 'grid',
+                gridTemplateColumns: '1fr 50px 40px 35px 35px 40px 40px 35px 35px 50px 50px',
+                gap: '4px',
+                padding: '6px 12px',
+                backgroundColor: index % 2 === 0 ? '#2a2a2a' : '#242424',
+                fontSize: '11px',
+                color: '#fff',
+                alignItems: 'center',
+                textAlign: 'center',
+                borderBottom: '1px solid rgba(255, 255, 255, 0.05)'
+              }}
+            >
+              <div style={{ 
+                fontWeight: '400',
+                textAlign: 'left',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap',
+                minWidth: '140px'
+              }}>
+                {formatPlayerName(player)}
+              </div>
+              <div style={{ fontSize: '9px', color: '#ccc' }}>
+                {formatPosition(player.position)}
+              </div>
+              <div>{player.stats.ab}</div>
+              <div>{player.stats.r}</div>
+              <div>{player.stats.h}</div>
+              <div>{player.stats.rbi}</div>
+              <div>{player.stats.bb}</div>
+              <div>{player.stats.so}</div>
+              <div>{player.stats.k}</div>
+              <div>{player.stats.lob}</div>
+              <div style={{ fontSize: '9px' }}>{player.stats.avg}</div>
+              <div style={{ fontSize: '9px' }}>{player.stats.ops}</div>
+            </div>
+          ))}
+
+          {/* Team Totals */}
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: '1fr 50px 40px 35px 35px 40px 40px 35px 35px 50px 50px',
+            gap: '4px',
+            padding: '8px 12px',
+            backgroundColor: '#1a2a3a',
+            fontSize: '11px',
+            fontWeight: '600',
+            color: '#fff',
+            textAlign: 'center',
+            borderTop: '1px solid rgba(255, 255, 255, 0.2)'
+          }}>
+            <div style={{ textAlign: 'left', minWidth: '140px' }}>TOTALS</div>
+            <div>-</div>
+            <div>{teamTotals.ab}</div>
+            <div>{teamTotals.r}</div>
+            <div>{teamTotals.h}</div>
+            <div>{teamTotals.rbi}</div>
+            <div>{teamTotals.bb}</div>
+            <div>{teamTotals.so}</div>
+            <div>{teamTotals.k}</div>
+            <div>{teamTotals.lob}</div>
+            <div>-</div>
+            <div>-</div>
+          </div>
         </div>
       </div>
     );
@@ -274,89 +301,106 @@ export function BoxScore({ gamePk, onClose, isVisible }) {
     }, { h: 0, r: 0, er: 0, bb: 0, so: 0, hr: 0 });
 
     return (
-      <div style={{ marginTop: '20px' }}>
-        {/* Header */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: '200px 50px 60px 30px 30px 30px 40px 30px 30px 50px 50px',
-          gap: '4px',
-          backgroundColor: '#1a1a1a',
-          padding: '8px',
-          borderRadius: '4px',
-          fontSize: '11px',
-          fontWeight: '600',
-          color: '#ccc',
-          marginBottom: '2px'
-        }}>
-          <div>PITCHERS</div>
-          <div>POS</div>
-          <div>IP</div>
-          <div>H</div>
-          <div>R</div>
-          <div>ER</div>
-          <div>BB</div>
-          <div>SO</div>
-          <div>HR</div>
-          <div>WHIP</div>
-          <div>ERA</div>
-        </div>
-
-        {pitchers.map((player, index) => (
-          <div
-            key={player.person.id}
-            style={{
-              display: 'grid',
-              gridTemplateColumns: '200px 50px 60px 30px 30px 30px 40px 30px 30px 50px 50px',
-              gap: '4px',
-              padding: '6px 8px',
-              backgroundColor: index % 2 === 0 ? '#2a2a2a' : '#242424',
-              fontSize: '12px',
-              color: '#fff',
-              alignItems: 'center'
-            }}
-          >
-            <div style={{ fontWeight: '400' }}>
-              {formatPlayerName(player)}
-            </div>
-            <div style={{ fontSize: '10px', color: '#ccc' }}>
-              {formatPosition(player.position)}
-            </div>
-            <div>{player.stats.ip}</div>
-            <div>{player.stats.h}</div>
-            <div>{player.stats.r}</div>
-            <div>{player.stats.er}</div>
-            <div>{player.stats.bb}</div>
-            <div>{player.stats.so}</div>
-            <div>{player.stats.hr}</div>
-            <div style={{ fontSize: '10px' }}>{player.stats.whip}</div>
-            <div style={{ fontSize: '10px' }}>{player.stats.era}</div>
+      <div style={{ 
+        marginTop: '20px',
+        overflowX: 'auto',
+        minWidth: '100%',
+        borderRadius: '4px',
+        border: '1px solid rgba(255, 255, 255, 0.1)'
+      }}>
+        <div style={{ minWidth: '760px' }}>
+          {/* Header */}
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: '1fr 50px 60px 35px 35px 35px 40px 35px 35px 50px 50px',
+            gap: '4px',
+            backgroundColor: '#1a1a1a',
+            padding: '8px 12px',
+            fontSize: '10px',
+            fontWeight: '600',
+            color: '#ccc',
+            textAlign: 'center',
+            borderBottom: '1px solid rgba(255, 255, 255, 0.1)'
+          }}>
+            <div style={{ textAlign: 'left', minWidth: '140px' }}>PITCHERS</div>
+            <div>POS</div>
+            <div>IP</div>
+            <div>H</div>
+            <div>R</div>
+            <div>ER</div>
+            <div>BB</div>
+            <div>SO</div>
+            <div>HR</div>
+            <div>WHIP</div>
+            <div>ERA</div>
           </div>
-        ))}
 
-        {/* Team Totals */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: '200px 50px 60px 30px 30px 30px 40px 30px 30px 50px 50px',
-          gap: '4px',
-          padding: '8px',
-          backgroundColor: '#1a2a3a',
-          fontSize: '12px',
-          fontWeight: '600',
-          color: '#fff',
-          marginTop: '4px',
-          borderRadius: '4px'
-        }}>
-          <div>TOTALS</div>
-          <div>-</div>
-          <div>-</div>
-          <div>{teamTotals.h}</div>
-          <div>{teamTotals.r}</div>
-          <div>{teamTotals.er}</div>
-          <div>{teamTotals.bb}</div>
-          <div>{teamTotals.so}</div>
-          <div>{teamTotals.hr}</div>
-          <div>-</div>
-          <div>-</div>
+          {pitchers.map((player, index) => (
+            <div
+              key={player.person.id}
+              style={{
+                display: 'grid',
+                gridTemplateColumns: '1fr 50px 60px 35px 35px 35px 40px 35px 35px 50px 50px',
+                gap: '4px',
+                padding: '6px 12px',
+                backgroundColor: index % 2 === 0 ? '#2a2a2a' : '#242424',
+                fontSize: '11px',
+                color: '#fff',
+                alignItems: 'center',
+                textAlign: 'center',
+                borderBottom: '1px solid rgba(255, 255, 255, 0.05)'
+              }}
+            >
+              <div style={{ 
+                fontWeight: '400',
+                textAlign: 'left',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap',
+                minWidth: '140px'
+              }}>
+                {formatPlayerName(player)}
+              </div>
+              <div style={{ fontSize: '9px', color: '#ccc' }}>
+                {formatPosition(player.position)}
+              </div>
+              <div>{player.stats.ip}</div>
+              <div>{player.stats.h}</div>
+              <div>{player.stats.r}</div>
+              <div>{player.stats.er}</div>
+              <div>{player.stats.bb}</div>
+              <div>{player.stats.so}</div>
+              <div>{player.stats.hr}</div>
+              <div style={{ fontSize: '9px' }}>{player.stats.whip}</div>
+              <div style={{ fontSize: '9px' }}>{player.stats.era}</div>
+            </div>
+          ))}
+
+          {/* Team Totals */}
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: '1fr 50px 60px 35px 35px 35px 40px 35px 35px 50px 50px',
+            gap: '4px',
+            padding: '8px 12px',
+            backgroundColor: '#1a2a3a',
+            fontSize: '11px',
+            fontWeight: '600',
+            color: '#fff',
+            textAlign: 'center',
+            borderTop: '1px solid rgba(255, 255, 255, 0.2)'
+          }}>
+            <div style={{ textAlign: 'left', minWidth: '140px' }}>TOTALS</div>
+            <div>-</div>
+            <div>-</div>
+            <div>{teamTotals.h}</div>
+            <div>{teamTotals.r}</div>
+            <div>{teamTotals.er}</div>
+            <div>{teamTotals.bb}</div>
+            <div>{teamTotals.so}</div>
+            <div>{teamTotals.hr}</div>
+            <div>-</div>
+            <div>-</div>
+          </div>
         </div>
       </div>
     );
@@ -374,60 +418,78 @@ export function BoxScore({ gamePk, onClose, isVisible }) {
     });
 
     return (
-      <div style={{ marginTop: '20px' }}>
-        {/* Header */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: '200px 50px 60px 30px 30px 30px 40px 30px 30px',
-          gap: '4px',
-          backgroundColor: '#1a1a1a',
-          padding: '8px',
-          borderRadius: '4px',
-          fontSize: '11px',
-          fontWeight: '600',
-          color: '#ccc',
-          marginBottom: '2px'
-        }}>
-          <div>BENCH</div>
-          <div>POS</div>
-          <div>AVG</div>
-          <div>GP</div>
-          <div>R</div>
-          <div>H</div>
-          <div>HR</div>
-          <div>RBI</div>
-          <div>SB</div>
-        </div>
-
-        {benchPlayers.map((player, index) => (
-          <div
-            key={player.person.id}
-            style={{
-              display: 'grid',
-              gridTemplateColumns: '200px 50px 60px 30px 30px 30px 40px 30px 30px',
-              gap: '4px',
-              padding: '6px 8px',
-              backgroundColor: index % 2 === 0 ? '#2a2a2a' : '#242424',
-              fontSize: '12px',
-              color: '#fff',
-              alignItems: 'center'
-            }}
-          >
-            <div style={{ fontWeight: '400' }}>
-              {formatPlayerName(player)}
-            </div>
-            <div style={{ fontSize: '10px', color: '#ccc' }}>
-              {formatPosition(player.position)}
-            </div>
-            <div style={{ fontSize: '10px' }}>{player.stats.avg}</div>
-            <div>{player.stats.gp}</div>
-            <div>{player.stats.r}</div>
-            <div>{player.stats.h}</div>
-            <div>{player.stats.hr}</div>
-            <div>{player.stats.rbi}</div>
-            <div>{player.stats.sb}</div>
+      <div style={{ 
+        marginTop: '20px',
+        overflowX: 'auto',
+        minWidth: '100%',
+        borderRadius: '4px',
+        border: '1px solid rgba(255, 255, 255, 0.1)'
+      }}>
+        <div style={{ minWidth: '620px' }}>
+          {/* Header */}
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: '1fr 60px 60px 40px 40px 40px 50px 50px 40px',
+            gap: '4px',
+            backgroundColor: '#1a1a1a',
+            padding: '8px 12px',
+            borderRadius: '4px 4px 0 0',
+            fontSize: '10px',
+            fontWeight: '600',
+            color: '#ccc',
+            textAlign: 'center',
+            borderBottom: '1px solid rgba(255, 255, 255, 0.1)'
+          }}>
+            <div style={{ textAlign: 'left', minWidth: '140px' }}>BENCH</div>
+            <div>POS</div>
+            <div>AVG</div>
+            <div>GP</div>
+            <div>R</div>
+            <div>H</div>
+            <div>HR</div>
+            <div>RBI</div>
+            <div>SB</div>
           </div>
-        ))}
+
+          {benchPlayers.map((player, index) => (
+            <div
+              key={player.person.id}
+              style={{
+                display: 'grid',
+                gridTemplateColumns: '1fr 60px 60px 40px 40px 40px 50px 50px 40px',
+                gap: '4px',
+                padding: '6px 12px',
+                backgroundColor: index % 2 === 0 ? '#2a2a2a' : '#242424',
+                fontSize: '11px',
+                color: '#fff',
+                alignItems: 'center',
+                textAlign: 'center',
+                borderBottom: '1px solid rgba(255, 255, 255, 0.05)'
+              }}
+            >
+              <div style={{ 
+                fontWeight: '400',
+                textAlign: 'left',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap',
+                minWidth: '140px'
+              }}>
+                {formatPlayerName(player)}
+              </div>
+              <div style={{ fontSize: '9px', color: '#ccc' }}>
+                {formatPosition(player.position)}
+              </div>
+              <div style={{ fontSize: '10px' }}>{player.stats.avg}</div>
+              <div>{player.stats.gp}</div>
+              <div>{player.stats.r}</div>
+              <div>{player.stats.h}</div>
+              <div>{player.stats.hr}</div>
+              <div>{player.stats.rbi}</div>
+              <div>{player.stats.sb}</div>
+            </div>
+          ))}
+        </div>
       </div>
     );
   };
@@ -444,56 +506,74 @@ export function BoxScore({ gamePk, onClose, isVisible }) {
     });
 
     return (
-      <div style={{ marginTop: '20px' }}>
-        {/* Header */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: '200px 50px 60px 30px 30px 30px 30px',
-          gap: '4px',
-          backgroundColor: '#1a1a1a',
-          padding: '8px',
-          borderRadius: '4px',
-          fontSize: '11px',
-          fontWeight: '600',
-          color: '#ccc',
-          marginBottom: '2px'
-        }}>
-          <div>BULLPEN</div>
-          <div>POS</div>
-          <div>ERA</div>
-          <div>IP</div>
-          <div>H</div>
-          <div>BB</div>
-          <div>SO</div>
-        </div>
-
-        {bullpenPlayers.map((player, index) => (
-          <div
-            key={player.person.id}
-            style={{
-              display: 'grid',
-              gridTemplateColumns: '200px 50px 60px 30px 30px 30px 30px',
-              gap: '4px',
-              padding: '6px 8px',
-              backgroundColor: index % 2 === 0 ? '#2a2a2a' : '#242424',
-              fontSize: '12px',
-              color: '#fff',
-              alignItems: 'center'
-            }}
-          >
-            <div style={{ fontWeight: '400' }}>
-              {formatPlayerName(player)}
-            </div>
-            <div style={{ fontSize: '10px', color: '#ccc' }}>
-              {formatPosition(player.position)}
-            </div>
-            <div style={{ fontSize: '10px' }}>{player.stats.era}</div>
-            <div>{player.stats.ip}</div>
-            <div>{player.stats.h}</div>
-            <div>{player.stats.bb}</div>
-            <div>{player.stats.so}</div>
+      <div style={{ 
+        marginTop: '20px',
+        overflowX: 'auto',
+        minWidth: '100%',
+        borderRadius: '4px',
+        border: '1px solid rgba(255, 255, 255, 0.1)'
+      }}>
+        <div style={{ minWidth: '540px' }}>
+          {/* Header */}
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: '1fr 60px 60px 40px 40px 40px 40px',
+            gap: '4px',
+            backgroundColor: '#1a1a1a',
+            padding: '8px 12px',
+            borderRadius: '4px 4px 0 0',
+            fontSize: '10px',
+            fontWeight: '600',
+            color: '#ccc',
+            textAlign: 'center',
+            borderBottom: '1px solid rgba(255, 255, 255, 0.1)'
+          }}>
+            <div style={{ textAlign: 'left', minWidth: '140px' }}>BULLPEN</div>
+            <div>POS</div>
+            <div>ERA</div>
+            <div>IP</div>
+            <div>H</div>
+            <div>BB</div>
+            <div>SO</div>
           </div>
-        ))}
+
+          {bullpenPlayers.map((player, index) => (
+            <div
+              key={player.person.id}
+              style={{
+                display: 'grid',
+                gridTemplateColumns: '1fr 60px 60px 40px 40px 40px 40px',
+                gap: '4px',
+                padding: '6px 12px',
+                backgroundColor: index % 2 === 0 ? '#2a2a2a' : '#242424',
+                fontSize: '11px',
+                color: '#fff',
+                alignItems: 'center',
+                textAlign: 'center',
+                borderBottom: '1px solid rgba(255, 255, 255, 0.05)'
+              }}
+            >
+              <div style={{ 
+                fontWeight: '400',
+                textAlign: 'left',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap',
+                minWidth: '140px'
+              }}>
+                {formatPlayerName(player)}
+              </div>
+              <div style={{ fontSize: '9px', color: '#ccc' }}>
+                {formatPosition(player.position)}
+              </div>
+              <div style={{ fontSize: '10px' }}>{player.stats.era}</div>
+              <div>{player.stats.ip}</div>
+              <div>{player.stats.h}</div>
+              <div>{player.stats.bb}</div>
+              <div>{player.stats.so}</div>
+            </div>
+          ))}
+        </div>
       </div>
     );
   };
@@ -510,33 +590,41 @@ export function BoxScore({ gamePk, onClose, isVisible }) {
       backgroundColor: 'rgba(0, 0, 0, 0.9)',
       zIndex: 2000,
       display: 'flex',
-      alignItems: 'center',
+      alignItems: 'flex-start',
       justifyContent: 'center',
-      padding: '20px'
+      padding: isMobile ? '5px' : '10px',
+      overflowY: 'auto'
     }}>
       <div style={{
         backgroundColor: '#1a1a1a',
-        borderRadius: '12px',
-        width: '95%',
-        maxWidth: '1200px',
-        maxHeight: '90vh',
-        overflow: 'auto',
+        borderRadius: isMobile ? '8px' : '12px',
+        width: '100%',
+        maxWidth: '1400px',
+        minHeight: 'fit-content',
+        maxHeight: 'calc(100vh - 20px)',
+        overflow: 'hidden',
         position: 'relative',
-        border: '1px solid rgba(255, 255, 255, 0.1)'
+        border: '1px solid rgba(255, 255, 255, 0.1)',
+        marginTop: isMobile ? '5px' : '10px'
       }}>
         {/* Header */}
         <div style={{
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
-          padding: '20px',
+          padding: isMobile ? '12px 16px' : '16px 20px',
           borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
           position: 'sticky',
           top: 0,
           backgroundColor: '#1a1a1a',
           zIndex: 10
         }}>
-          <h2 style={{ color: '#fff', margin: 0, fontSize: '20px', fontWeight: '600' }}>
+          <h2 style={{ 
+            color: '#fff', 
+            margin: 0, 
+            fontSize: isMobile ? '16px' : '18px', 
+            fontWeight: '600' 
+          }}>
             Box Score
           </h2>
           <button
@@ -545,7 +633,7 @@ export function BoxScore({ gamePk, onClose, isVisible }) {
               background: 'none',
               border: 'none',
               color: '#fff',
-              fontSize: '24px',
+              fontSize: isMobile ? '20px' : '24px',
               cursor: 'pointer',
               padding: '5px 10px',
               borderRadius: '4px',
@@ -585,20 +673,27 @@ export function BoxScore({ gamePk, onClose, isVisible }) {
         )}
 
         {boxScoreData && (
-          <div style={{ padding: '20px' }}>
+          <div style={{ 
+            padding: isMobile ? '12px' : '20px',
+            overflowY: 'auto',
+            maxHeight: 'calc(100vh - 120px)'
+          }}>
             {/* Team Selection Tabs */}
             <div style={{
               display: 'flex',
-              marginBottom: '20px',
+              marginBottom: isMobile ? '16px' : '20px',
               backgroundColor: '#2a2a2a',
               borderRadius: '8px',
-              padding: '4px'
+              padding: '4px',
+              flexWrap: 'wrap',
+              gap: '4px'
             }}>
               <button
                 onClick={() => setActiveTab('away')}
                 style={{
-                  flex: 1,
-                  padding: '12px 20px',
+                  flex: '1 1 250px',
+                  minWidth: isMobile ? '120px' : '250px',
+                  padding: isMobile ? '10px 12px' : '12px 16px',
                   border: 'none',
                   borderRadius: '6px',
                   backgroundColor: activeTab === 'away' ? getTeamSpotColor(boxScoreData.teams.away.team.id) : 'transparent',
@@ -609,22 +704,24 @@ export function BoxScore({ gamePk, onClose, isVisible }) {
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  gap: '10px'
+                  gap: isMobile ? '6px' : '10px',
+                  fontSize: isMobile ? '12px' : '14px'
                 }}
               >
                 <img 
                   src={getTeamSpotLogo(boxScoreData.teams.away.team.id)} 
                   alt="Away Team"
-                  width="24"
-                  height="24"
+                  width={isMobile ? '20' : '24'}
+                  height={isMobile ? '20' : '24'}
                 />
-                {boxScoreData.teams.away.team.name} (Away)
+                <span>{boxScoreData.teams.away.team.name} (Away)</span>
               </button>
               <button
                 onClick={() => setActiveTab('home')}
                 style={{
-                  flex: 1,
-                  padding: '12px 20px',
+                  flex: '1 1 250px',
+                  minWidth: isMobile ? '120px' : '250px',
+                  padding: isMobile ? '10px 12px' : '12px 16px',
                   border: 'none',
                   borderRadius: '6px',
                   backgroundColor: activeTab === 'home' ? getTeamSpotColor(boxScoreData.teams.home.team.id) : 'transparent',
@@ -635,16 +732,17 @@ export function BoxScore({ gamePk, onClose, isVisible }) {
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  gap: '10px'
+                  gap: isMobile ? '6px' : '10px',
+                  fontSize: isMobile ? '12px' : '14px'
                 }}
               >
                 <img 
                   src={getTeamSpotLogo(boxScoreData.teams.home.team.id)} 
                   alt="Home Team"
-                  width="24"
-                  height="24"
+                  width={isMobile ? '20' : '24'}
+                  height={isMobile ? '20' : '24'}
                 />
-                {boxScoreData.teams.home.team.name} (Home)
+                <span>{boxScoreData.teams.home.team.name} (Home)</span>
               </button>
             </div>
 
@@ -652,19 +750,11 @@ export function BoxScore({ gamePk, onClose, isVisible }) {
             <div style={{
               backgroundColor: '#242424',
               borderRadius: '8px',
-              padding: '20px',
+              padding: isMobile ? '12px' : '20px',
               color: '#fff'
             }}>
               {activeTab === 'away' && (
                 <div>
-                  <h3 style={{ 
-                    margin: '0 0 16px 0', 
-                    color: getTeamSpotColor(boxScoreData.teams.away.team.id),
-                    fontSize: '18px',
-                    fontWeight: '600'
-                  }}>
-                    {boxScoreData.teams.away.team.name} - Away Team
-                  </h3>
                   {renderBattingTable(boxScoreData.teams.away.team, boxScoreData.teams.away)}
                   {renderPitchingTable(boxScoreData.teams.away.team, boxScoreData.teams.away)}
                   {renderBenchTable(boxScoreData.teams.away.team, boxScoreData.teams.away)}
@@ -674,14 +764,6 @@ export function BoxScore({ gamePk, onClose, isVisible }) {
 
               {activeTab === 'home' && (
                 <div>
-                  <h3 style={{ 
-                    margin: '0 0 16px 0', 
-                    color: getTeamSpotColor(boxScoreData.teams.home.team.id),
-                    fontSize: '18px',
-                    fontWeight: '600'
-                  }}>
-                    {boxScoreData.teams.home.team.name} - Home Team
-                  </h3>
                   {renderBattingTable(boxScoreData.teams.home.team, boxScoreData.teams.home)}
                   {renderPitchingTable(boxScoreData.teams.home.team, boxScoreData.teams.home)}
                   {renderBenchTable(boxScoreData.teams.home.team, boxScoreData.teams.home)}
@@ -698,20 +780,39 @@ export function BoxScore({ gamePk, onClose, isVisible }) {
                 backgroundColor: '#2a2a2a',
                 borderRadius: '8px',
                 fontSize: '12px',
-                color: '#ccc'
+                color: '#ccc',
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+                gap: '12px'
               }}>
-                <div style={{ marginBottom: '8px' }}>
-                  <strong>Weather:</strong> {boxScoreData.gameInfo.weather || 'N/A'}
-                </div>
-                <div style={{ marginBottom: '8px' }}>
-                  <strong>Wind:</strong> {boxScoreData.gameInfo.wind || 'N/A'}
-                </div>
-                <div style={{ marginBottom: '8px' }}>
-                  <strong>First Pitch:</strong> {boxScoreData.gameInfo.firstPitch || 'N/A'}
+                <div>
+                  <strong style={{ color: '#fff' }}>Weather:</strong> {boxScoreData.gameInfo.weather || 'N/A'}
                 </div>
                 <div>
-                  <strong>Time:</strong> {boxScoreData.gameInfo.gameDurationMinutes ? `${boxScoreData.gameInfo.gameDurationMinutes} minutes` : 'N/A'}
+                  <strong style={{ color: '#fff' }}>Wind:</strong> {boxScoreData.gameInfo.wind || 'N/A'}
                 </div>
+                <div>
+                  <strong style={{ color: '#fff' }}>First Pitch:</strong> {boxScoreData.gameInfo.firstPitch || 'N/A'}
+                </div>
+                <div>
+                  <strong style={{ color: '#fff' }}>Duration:</strong> {boxScoreData.gameInfo.gameDurationMinutes ? `${boxScoreData.gameInfo.gameDurationMinutes} minutes` : 'N/A'}
+                </div>
+              </div>
+            )}
+
+            {/* Mobile scroll hint */}
+            {isMobile && (
+              <div style={{
+                marginTop: '16px',
+                padding: '8px 12px',
+                backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                borderRadius: '4px',
+                fontSize: '11px',
+                color: '#999',
+                textAlign: 'center',
+                display: 'block'
+              }}>
+                💡 Tip: Scroll horizontally within tables to view all stats
               </div>
             )}
           </div>
