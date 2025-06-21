@@ -38,6 +38,22 @@ npm run preview
 ./deploy-stable.sh    # Secure deploy to stable (password: 3333)
 ```
 
+### **📚 Documentation Site**
+```bash
+# View interactive documentation
+open docs/index.html
+
+# Auto-sync documentation with README
+cd docs && npm run sync
+
+# Serve documentation locally
+cd docs && npm run serve
+# Visit http://localhost:8080
+
+# Deploy documentation
+cd docs && ./deploy-docs.sh
+```
+
 ## 🏗️ **Development Workflow & Branch Strategy**
 
 ### **🔄 Branch Strategy**
@@ -401,7 +417,33 @@ If Vercel shows wrong repository (iamdavidsantana/xr-branding-guide):
 - **Architecture**: Modern React SPA with minimal footprint
 - **Team Spot Colors**: 32 official MLB team colors mapped
 - **Deployment Scripts**: 2 (main + stable with password)
-- **Documentation**: Consolidated into single comprehensive README
+- **Documentation**: Interactive HTML site with auto-sync from README
+- **Documentation Features**: Responsive design, team color viewer, offline support
+
+## 📚 **Interactive Documentation**
+
+This project includes a comprehensive interactive documentation site that automatically syncs with this README:
+
+### **Features**
+- **📱 Responsive Design** - Works on all devices
+- **🎨 Interactive Team Colors** - Clickable team color cards with details
+- **🔍 Smooth Navigation** - Sidebar with smooth scrolling
+- **🌙 Dark Theme** - MLB-inspired design
+- **🔄 Auto-Sync** - Updates when README changes
+- **⚡ Fast & Accessible** - Optimized performance
+- **📱 PWA Ready** - Offline functionality
+
+### **Access Documentation**
+- **Local**: Open `docs/index.html` in your browser
+- **Live Server**: `cd docs && npm run serve` then visit http://localhost:8080
+- **Auto-Sync**: `cd docs && npm run watch` for live README updates
+
+### **Deploy Documentation**
+```bash
+cd docs && ./deploy-docs.sh  # Auto-sync and commit to git
+```
+
+The documentation site can be hosted on any static hosting platform (Vercel, Netlify, GitHub Pages, etc.).
 
 ## 📱 **Browser Compatibility**
 
