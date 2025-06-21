@@ -1,7 +1,8 @@
 #!/bin/bash
 
 # MLB XR Branding Guide - Main Branch Deployment Script
-# Quick deployment to main branch
+# Quick deployment to main branch (DEFAULT WORKING BRANCH)
+# WORKFLOW: Develop on MAIN → Push to origin/main (this script) → Deploy to STABLE (secure script)
 
 set -e  # Exit on any error
 
@@ -17,6 +18,7 @@ NC='\033[0m' # No Color
 
 echo -e "${BLUE}🏗️  MLB XR Branding Guide - Main Branch Deployment${NC}"
 echo -e "${BLUE}===============================================${NC}"
+echo -e "${GREEN}📋 DEFAULT WORKING BRANCH: Develop here, push here${NC}"
 echo ""
 
 # Get current branch

@@ -2,12 +2,14 @@
 
 # MLB XR Branding Guide - Secure Stable Branch Deployment Script
 # This script provides password protection before pushing to the stable branch
+# WORKFLOW: Always work on MAIN branch, use this script to deploy to STABLE
 
 set -e  # Exit on any error
 
 # Configuration
 REQUIRED_PASSWORD="3333"
 STABLE_BRANCH="stable"
+MAIN_BRANCH="main"
 REMOTE="origin"
 
 # Colors for output
@@ -19,6 +21,7 @@ NC='\033[0m' # No Color
 
 echo -e "${BLUE}🏗️  MLB XR Branding Guide - Stable Deployment${NC}"
 echo -e "${BLUE}===============================================${NC}"
+echo -e "${YELLOW}📋 WORKFLOW: Work on MAIN → Deploy to STABLE${NC}"
 echo ""
 
 # Check if we're in a git repository
@@ -63,6 +66,10 @@ echo -e "${YELLOW}📦 Deployment Preview:${NC}"
 if [ "$CURRENT_BRANCH" != "$STABLE_BRANCH" ]; then
     echo -e "   Will switch to ${BLUE}$STABLE_BRANCH${NC} branch"
     echo -e "   Will merge changes from ${BLUE}$CURRENT_BRANCH${NC}"
+    if [ "$CURRENT_BRANCH" != "$MAIN_BRANCH" ]; then
+        echo -e "${YELLOW}   ⚠️  WARNING: You're not on the main branch!${NC}"
+        echo -e "${YELLOW}   Recommended workflow: work on ${BLUE}$MAIN_BRANCH${NC} → deploy to ${BLUE}$STABLE_BRANCH${NC}"
+    fi
 else
     echo -e "   Already on ${BLUE}$STABLE_BRANCH${NC} branch"
 fi
