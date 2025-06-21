@@ -9,13 +9,211 @@ MLB API driven branding assets for Extended Reality applications. A comprehensiv
 The MLB XR Branding Guide is a modern React application that provides developers with easy access to official MLB branding assets, team data, and live game information. Built specifically for Extended Reality (XR) applications, it features a clean interface for browsing team assets, colors, and real-time game data.
 
 ### **✨ Key Features**
-- **Official MLB spot colors** for all 30 teams
-- **Live game carousel** with logo-vs-logo design
+- **Official MLB spot colors** for all 30 teams (official hex values)
+- **Live game carousel** with horizontal logo-vs-logo design
 - **Team-specific branding assets** (logos, wordmarks, colors)
 - **Real-time game data** and schedules
 - **Player roster information** and statistics
 - **Responsive design** optimized for all devices
 - **Secure deployment workflow** with password protection
+- **TeamGameCarousel component** with modern UI design
+
+## 🚀 **Quick Start**
+
+### **Development**
+```bash
+npm install
+npm run dev
+```
+
+### **Build**
+```bash
+npm run build
+npm run preview
+```
+
+### **Deploy**
+```bash
+./deploy-main.sh      # Quick deploy to main (no password)
+./deploy-stable.sh    # Secure deploy to stable (password: 3333)
+```
+
+## 🏗️ **Development Workflow & Branch Strategy**
+
+### **🔄 Branch Strategy**
+
+#### **MAIN Branch (Default Working Branch)**
+- ✅ **Primary development branch**
+- ✅ **Always work here by default**
+- ✅ **All new features and changes**
+- ✅ **Quick iterations and testing**
+
+#### **STABLE Branch (Production Branch)**
+- 🔐 **Password-protected deployments only**
+- 🎯 **Stable, tested features only**
+- 📦 **Production-ready releases**
+
+### **🚀 Deployment Scripts**
+
+#### **Quick Deploy to Main** (`./deploy-main.sh`)
+```bash
+./deploy-main.sh
+```
+- **No password required**
+- **Fast deployment for development**
+- **Use this for regular development pushes**
+
+#### **Secure Deploy to Stable** (`./deploy-stable.sh`)
+```bash
+./deploy-stable.sh
+```
+- **Password required**: `3333`
+- **Final confirmation required**: `yes`
+- **Use this for production releases only**
+
+### **📋 Recommended Daily Workflow**
+
+#### **Daily Development:**
+1. **Work on MAIN branch** (default)
+2. **Make changes and commit**
+3. **Push to main**: `./deploy-main.sh`
+4. **Continue development**
+
+#### **Production Release:**
+1. **Ensure all changes are on MAIN**
+2. **Test thoroughly**
+3. **Deploy to stable**: `./deploy-stable.sh`
+4. **Enter password**: `3333`
+5. **Confirm deployment**: `yes`
+
+### **🛡️ Security Features**
+- **Stable branch**: Protected with password "3333"
+- **Main branch**: Open for development
+- **All deployments**: Logged with timestamps
+- **Environment Separation** - Development vs production workflows
+- **Secure API Integration** - Proper error handling and validation
+
+## 🎨 **MLB Team Spot Colors**
+
+### **Official Spot Color Mapping**
+
+The application uses official MLB team spot colors (primary brand colors used behind logos). These are different from secondary colors and ensure consistent branding throughout the application.
+
+#### **Usage Examples**
+
+```javascript
+import { getTeamSpotColor } from './src/utils/spotColorMapping';
+
+// Get spot color for a team
+const yankeeSpotColor = getTeamSpotColor(147); // Returns: #132448
+const dodgerSpotColor = getTeamSpotColor(119); // Returns: #005A9C
+```
+
+#### **React Hook Integration**
+
+```javascript
+import { useTeamSpotColor } from './src/hooks/useTeamData';
+
+function TeamComponent({ teamId }) {
+  const spotColor = useTeamSpotColor(teamId);
+  
+  return (
+    <div style={{ backgroundColor: spotColor }}>
+      Team content with official spot color background
+    </div>
+  );
+}
+```
+
+#### **All Available Functions**
+
+```javascript
+import { 
+  getTeamSpotColor, 
+  getAllTeamSpotColors, 
+  hasTeamSpotColor 
+} from './src/utils/spotColorMapping';
+
+// Get spot color for a specific team
+getTeamSpotColor(147); // #132448
+
+// Check if a team has a spot color defined
+hasTeamSpotColor(147); // true
+hasTeamSpotColor(999); // false
+
+// Get all teams with their spot colors
+getAllTeamSpotColors(); // Array of {teamId, spotColor} objects
+```
+
+### **Complete Spot Color Reference**
+
+#### **American League East**
+- **110: Baltimore Orioles** - `#df4601` (Orange)
+- **111: Boston Red Sox** - `#0d2b56` (Navy)
+- **147: New York Yankees** - `#132448` (Navy)
+- **139: Tampa Bay Rays** - `#8fbce6` (Light Blue)
+- **141: Toronto Blue Jays** - `#134a8e` (Blue)
+
+#### **American League Central**
+- **145: Chicago White Sox** - `#333333` (Gray)
+- **114: Cleveland Guardians** - `#002b5c` (Navy)
+- **116: Detroit Tigers** - `#0c2c56` (Navy)
+- **118: Kansas City Royals** - `#004687` (Blue)
+- **142: Minnesota Twins** - `#002b5c` (Navy)
+
+#### **American League West**
+- **117: Houston Astros** - `#eb6e1f` (Orange)
+- **108: Los Angeles Angels** - `#862633` (Red)
+- **133: Oakland Athletics** - `#003831` (Green)
+- **136: Seattle Mariners** - `#0c2c56` (Navy)
+- **140: Texas Rangers** - `#003278` (Blue)
+
+#### **National League East**
+- **144: Atlanta Braves** - `#0c2340` (Navy)
+- **146: Miami Marlins** - `#00a3e0` (Blue)
+- **121: New York Mets** - `#002d72` (Navy)
+- **143: Philadelphia Phillies** - `#e81828` (Red)
+- **120: Washington Nationals** - `#ab0003` (Red)
+
+#### **National League Central**
+- **112: Chicago Cubs** - `#0e3386` (Blue)
+- **113: Cincinnati Reds** - `#c6011f` (Red)
+- **158: Milwaukee Brewers** - `#13294b` (Navy)
+- **134: Pittsburgh Pirates** - `#333333` (Gray)
+- **138: St. Louis Cardinals** - `#be0a14` (Red)
+
+#### **National League West**
+- **109: Arizona Diamondbacks** - `#aa182c` (Red)
+- **115: Colorado Rockies** - `#33006f` (Purple)
+- **119: Los Angeles Dodgers** - `#005a9c` (Blue)
+- **135: San Diego Padres** - `#ffc425` (Yellow)
+- **137: San Francisco Giants** - `#fd5a1e` (Orange)
+
+#### **Additional Teams**
+- **159: Team 159** - `#bc0022` (Red)
+- **160: Team 160** - `#041e42` (Navy)
+
+### **Important Spot Color Notes**
+
+1. **Spot Colors vs Secondary Colors**: These are the official spot colors, not the secondary colors from the BigData API. The spot color is the primary brand color used behind team logos and in branded elements.
+
+2. **Future Reference**: This mapping should be used throughout the application instead of trying to extract colors from images or using secondary colors from the API.
+
+3. **Consistency**: All components using team colors should use this mapping to ensure consistent branding across the application.
+
+4. **Testing**: Run the test utilities in `src/utils/spotColorTest.js` to validate the mapping after any changes.
+
+### **Components Updated for Spot Colors**
+
+The following components have been updated to use the official spot color mapping:
+
+- `/src/components/MLBSchedule.jsx` - Schedule cards now use official spot colors
+- `/src/components/AnchorMenu.js` - Team buttons use official spot colors  
+- `/src/hooks/useTeamData.js` - React hooks now use the mapping
+- `/src/App.jsx` - Main app components use the mapping
+- `/src/components/GameCarousel.jsx` - Team game carousel uses spot colors
+
+This ensures consistent, official MLB branding throughout the entire application.
 
 ## 🏗️ **Technical Architecture**
 
@@ -76,13 +274,13 @@ The MLB XR Branding Guide is a modern React application that provides developers
 - **`spotColorTest.js`** - Color mapping validation utility
 
 #### **Components (`src/components/`)**
-- **`MLBSchedule.jsx`** - Live games schedule with spotlight design
-- **`GameCarousel.jsx`** - Team-specific horizontal game carousel
-- **`AnchorMenu.js`** - Division-based team navigation
+- **`MLBSchedule.jsx`** - Live games schedule with spotlight design and official spot colors
+- **`GameCarousel.jsx`** - Team-specific horizontal game carousel (logo-vs-logo design)
+- **`AnchorMenu.js`** - Division-based team navigation with spot color integration
 - **`UI/CommonComponents.js`** - Reusable UI components
 
 #### **Hooks (`src/hooks/`)**
-- **`useTeamData.js`** - Custom hooks for team data and spot colors
+- **`useTeamData.js`** - Custom hooks for team data and official spot colors integration
 
 #### **Data Assets**
 - **`team-extras.json`** - Additional team metadata
@@ -126,6 +324,63 @@ The MLB XR Branding Guide is a modern React application that provides developers
 - **React Hooks Rules** - Hook usage validation
 - **Fast Refresh** - Hot module replacement
 
+## 📦 **Deployment Configuration**
+
+### **Repository Information**
+- **Repository**: https://github.com/skull-github/XRBrandingGuide
+- **Branch**: main
+- **Latest Updates**: Consolidated README with all documentation
+
+### **Vercel Configuration**
+- **Framework**: Vite
+- **Root Directory**: ./
+- **Build Command**: npm run build
+- **Output Directory**: dist
+- **Install Command**: npm install
+
+### **Files Structure (Root Level)**
+```
+✅ package.json        # Dependencies and scripts
+✅ index.html          # Entry point  
+✅ src/                # React app source code
+✅ vite.config.js      # Vite configuration
+✅ vercel.json         # Deployment settings
+✅ dist/               # Build output (after npm run build)
+✅ deploy-main.sh      # Main branch deployment script
+✅ deploy-stable.sh    # Stable branch deployment script (password-protected)
+```
+
+### **Deployment Issue Resolution**
+If Vercel shows wrong repository (iamdavidsantana/xr-branding-guide):
+1. Delete the Vercel project completely
+2. Create new project from scratch
+3. Import from skull-github/XRBrandingGuide
+4. Ensure branch is set to 'main'
+
+## 🎯 **Recent Project Updates**
+
+### **✅ Recently Completed Features:**
+- **Official MLB spot colors** for all teams (hex values mapped)
+- **Horizontal carousel layout** (logo-vs-logo design)
+- **TeamGameCarousel component** replacing vertical layout
+- **Secure deployment system** with password protection
+- **Consolidated documentation** - All README files merged into one
+- **MAIN branch workflow** - Set as default working branch
+- **Schedule card improvements** - Changed "VIEWING" to "LIVE" status
+- **Complete spot color integration** - All components updated
+
+### **🎨 Current Team Section Layout:**
+- **Live Game Context**: Horizontal carousel with logo-vs-logo cards
+- **Upcoming Games**: Clean vertical list format
+- **Official spot colors** used throughout all team displays
+- **Responsive design** for all screen sizes
+
+### **🛡️ Security & Workflow:**
+- **Password-protected stable deployments** (password: "3333")
+- **Main branch** for daily development (no password)
+- **All deployments logged** with timestamps
+- **Secure API integration** with proper error handling
+
 ### **🎵 Audio System**
 - **Web Audio API** - Native browser audio capabilities
 - **Interactive Sounds** - Hover and click feedback
@@ -137,19 +392,16 @@ The MLB XR Branding Guide is a modern React application that provides developers
 - **Memoization** - React hooks for performance
 - **Minimal Dependencies** - Lean dependency tree
 
-## 🎯 **Project Stats**
+## 📊 **Project Stats & Summary**
 
 - **Total Dependencies**: 12 (3 production + 9 development)
 - **External APIs**: 4 (MLB Stats, Images, Mobile, Google)
 - **Custom Modules**: 10+ utilities, components, and hooks
 - **Configuration Files**: 5 (Vite, Vercel, ESLint, Package, Git)
 - **Architecture**: Modern React SPA with minimal footprint
-
-## 🔐 **Security Features**
-
-- **Password-Protected Deployments** - Stable branch security
-- **Environment Separation** - Development vs production workflows
-- **Secure API Integration** - Proper error handling and validation
+- **Team Spot Colors**: 32 official MLB team colors mapped
+- **Deployment Scripts**: 2 (main + stable with password)
+- **Documentation**: Consolidated into single comprehensive README
 
 ## 📱 **Browser Compatibility**
 
@@ -157,6 +409,16 @@ The MLB XR Branding Guide is a modern React application that provides developers
 - **Mobile Responsive** - iOS and Android optimization
 - **Web Audio API** - Enhanced with graceful fallbacks
 
+## 📋 **Important Reminders**
+
+1. **Always work on MAIN branch** by default! 🎯
+2. **Use official spot colors** from the mapping system
+3. **Password for stable deployments**: `3333`
+4. **Test spot color changes** with `src/utils/spotColorTest.js`
+5. **All documentation** is now in this single README file
+
 ---
 
 **Built with ⚾ for the MLB XR ecosystem**
+
+*This comprehensive README consolidates all previous documentation files (README.md, src/utils/README.md, WORKFLOW.md, DEPLOYMENT.md) into a single source of truth for the project.*
