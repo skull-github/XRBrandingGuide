@@ -1,9 +1,73 @@
-/* Typography System - Based on provided style guide with 2x scale reduction */
+/* MLB HEX Franklin Font Declarations */
+@font-face {
+    font-family: 'MLB HEX Franklin';
+    src: url('./fonts/HEXFranklinMLBNormal-Regular.woff2') format('woff2'),
+         url('./fonts/HEXFranklinMLBNormal-Regular.otf') format('opentype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'MLB HEX Franklin';
+    src: url('./fonts/HEXFranklinMLBNormal-Light.woff2') format('woff2'),
+         url('./fonts/HEXFranklinMLBNormal-Light.otf') format('opentype');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'MLB HEX Franklin';
+    src: url('./fonts/HEXFranklinMLBNormal-Medium.woff2') format('woff2'),
+         url('./fonts/HEXFranklinMLBNormal-Medium.otf') format('opentype');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'MLB HEX Franklin';
+    src: url('./fonts/HEXFranklinMLBNormal-Semibold.woff2') format('woff2'),
+         url('./fonts/HEXFranklinMLBNormal-Semibold.otf') format('opentype');
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'MLB HEX Franklin';
+    src: url('./fonts/HEXFranklinMLBNormal-Bold.woff2') format('woff2'),
+         url('./fonts/HEXFranklinMLBNormal-Bold.otf') format('opentype');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'MLB HEX Franklin';
+    src: url('./fonts/HEXFranklinMLBNormal-Extrabold.woff2') format('woff2'),
+         url('./fonts/HEXFranklinMLBNormal-Extrabold.otf') format('opentype');
+    font-weight: 800;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'MLB HEX Franklin';
+    src: url('./fonts/HEXFranklinMLBNormal-Black.woff2') format('woff2'),
+         url('./fonts/HEXFranklinMLBNormal-Black.otf') format('opentype');
+    font-weight: 900;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* Typography System - Based on MLB XR Style Guide with 50% scale reduction for web */
 
 /* Typography Variables */
 :root {
     /* Font Families */
-    --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    --font-primary: 'MLB HEX Franklin', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
     --font-mono: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Cascadia Code', monospace;
     
     /* Font Weights */
@@ -147,7 +211,7 @@
 .text-body-bold {
     font-family: var(--font-primary);
     font-size: var(--font-body-b);
-    font-weight: var(--weight-medium);
+    font-weight: var(--weight-bold);
     line-height: var(--line-body);
     letter-spacing: var(--tracking-normal);
 }

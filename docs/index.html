@@ -32,8 +32,7 @@
                 <li><a href="#recent-project-updates" class="nav-link">Recent Project Updates</a></li>
                 <li><a href="#project-stats-summary" class="nav-link">Project Stats & Summary</a></li>
                 <li><a href="#interactive-documentation" class="nav-link">📚 Interactive Documentation</a></li>
-                <li><a href="#browser-compatibility" class="nav-link">Browser Compatibility</a></li>
-                <li><a href="#important-reminders" class="nav-link">Important Reminders</a></li>
+                <li><a href="#typography-scale-style-guide" class="nav-link">Typography Scale & Style Guide</a></li>
             </ul>
             <div class="sidebar-footer">
                 <p>Last Updated: <span id="lastUpdated">6/21/2025</span></p>
@@ -57,37 +56,709 @@
 
             <!-- Documentation Content -->
             <div id="documentationContent">
-                <section id="project-overview" class="section"><h2 class="text-title-bold">Project Overview</h2><p class="text-body">The MLB XR Branding Guide is a modern React application that provides developers with easy access to official MLB branding assets, team data, and live game information. Built specifically for Extended Reality (XR) applications, it features a clean interface for browsing team assets, colors, and real-time game data.</p></section>
-<section id="quick-start" class="section"><h2 class="text-title-bold">🚀 Quick Start</h2></section>
-<section id="development-workflow-branch-strategy" class="section"><h2 class="text-title-bold">Development Workflow & Branch Strategy</h2></section>
-<section id="mlb-team-spot-colors" class="section"><h2 class="text-title-bold">MLB Team Spot Colors</h2></section>
-<section id="technical-architecture" class="section"><h2 class="text-title-bold">Technical Architecture</h2></section>
-<section id="mlb-api-endpoints-json-index" class="section"><h2 class="text-title-bold">🔗 MLB API Endpoints & JSON Index</h2></section>
-<section id="deployment-configuration" class="section"><h2 class="text-title-bold">Deployment Configuration</h2></section>
-<section id="recent-project-updates" class="section"><h2 class="text-title-bold">Recent Project Updates</h2></section>
-<section id="project-stats-summary" class="section"><h2 class="text-title-bold">Project Stats & Summary</h2><li class="text-body"><strong class="text-body-bold">Total Dependencies</strong>: 12 (3 production + 9 development)</li>
-<li class="text-body"><strong class="text-body-bold">External APIs</strong>: 4 (MLB Stats, Images, Mobile, Google)</li>
-<li class="text-body"><strong class="text-body-bold">Custom Modules</strong>: 10+ utilities, components, and hooks</li>
-<li class="text-body"><strong class="text-body-bold">Configuration Files</strong>: 5 (Vite, Vercel, ESLint, Package, Git)</li>
-<li class="text-body"><strong class="text-body-bold">Architecture</strong>: Modern React SPA with minimal footprint</li>
-<li class="text-body"><strong class="text-body-bold">Team Spot Colors</strong>: 32 official MLB team colors mapped</li>
-<li class="text-body"><strong class="text-body-bold">Deployment Scripts</strong>: 2 (main + stable with password)</li>
-<li class="text-body"><strong class="text-body-bold">Documentation</strong>: Interactive HTML site with auto-sync from README</li>
-<li class="text-body"><strong class="text-body-bold">Documentation Features</strong>: Responsive design, team color viewer, offline support</li></section>
-<section id="interactive-documentation" class="section"><h2 class="text-title-bold">📚 Interactive Documentation</h2><p class="text-body">This project includes a comprehensive interactive documentation site that automatically syncs with this README:</p></section>
-<section id="browser-compatibility" class="section"><h2 class="text-title-bold">Browser Compatibility</h2><li class="text-body"><strong class="text-body-bold">Modern Browsers</strong> - Chrome, Firefox, Safari, Edge</li>
-<li class="text-body"><strong class="text-body-bold">Mobile Responsive</strong> - iOS and Android optimization</li>
-<li class="text-body"><strong class="text-body-bold">Web Audio API</strong> - Enhanced with graceful fallbacks</li></section>
-<section id="important-reminders" class="section"><h2 class="text-title-bold">Important Reminders</h2><li class="text-body"><strong class="text-body-bold">Always work on MAIN branch</strong> by default! 🎯</li>
-<li class="text-body"><strong class="text-body-bold">Use official spot colors</strong> from the mapping system</li>
-<li class="text-body"><strong class="text-body-bold">Password for stable deployments</strong>: <code class="text-code inline-code">3333</code></li>
-<li class="text-body"><strong class="text-body-bold">Test spot color changes</strong> with <code class="text-code inline-code">src/utils/spotColorTest.js</code></li>
-<li class="text-body"><strong class="text-body-bold">All documentation</strong> is now in this single README file</li>
-<p class="text-body">---</p>
-<strong class="text-body-bold">Built with ⚾ for the MLB XR ecosystem</strong>
-<p class="text-body">*This comprehensive README consolidates all previous documentation files (README.md, src/utils/README.md, WORKFLOW.md, DEPLOYMENT.md) into a single source of truth for the project.*</p></section>
+<section id="project-overview" class="section">
+    <h2 class="text-title-bold">Project Overview</h2>
+    <p class="text-body">The MLB XR Branding Guide is a modern React application that provides developers with easy access to official MLB branding assets, team data, and live game information. Built specifically for Extended Reality (XR) applications, it features a clean interface for browsing team assets, colors, and real-time game data.</p>
+    <h3 class="text-headline">✨ Key Features</h3>
+    <ul>
+    <li class="text-body"><strong class="text-body-bold">Official MLB spot colors</strong> for all 30 teams (official hex values)</li>
+    <li class="text-body"><strong class="text-body-bold">Live game carousel</strong> with horizontal logo-vs-logo design</li>
+    <li class="text-body"><strong class="text-body-bold">Team-specific branding assets</strong> (logos, wordmarks, colors)</li>
+    <li class="text-body"><strong class="text-body-bold">Real-time game data</strong> and schedules</li>
+    <li class="text-body"><strong class="text-body-bold">Player roster information</strong> and statistics</li>
+    <li class="text-body"><strong class="text-body-bold">Responsive design</strong> optimized for all devices</li>
+    <li class="text-body"><strong class="text-body-bold">Secure deployment workflow</strong> with password protection</li>
+    <li class="text-body"><strong class="text-body-bold">TeamGameCarousel component</strong> with modern UI design</li>
+    </ul>
+</section>
+
+<section id="quick-start" class="section">
+    <h2 class="text-title-bold">🚀 Quick Start</h2>
+    <h3 class="text-headline">Development</h3>
+    <div class="code-block"><pre class="text-code">bash
+    npm install
+    npm run dev</pre></div>
+    <h3 class="text-headline">Build</h3>
+    <div class="code-block"><pre class="text-code">bash
+    npm run build
+    npm run preview</pre></div>
+    <h3 class="text-headline">Deploy</h3>
+    <div class="code-block"><pre class="text-code">bash
+    ./deploy-main.sh      # Quick deploy to main (no password)
+    ./deploy-stable.sh    # Secure deploy to stable (password: 3333)</pre></div>
+    <h3 class="text-headline">📚 Documentation Site</h3>
+    <div class="code-block"><pre class="text-code">bash
+    # View interactive documentation
+    open docs/index.html
+    
+    # Auto-sync documentation with README
+    cd docs && npm run sync
+    
+    # Serve documentation locally
+    cd docs && npm run serve
+    # Visit http://localhost:8080
+    
+    # Deploy documentation
+    cd docs && ./deploy-docs.sh</pre></div>
+</section>
+
+<section id="development-workflow-branch-strategy" class="section">
+    <h2 class="text-title-bold">Development Workflow & Branch Strategy</h2>
+    <h3 class="text-headline">🔄 Branch Strategy</h3>
+    <h4 class="text-subheadline">MAIN Branch (Default Working Branch)</h4>
+    <ul>
+    <li class="text-body">✅ <strong class="text-body-bold">Primary development branch</strong></li>
+    <li class="text-body">✅ <strong class="text-body-bold">Always work here by default</strong></li>
+    <li class="text-body">✅ <strong class="text-body-bold">All new features and changes</strong></li>
+    <li class="text-body">✅ <strong class="text-body-bold">Quick iterations and testing</strong></li>
+    </ul>
+    <h4 class="text-subheadline">STABLE Branch (Production Branch)</h4>
+    <ul>
+    <li class="text-body">🔐 <strong class="text-body-bold">Password-protected deployments only</strong></li>
+    <li class="text-body">🎯 <strong class="text-body-bold">Stable, tested features only</strong></li>
+    <li class="text-body">📦 <strong class="text-body-bold">Production-ready releases</strong></li>
+    </ul>
+    <h3 class="text-headline">🚀 Deployment Scripts</h3>
+    <h4 class="text-subheadline">Quick Deploy to Main (<code class="text-code inline-code">./deploy-main.sh</code>)</h4>
+    <div class="code-block"><pre class="text-code">bash
+    ./deploy-main.sh</pre></div>
+    <ul>
+    <li class="text-body"><strong class="text-body-bold">No password required</strong></li>
+    <li class="text-body"><strong class="text-body-bold">Fast deployment for development</strong></li>
+    <li class="text-body"><strong class="text-body-bold">Use this for regular development pushes</strong></li>
+    </ul>
+    <h4 class="text-subheadline">Secure Deploy to Stable (<code class="text-code inline-code">./deploy-stable.sh</code>)</h4>
+    <div class="code-block"><pre class="text-code">bash
+    ./deploy-stable.sh</pre></div>
+    <ul>
+    <li class="text-body"><strong class="text-body-bold">Password required</strong>: <code class="text-code inline-code">3333</code></li>
+    <li class="text-body"><strong class="text-body-bold">Final confirmation required</strong>: <code class="text-code inline-code">yes</code></li>
+    <li class="text-body"><strong class="text-body-bold">Use this for production releases only</strong></li>
+    </ul>
+    <h3 class="text-headline">📋 Recommended Daily Workflow</h3>
+    <h4 class="text-subheadline">Daily Development:</h4>
+    <ol>
+    <li class="text-body"><strong class="text-body-bold">Work on MAIN branch</strong> (default)</li>
+    <li class="text-body"><strong class="text-body-bold">Make changes and commit</strong></li>
+    <li class="text-body"><strong class="text-body-bold">Push to main</strong>: <code class="text-code inline-code">./deploy-main.sh</code></li>
+    <li class="text-body">Continue development`</li>
+    </ol>
+    <h4 class="text-subheadline">Production Release:</h4>
+    <ol>
+    <li class="text-body"><strong class="text-body-bold">Ensure all changes are on MAIN</strong></li>
+    <li class="text-body"><strong class="text-body-bold">Test thoroughly</strong></li>
+    <li class="text-body"><strong class="text-body-bold">Deploy to stable</strong>: <code class="text-code inline-code">./deploy-stable.sh</code></li>
+    <li class="text-body"><strong class="text-body-bold">Enter password</strong>: <code class="text-code inline-code">3333</code></li>
+    <li class="text-body"><strong class="text-body-bold">Confirm deployment</strong>: <code class="text-code inline-code">yes</code></li>
+    </ol>
+    <h3 class="text-headline">🛡️ Security Features</h3>
+    <ul>
+    <li class="text-body"><strong class="text-body-bold">Stable branch</strong>: Protected with password "3333"</li>
+    <li class="text-body"><strong class="text-body-bold">Main branch</strong>: Open for development</li>
+    <li class="text-body"><strong class="text-body-bold">All deployments</strong>: Logged with timestamps</li>
+    <li class="text-body"><strong class="text-body-bold">Environment Separation</strong> - Development vs production workflows</li>
+    <li class="text-body"><strong class="text-body-bold">Secure API Integration</strong> - Proper error handling and validation</li>
+    </ul>
+</section>
+
+<section id="mlb-team-spot-colors" class="section">
+    <h2 class="text-title-bold">MLB Team Spot Colors</h2>
+    <h3 class="text-headline">Official Spot Color Mapping</h3>
+    <p class="text-body">The application uses official MLB team spot colors (primary brand colors used behind logos). These are different from secondary colors and ensure consistent branding throughout the application.</p>
+    <h4 class="text-subheadline">Usage Examples</h4>
+    <div class="code-block"><pre class="text-code">javascript
+    import { getTeamSpotColor } from './src/utils/spotColorMapping';
+    
+    // Get spot color for a team
+    const yankeeSpotColor = getTeamSpotColor(147); // Returns: #132448
+    const dodgerSpotColor = getTeamSpotColor(119); // Returns: #005A9C</pre></div>
+    <h4 class="text-subheadline">React Hook Integration</h4>
+    <div class="code-block"><pre class="text-code">javascript
+    import { useTeamSpotColor } from './src/hooks/useTeamData';
+    
+    function TeamComponent({ teamId }) {
+      const spotColor = useTeamSpotColor(teamId);
+      
+      return (
+        <div style={{ backgroundColor: spotColor }}>
+          Team content with official spot color background
+        </div>
+      );
+    }</pre></div>
+    <h4 class="text-subheadline">All Available Functions</h4>
+    <div class="code-block"><pre class="text-code">javascript
+    import { 
+      getTeamSpotColor, 
+      getAllTeamSpotColors, 
+      hasTeamSpotColor 
+    } from './src/utils/spotColorMapping';
+    
+    // Get spot color for a specific team
+    getTeamSpotColor(147); // #132448
+    
+    // Check if a team has a spot color defined
+    hasTeamSpotColor(147); // true
+    hasTeamSpotColor(999); // false
+    
+    // Get all teams with their spot colors
+    getAllTeamSpotColors(); // Array of {teamId, spotColor} objects</pre></div>
+    <h3 class="text-headline">Complete Spot Color Reference</h3>
+    <h4 class="text-subheadline">American League East</h4>
+    <ul>
+    <li class="text-body"><strong class="text-body-bold">110: Baltimore Orioles</strong> - <code class="text-code inline-code">#df4601</code> (Orange)</li>
+    <li class="text-body"><strong class="text-body-bold">111: Boston Red Sox</strong> - <code class="text-code inline-code">#0d2b56</code> (Navy)</li>
+    <li class="text-body"><strong class="text-body-bold">147: New York Yankees</strong> - <code class="text-code inline-code">#132448</code> (Navy)</li>
+    <li class="text-body"><strong class="text-body-bold">139: Tampa Bay Rays</strong> - <code class="text-code inline-code">#8fbce6</code> (Light Blue)</li>
+    <li class="text-body"><strong class="text-body-bold">141: Toronto Blue Jays</strong> - <code class="text-code inline-code">#134a8e</code> (Blue)</li>
+    </ul>
+    <h4 class="text-subheadline">American League Central</h4>
+    <ul>
+    <li class="text-body"><strong class="text-body-bold">145: Chicago White Sox</strong> - <code class="text-code inline-code">#333333</code> (Gray)</li>
+    <li class="text-body"><strong class="text-body-bold">114: Cleveland Guardians</strong> - <code class="text-code inline-code">#002b5c</code> (Navy)</li>
+    <li class="text-body"><strong class="text-body-bold">116: Detroit Tigers</strong> - <code class="text-code inline-code">#0c2c56</code> (Navy)</li>
+    <li class="text-body"><strong class="text-body-bold">118: Kansas City Royals</strong> - <code class="text-code inline-code">#004687</code> (Blue)</li>
+    <li class="text-body"><strong class="text-body-bold">142: Minnesota Twins</strong> - <code class="text-code inline-code">#002b5c</code> (Navy)</li>
+    </ul>
+    <h4 class="text-subheadline">American League West</h4>
+    <ul>
+    <li class="text-body"><strong class="text-body-bold">117: Houston Astros</strong> - <code class="text-code inline-code">#eb6e1f</code> (Orange)</li>
+    <li class="text-body"><strong class="text-body-bold">108: Los Angeles Angels</strong> - <code class="text-code inline-code">#862633</code> (Red)</li>
+    <li class="text-body"><strong class="text-body-bold">133: Oakland Athletics</strong> - <code class="text-code inline-code">#003831</code> (Green)</li>
+    <li class="text-body"><strong class="text-body-bold">136: Seattle Mariners</strong> - <code class="text-code inline-code">#0c2c56</code> (Navy)</li>
+    <li class="text-body"><strong class="text-body-bold">140: Texas Rangers</strong> - <code class="text-code inline-code">#003278</code> (Blue)</li>
+    </ul>
+    <h4 class="text-subheadline">National League East</h4>
+    <ul>
+    <li class="text-body"><strong class="text-body-bold">144: Atlanta Braves</strong> - <code class="text-code inline-code">#0c2340</code> (Navy)</li>
+    <li class="text-body"><strong class="text-body-bold">146: Miami Marlins</strong> - <code class="text-code inline-code">#00a3e0</code> (Blue)</li>
+    <li class="text-body"><strong class="text-body-bold">121: New York Mets</strong> - <code class="text-code inline-code">#002d72</code> (Navy)</li>
+    <li class="text-body"><strong class="text-body-bold">143: Philadelphia Phillies</strong> - <code class="text-code inline-code">#e81828</code> (Red)</li>
+    <li class="text-body"><strong class="text-body-bold">120: Washington Nationals</strong> - <code class="text-code inline-code">#ab0003</code> (Red)</li>
+    </ul>
+    <h4 class="text-subheadline">National League Central</h4>
+    <ul>
+    <li class="text-body"><strong class="text-body-bold">112: Chicago Cubs</strong> - <code class="text-code inline-code">#0e3386</code> (Blue)</li>
+    <li class="text-body"><strong class="text-body-bold">113: Cincinnati Reds</strong> - <code class="text-code inline-code">#c6011f</code> (Red)</li>
+    <li class="text-body"><strong class="text-body-bold">158: Milwaukee Brewers</strong> - <code class="text-code inline-code">#13294b</code> (Navy)</li>
+    <li class="text-body"><strong class="text-body-bold">134: Pittsburgh Pirates</strong> - <code class="text-code inline-code">#333333</code> (Gray)</li>
+    <li class="text-body"><strong class="text-body-bold">138: St. Louis Cardinals</strong> - <code class="text-code inline-code">#be0a14</code> (Red)</li>
+    </ul>
+    <h4 class="text-subheadline">National League West</h4>
+    <ul>
+    <li class="text-body"><strong class="text-body-bold">109: Arizona Diamondbacks</strong> - <code class="text-code inline-code">#aa182c</code> (Red)</li>
+    <li class="text-body"><strong class="text-body-bold">115: Colorado Rockies</strong> - <code class="text-code inline-code">#33006f</code> (Purple)</li>
+    <li class="text-body"><strong class="text-body-bold">119: Los Angeles Dodgers</strong> - <code class="text-code inline-code">#005a9c</code> (Blue)</li>
+    <li class="text-body"><strong class="text-body-bold">135: San Diego Padres</strong> - <code class="text-code inline-code">#ffc425</code> (Yellow)</li>
+    <li class="text-body"><strong class="text-body-bold">137: San Francisco Giants</strong> - <code class="text-code inline-code">#fd5a1e</code> (Orange)</li>
+    </ul>
+    <h4 class="text-subheadline">Additional Teams</h4>
+    <ul>
+    <li class="text-body"><strong class="text-body-bold">159: Team 159</strong> - <code class="text-code inline-code">#bc0022</code> (Red)</li>
+    <li class="text-body"><strong class="text-body-bold">160: Team 160</strong> - <code class="text-code inline-code">#041e42</code> (Navy)</li>
+    </ul>
+    <h3 class="text-headline">Important Spot Color Notes</h3>
+    <ol>
+    <li class="text-body"><strong class="text-body-bold">Spot Colors vs Secondary Colors</strong>: These are the official spot colors, not the secondary colors from the BigData API. The spot color is the primary brand color used behind team logos and in branded elements.</li>
+    </ol>
+    <ol>
+    <li class="text-body"><strong class="text-body-bold">Future Reference</strong>: This mapping should be used throughout the application instead of trying to extract colors from images or using secondary colors from the API.</li>
+    </ol>
+    <ol>
+    <li class="text-body"><strong class="text-body-bold">Consistency</strong>: All components using team colors should use this mapping to ensure consistent branding across the application.</li>
+    </ol>
+    <ol>
+    <li class="text-body"><strong class="text-body-bold">Testing</strong>: Run the test utilities in <code class="text-code inline-code">src/utils/spotColorTest.js</code> to validate the mapping after any changes.</li>
+    </ol>
+    <h3 class="text-headline">Components Updated for Spot Colors</h3>
+    <p class="text-body">The following components have been updated to use the official spot color mapping:</p>
+    <ul>
+    <li class="text-body"><code class="text-code inline-code">/src/components/MLBSchedule.jsx</code> - Schedule cards now use official spot colors</li>
+    <li class="text-body"><code class="text-code inline-code">/src/components/AnchorMenu.js</code> - Team buttons use official spot colors  </li>
+    <li class="text-body"><code class="text-code inline-code">/src/hooks/useTeamData.js</code> - React hooks now use the mapping</li>
+    <li class="text-body"><code class="text-code inline-code">/src/App.jsx</code> - Main app components use the mapping</li>
+    <li class="text-body"><code class="text-code inline-code">/src/components/GameCarousel.jsx</code> - Team game carousel uses spot colors</li>
+    </ul>
+    <p class="text-body">This ensures consistent, official MLB branding throughout the entire application.</p>
+</section>
+
+<section id="technical-architecture" class="section">
+    <h2 class="text-title-bold">Technical Architecture</h2>
+    <h3 class="text-headline">📦 Core Dependencies</h3>
+    <h4 class="text-subheadline">Production (3 dependencies)</h4>
+    <div class="code-block"><pre class="text-code">json
+    {
+      "react": "^19.1.0",           // Core React framework (latest)
+      "react-dom": "^19.1.0",       // React DOM renderer
+      "papaparse": "^5.5.3"         // CSV parsing for Google Sheets data
+    }</pre></div>
+    <h4 class="text-subheadline">Development (9 dependencies)</h4>
+    <div class="code-block"><pre class="text-code">json
+    {
+      "vite": "^6.3.5",                          // Modern build tool
+      "@vitejs/plugin-react": "^4.4.1",          // Vite React integration
+      "eslint": "^9.25.0",                       // Code linting
+      "@eslint/js": "^9.25.0",                   // ESLint core rules
+      "eslint-plugin-react-hooks": "^5.2.0",     // React Hooks linting
+      "eslint-plugin-react-refresh": "^0.4.19",  // Fast Refresh linting
+      "globals": "^16.0.0",                      // Global variables
+      "@types/react": "^19.1.2",                 // TypeScript React types
+      "@types/react-dom": "^19.1.2"              // TypeScript React DOM types
+    }</pre></div>
+    <h3 class="text-headline">🌐 External APIs & Services</h3>
+    <h4 class="text-subheadline">MLB Official APIs</h4>
+    <ol>
+    <li class="text-body"><strong class="text-body-bold">MLB Stats API</strong> (<code class="text-code inline-code">statsapi.mlb.com</code>)</li>
+    </ol>
+    <p class="text-body">   - Team rosters and player data</p>
+    <p class="text-body">   - Game schedules and live scores</p>
+    <p class="text-body">   - Season statistics and metrics</p>
+    <ol>
+    <li class="text-body"><strong class="text-body-bold">MLB Image CDN</strong> (<code class="text-code inline-code">img.mlbstatic.com</code>)</li>
+    </ol>
+    <p class="text-body">   - Official team logos (spot, cap, wordmarks)</p>
+    <p class="text-body">   - Player photos (headshots, action shots)</p>
+    <p class="text-body">   - Responsive image optimization</p>
+    <ol>
+    <li class="text-body"><strong class="text-body-bold">MLB Mobile Infrastructure</strong> (<code class="text-code inline-code">storage.mobile.mlbinfra.com</code>)</li>
+    </ol>
+    <p class="text-body">   - Complete branding configuration</p>
+    <p class="text-body">   - MLB.TV assets and backgrounds</p>
+    <ol>
+    <li class="text-body"><strong class="text-body-bold">Google Sheets Integration</strong></li>
+    </ol>
+    <p class="text-body">   - Team metadata and configuration</p>
+    <p class="text-body">   - CSV export for dynamic data updates</p>
+</section>
+
+<section id="mlb-api-endpoints-json-index" class="section">
+    <h2 class="text-title-bold">🔗 MLB API Endpoints & JSON Index</h2>
+    <h3 class="text-headline">MLB Branding API</h3>
+    <p class="text-body">Team branding, colors, logos, wordmarks, MLB.TV assets, and All-Star teams.</p>
+    <ul>
+    <li class="text-body"><code class="text-code inline-code">https://storage.mobile.mlbinfra.com/atbatconfig/branding.json</code> - Complete branding data</li>
+    </ul>
+    <h3 class="text-headline">MLB Stats API</h3>
+    <p class="text-body">Player statistics, team rosters, game data, and advanced metrics.</p>
+    <ul>
+    <li class="text-body"><code class="text-code inline-code">https://statsapi.mlb.com/api/v1/teams</code> - All teams list</li>
+    <li class="text-body"><code class="text-code inline-code">https://statsapi.mlb.com/api/v1/teams/[TEAM_ID]/roster/Active</code> - Active team roster</li>
+    <li class="text-body"><code class="text-code inline-code">https://statsapi.mlb.com/api/v1/people/[PLAYER_ID]</code> - Player details</li>
+    <li class="text-body"><code class="text-code inline-code">https://statsapi.mlb.com/api/v1/people/[PLAYER_ID]/stats?stats=season&group=hitting&season=[YEAR]</code> - Season hitting stats</li>
+    <li class="text-body"><code class="text-code inline-code">https://statsapi.mlb.com/api/v1/people/[PLAYER_ID]/stats?stats=statcast&group=hitting&season=[YEAR]</code> - Statcast metrics</li>
+    <li class="text-body"><code class="text-code inline-code">https://statsapi.mlb.com/api/v1/people/[PLAYER_ID]/stats?stats=metricAverages&group=hitting&season=[YEAR]&metrics=launchSpeed,distance,launchAngle</code> - Advanced hitting metrics</li>
+    <li class="text-body"><code class="text-code inline-code">https://statsapi.mlb.com/api/v1/people/[PLAYER_ID]/stats?stats=season&group=pitching&season=[YEAR]</code> - Season pitching stats</li>
+    </ul>
+    <h3 class="text-headline">MLB Schedule API</h3>
+    <p class="text-body">Game schedules, live game data, and calendar information.</p>
+    <ul>
+    <li class="text-body"><code class="text-code inline-code">https://statsapi.mlb.com/api/v1/schedule?sportId=1&startDate=[DATE]&endDate=[DATE]</code> - Games by date range</li>
+    <li class="text-body"><code class="text-code inline-code">https://statsapi.mlb.com/api/v1/schedule?sportId=1&teamId=[TEAM_ID]&startDate=[DATE]&endDate=[DATE]</code> - Team schedule</li>
+    <li class="text-body"><code class="text-code inline-code">https://statsapi.mlb.com/api/v1/schedule/games/?sportId=1&startDate=[DATE]&endDate=[DATE]&teamId=[TEAM_ID]&hydrate=linescore,team</code> - Live game context</li>
+    <li class="text-body"><code class="text-code inline-code">https://statsapi.mlb.com/api/v1/game/[GAME_PK]/linescore</code> - Live game score</li>
+    <li class="text-body"><code class="text-code inline-code">https://statsapi.mlb.com/api/v1/game/[GAME_PK]/playByPlay</code> - Play-by-play data</li>
+    </ul>
+    <h3 class="text-headline">MLB Image CDN</h3>
+    <p class="text-body">Player photos, team logos, and branded assets with dynamic sizing and formats.</p>
+    <p class="text-body"><strong class="text-body-bold">Player Images:</strong></p>
+    <ul>
+    <li class="text-body"><code class="text-code inline-code">https://img.mlbstatic.com/mlb-photos/image/upload/w_[WIDTH],q_auto/v1/people/[PLAYER_ID]/headshot/silo/current</code> - Player headshot</li>
+    <li class="text-body"><code class="text-code inline-code">https://img.mlbstatic.com/mlb-photos/image/upload/h_1080,w_1920,c_auto,g_auto:subject/v1/people/[PLAYER_ID]/action/hero/current</code> - Player action shot</li>
+    <li class="text-body"><code class="text-code inline-code">https://img.mlbstatic.com/mlb-photos/image/upload/w_720,f_png,q_auto/v1/people/[PLAYER_ID]/pressbox/current</code> - Pressbox photo</li>
+    </ul>
+    <p class="text-body"><strong class="text-body-bold">Team Logos:</strong></p>
+    <ul>
+    <li class="text-body"><code class="text-code inline-code">https://img.mlbstatic.com/mlb-photos/image/upload/w_[WIDTH],f_png,q_auto/v1/team/[TEAM_ID]/logo/spot/current</code> - Team spot logo</li>
+    <li class="text-body"><code class="text-code inline-code">https://img.mlbstatic.com/mlb-photos/image/upload/w_[WIDTH],f_png,q_auto/v1/team/[TEAM_ID]/logo/cap/dark/current</code> - Cap logo dark</li>
+    <li class="text-body"><code class="text-code inline-code">https://img.mlbstatic.com/mlb-photos/image/upload/w_[WIDTH],f_png,q_auto/v1/team/[TEAM_ID]/logo/cap/light/current</code> - Cap logo light</li>
+    <li class="text-body"><code class="text-code inline-code">https://img.mlbstatic.com/mlb-photos/image/upload/w_[WIDTH],f_png,q_auto/v1/team/[TEAM_ID]/fill/spot</code> - Team fill color</li>
+    </ul>
+    <p class="text-body"><strong class="text-body-bold">Team Backgrounds:</strong></p>
+    <ul>
+    <li class="text-body"><code class="text-code inline-code">https://img.mlbstatic.com/mlb-photos/image/upload/w_1280,f_png,q_auto/v1/team/[TEAM_ID]/action/hero/current</code> - Team hero background</li>
+    </ul>
+    <h3 class="text-headline">MLB Standings API</h3>
+    <p class="text-body">League standings, division records, and playoff positioning.</p>
+    <ul>
+    <li class="text-body"><code class="text-code inline-code">https://statsapi.mlb.com/api/v1/standings?leagueId=103,104&season=[YEAR]</code> - League standings</li>
+    <li class="text-body"><code class="text-code inline-code">https://statsapi.mlb.com/api/v1/standings/regularSeason?leagueId=103&season=[YEAR]</code> - AL standings</li>
+    <li class="text-body"><code class="text-code inline-code">https://statsapi.mlb.com/api/v1/standings/regularSeason?leagueId=104&season=[YEAR]</code> - NL standings</li>
+    <li class="text-body"><code class="text-code inline-code">https://statsapi.mlb.com/api/v1/standings/wildCard?leagueId=103,104&season=[YEAR]</code> - Wild card standings</li>
+    </ul>
+    <h3 class="text-headline">MLB Venues API</h3>
+    <p class="text-body">Stadium information, venue details, and ballpark data.</p>
+    <ul>
+    <li class="text-body"><code class="text-code inline-code">https://statsapi.mlb.com/api/v1/venues</code> - All venues list</li>
+    <li class="text-body"><code class="text-code inline-code">https://statsapi.mlb.com/api/v1/venues/[VENUE_ID]</code> - Specific venue details</li>
+    </ul>
+    <h3 class="text-headline">Common Parameters</h3>
+    <ul>
+    <li class="text-body"><strong class="text-body-bold">[TEAM_ID]</strong>: Team ID (e.g., 147 for Yankees, 119 for Dodgers)</li>
+    <li class="text-body"><strong class="text-body-bold">[PLAYER_ID]</strong>: Player ID (e.g., 545361 for Mike Trout)</li>
+    <li class="text-body"><strong class="text-body-bold">[GAME_PK]</strong>: Game primary key from schedule API</li>
+    <li class="text-body"><strong class="text-body-bold">[DATE]</strong>: Date in YYYY-MM-DD format</li>
+    <li class="text-body"><strong class="text-body-bold">[YEAR]</strong>: Season year (e.g., 2025)</li>
+    <li class="text-body"><strong class="text-body-bold">[WIDTH]</strong>: Image width in pixels</li>
+    <li class="text-body"><strong class="text-body-bold">[VENUE_ID]</strong>: Venue ID from venues API</li>
+    </ul>
+    <h3 class="text-headline">📁 Custom Module System</h3>
+    <h4 class="text-subheadline">Utilities (<code class="text-code inline-code">src/utils/</code>)</h4>
+    <ul>
+    <li class="text-body"><strong class="text-body-bold"><code class="text-code inline-code">spotColorMapping.js</code></strong> - Official MLB team spot colors (hex values)</li>
+    <li class="text-body"><strong class="text-body-bold"><code class="text-code inline-code">teamColorReference.js</code></strong> - Comprehensive team color reference</li>
+    <li class="text-body"><strong class="text-body-bold"><code class="text-code inline-code">teamUtils.js</code></strong> - Team organization and division logic</li>
+    <li class="text-body"><strong class="text-body-bold"><code class="text-code inline-code">audio.js</code></strong> - Web Audio API integration for UI sounds</li>
+    <li class="text-body"><strong class="text-body-bold"><code class="text-code inline-code">spotColorTest.js</code></strong> - Color mapping validation utility</li>
+    </ul>
+    <h4 class="text-subheadline">Components (<code class="text-code inline-code">src/components/</code>)</h4>
+    <ul>
+    <li class="text-body"><strong class="text-body-bold"><code class="text-code inline-code">MLBSchedule.jsx</code></strong> - Live games schedule with spotlight design and official spot colors</li>
+    <li class="text-body"><strong class="text-body-bold"><code class="text-code inline-code">GameCarousel.jsx</code></strong> - Team-specific horizontal game carousel (logo-vs-logo design)</li>
+    <li class="text-body"><strong class="text-body-bold"><code class="text-code inline-code">AnchorMenu.js</code></strong> - Division-based team navigation with spot color integration</li>
+    <li class="text-body"><strong class="text-body-bold"><code class="text-code inline-code">UI/CommonComponents.js</code></strong> - Reusable UI components</li>
+    </ul>
+    <h4 class="text-subheadline">Hooks (<code class="text-code inline-code">src/hooks/</code>)</h4>
+    <ul>
+    <li class="text-body"><strong class="text-body-bold"><code class="text-code inline-code">useTeamData.js</code></strong> - Custom hooks for team data and official spot colors integration</li>
+    </ul>
+    <h4 class="text-subheadline">Data Assets</h4>
+    <ul>
+    <li class="text-body"><strong class="text-body-bold"><code class="text-code inline-code">team-extras.json</code></strong> - Additional team metadata</li>
+    <li class="text-body"><strong class="text-body-bold">Configuration files</strong> - Various JSON configurations</li>
+    </ul>
+    <h3 class="text-headline">🎨 Styling & UI Architecture</h3>
+    <ul>
+    <li class="text-body"><strong class="text-body-bold">No CSS Framework</strong> - Pure CSS with strategic inline styles</li>
+    <li class="text-body"><strong class="text-body-bold">Dark Theme</strong> - Custom MLB-inspired color palette</li>
+    <li class="text-body"><strong class="text-body-bold">System Fonts</strong> - Native font stack (system-ui, Avenir, Helvetica)</li>
+    <li class="text-body"><strong class="text-body-bold">Responsive Design</strong> - Mobile-first approach</li>
+    <li class="text-body"><strong class="text-body-bold">Component-Scoped Styles</strong> - Mix of CSS classes and React inline styles</li>
+    </ul>
+    <h3 class="text-headline">🚀 Build & Deployment</h3>
+    <h4 class="text-subheadline">Build System</h4>
+    <ul>
+    <li class="text-body"><strong class="text-body-bold">Vite</strong> - Modern, fast bundler with HMR</li>
+    <li class="text-body"><strong class="text-body-bold">Code Splitting</strong> - Separate chunks for vendor and utilities</li>
+    <li class="text-body"><strong class="text-body-bold">Output Directory</strong> - <code class="text-code inline-code">dist/</code> for production builds</li>
+    <li class="text-body"><strong class="text-body-bold">Source Maps</strong> - Disabled for production</li>
+    </ul>
+    <h4 class="text-subheadline">Deployment Platform</h4>
+    <ul>
+    <li class="text-body"><strong class="text-body-bold">Vercel</strong> - Serverless deployment platform</li>
+    <li class="text-body"><strong class="text-body-bold">SPA Configuration</strong> - Single-page app routing</li>
+    <li class="text-body"><strong class="text-body-bold">Automatic Deployments</strong> - Git-based workflow</li>
+    </ul>
+    <h3 class="text-headline">🔧 Development Workflow</h3>
+    <h4 class="text-subheadline">Branch Strategy</h4>
+    <ul>
+    <li class="text-body"><strong class="text-body-bold">MAIN</strong> - Default development branch (daily work)</li>
+    <li class="text-body"><strong class="text-body-bold">STABLE</strong> - Production branch (password-protected)</li>
+    </ul>
+    <h4 class="text-subheadline">Deployment Scripts</h4>
+    <div class="code-block"><pre class="text-code">bash
+    ./deploy-main.sh      # Quick deploy to main (no password)
+    ./deploy-stable.sh    # Secure deploy to stable (password: 3333)</pre></div>
+    <h4 class="text-subheadline">Code Quality</h4>
+    <ul>
+    <li class="text-body"><strong class="text-body-bold">ESLint</strong> - JavaScript/React linting</li>
+    <li class="text-body"><strong class="text-body-bold">React Hooks Rules</strong> - Hook usage validation</li>
+    <li class="text-body"><strong class="text-body-bold">Fast Refresh</strong> - Hot module replacement</li>
+    </ul>
+</section>
+
+<section id="deployment-configuration" class="section">
+    <h2 class="text-title-bold">Deployment Configuration</h2>
+    <h3 class="text-headline">Repository Information</h3>
+    <ul>
+    <li class="text-body"><strong class="text-body-bold">Repository</strong>: https://github.com/skull-github/XRBrandingGuide</li>
+    <li class="text-body"><strong class="text-body-bold">Branch</strong>: main</li>
+    <li class="text-body"><strong class="text-body-bold">Latest Updates</strong>: Consolidated README with all documentation</li>
+    </ul>
+    <h3 class="text-headline">Vercel Configuration</h3>
+    <ul>
+    <li class="text-body"><strong class="text-body-bold">Framework</strong>: Vite</li>
+    <li class="text-body"><strong class="text-body-bold">Root Directory</strong>: ./</li>
+    <li class="text-body"><strong class="text-body-bold">Build Command</strong>: npm run build</li>
+    <li class="text-body"><strong class="text-body-bold">Output Directory</strong>: dist</li>
+    <li class="text-body"><strong class="text-body-bold">Install Command</strong>: npm install</li>
+    </ul>
+    <h3 class="text-headline">Files Structure (Root Level)</h3>
+    <div class="code-block"><pre class="text-code">✅ package.json        # Dependencies and scripts
+    ✅ index.html          # Entry point  
+    ✅ src/                # React app source code
+    ✅ vite.config.js      # Vite configuration
+    ✅ vercel.json         # Deployment settings
+    ✅ dist/               # Build output (after npm run build)
+    ✅ deploy-main.sh      # Main branch deployment script
+    ✅ deploy-stable.sh    # Stable branch deployment script (password-protected)</pre></div>
+    <h3 class="text-headline">Deployment Issue Resolution</h3>
+    <p class="text-body">If Vercel shows wrong repository (iamdavidsantana/xr-branding-guide):</p>
+    <ol>
+    <li class="text-body">Delete the Vercel project completely</li>
+    <li class="text-body">Create new project from scratch</li>
+    <li class="text-body">Import from skull-github/XRBrandingGuide</li>
+    <li class="text-body">Ensure branch is set to 'main'</li>
+    </ol>
+</section>
+
+<section id="recent-project-updates" class="section">
+    <h2 class="text-title-bold">Recent Project Updates</h2>
+    <h3 class="text-headline">✅ Recently Completed Features:</h3>
+    <ul>
+    <li class="text-body"><strong class="text-body-bold">Official MLB spot colors</strong> for all teams (hex values mapped)</li>
+    <li class="text-body"><strong class="text-body-bold">Horizontal carousel layout</strong> (logo-vs-logo design)</li>
+    <li class="text-body"><strong class="text-body-bold">TeamGameCarousel component</strong> replacing vertical layout</li>
+    <li class="text-body"><strong class="text-body-bold">Secure deployment system</strong> with password protection</li>
+    <li class="text-body"><strong class="text-body-bold">Consolidated documentation</strong> - All README files merged into one</li>
+    <li class="text-body"><strong class="text-body-bold">MAIN branch workflow</strong> - Set as default working branch</li>
+    <li class="text-body"><strong class="text-body-bold">Schedule card improvements</strong> - Changed "VIEWING" to "LIVE" status</li>
+    <li class="text-body"><strong class="text-body-bold">Complete spot color integration</strong> - All components updated</li>
+    </ul>
+    <h3 class="text-headline">🎨 Current Team Section Layout:</h3>
+    <ul>
+    <li class="text-body"><strong class="text-body-bold">Live Game Context</strong>: Horizontal carousel with logo-vs-logo cards</li>
+    <li class="text-body"><strong class="text-body-bold">Upcoming Games</strong>: Clean vertical list format</li>
+    <li class="text-body"><strong class="text-body-bold">Official spot colors</strong> used throughout all team displays</li>
+    <li class="text-body"><strong class="text-body-bold">Responsive design</strong> for all screen sizes</li>
+    </ul>
+    <h3 class="text-headline">🛡️ Security & Workflow:</h3>
+    <ul>
+    <li class="text-body"><strong class="text-body-bold">Password-protected stable deployments</strong> (password: "3333")</li>
+    <li class="text-body"><strong class="text-body-bold">Main branch</strong> for daily development (no password)</li>
+    <li class="text-body"><strong class="text-body-bold">All deployments logged</strong> with timestamps</li>
+    <li class="text-body"><strong class="text-body-bold">Secure API integration</strong> with proper error handling</li>
+    </ul>
+    <h3 class="text-headline">🎵 Audio System</h3>
+    <ul>
+    <li class="text-body"><strong class="text-body-bold">Web Audio API</strong> - Native browser audio capabilities</li>
+    <li class="text-body"><strong class="text-body-bold">Interactive Sounds</strong> - Hover and click feedback</li>
+    <li class="text-body"><strong class="text-body-bold">User Gesture Activation</strong> - Proper audio context management</li>
+    </ul>
+    <h3 class="text-headline">📊 Performance Features</h3>
+    <ul>
+    <li class="text-body"><strong class="text-body-bold">Lazy Loading</strong> - Components loaded on demand</li>
+    <li class="text-body"><strong class="text-body-bold">Image Optimization</strong> - MLB CDN with responsive sizing</li>
+    <li class="text-body"><strong class="text-body-bold">Memoization</strong> - React hooks for performance</li>
+    <li class="text-body"><strong class="text-body-bold">Minimal Dependencies</strong> - Lean dependency tree</li>
+    </ul>
+</section>
+
+<section id="project-stats-summary" class="section">
+    <h2 class="text-title-bold">Project Stats & Summary</h2>
+    <ul>
+    <li class="text-body"><strong class="text-body-bold">Total Dependencies</strong>: 12 (3 production + 9 development)</li>
+    <li class="text-body"><strong class="text-body-bold">External APIs</strong>: 4 (MLB Stats, Images, Mobile, Google)</li>
+    <li class="text-body"><strong class="text-body-bold">Custom Modules</strong>: 10+ utilities, components, and hooks</li>
+    <li class="text-body"><strong class="text-body-bold">Configuration Files</strong>: 5 (Vite, Vercel, ESLint, Package, Git)</li>
+    <li class="text-body"><strong class="text-body-bold">Architecture</strong>: Modern React SPA with minimal footprint</li>
+    <li class="text-body"><strong class="text-body-bold">Team Spot Colors</strong>: 32 official MLB team colors mapped</li>
+    <li class="text-body"><strong class="text-body-bold">Deployment Scripts</strong>: 2 (main + stable with password)</li>
+    <li class="text-body"><strong class="text-body-bold">Documentation</strong>: Interactive HTML site with auto-sync from README</li>
+    <li class="text-body"><strong class="text-body-bold">Documentation Features</strong>: Responsive design, team color viewer, offline support</li>
+    </ul>
+</section>
+
+<section id="interactive-documentation" class="section">
+    <h2 class="text-title-bold">📚 Interactive Documentation</h2>
+    <p class="text-body">This project includes a comprehensive interactive documentation site that automatically syncs with this README:</p>
+    <h3 class="text-headline">Features</h3>
+    <ul>
+    <li class="text-body"><strong class="text-body-bold">📱 Responsive Design</strong> - Works on all devices</li>
+    <li class="text-body"><strong class="text-body-bold">🎨 Interactive Team Colors</strong> - Clickable team color cards with details</li>
+    <li class="text-body"><strong class="text-body-bold">🔍 Smooth Navigation</strong> - Sidebar with smooth scrolling</li>
+    <li class="text-body"><strong class="text-body-bold">🌙 Dark Theme</strong> - MLB-inspired design</li>
+    <li class="text-body"><strong class="text-body-bold">🔄 Auto-Sync</strong> - Updates when README changes</li>
+    <li class="text-body"><strong class="text-body-bold">⚡ Fast & Accessible</strong> - Optimized performance</li>
+    <li class="text-body"><strong class="text-body-bold">📱 PWA Ready</strong> - Offline functionality</li>
+    </ul>
+    <h3 class="text-headline">Access Documentation</h3>
+    <ul>
+    <li class="text-body"><strong class="text-body-bold">Local</strong>: Open <code class="text-code inline-code">docs/index.html</code> in your browser</li>
+    <li class="text-body"><strong class="text-body-bold">Live Server</strong>: <code class="text-code inline-code">cd docs && npm run serve</code> then visit http://localhost:8080</li>
+    <li class="text-body"><strong class="text-body-bold">Auto-Sync</strong>: <code class="text-code inline-code">cd docs && npm run watch</code> for live README updates</li>
+    </ul>
+    <h3 class="text-headline">Deploy Documentation</h3>
+    <div class="code-block"><pre class="text-code">bash
+    cd docs && ./deploy-docs.sh  # Auto-sync and commit to git</pre></div>
+    <p class="text-body">The documentation site can be hosted on any static hosting platform (Vercel, Netlify, GitHub Pages, etc.).</p>
+</section>
+
+<section id="typography-scale-style-guide" class="section">
+    <h2 class="text-title-bold">Typography Scale & Style Guide</h2>
+
+            <div class="typography-showcase">
+                <p class="text-body">The MLB XR Branding Guide uses a consistent typography system optimized for both XR applications and web interfaces. Web sizes are 50% of the original XR sizes for better readability.</p>
+                
+                <h3 class="text-headline">Typography Breakdown</h3>
+                <table class="typography-table">
+                    <thead>
+                        <tr>
+                            <th>Style</th>
+                            <th>XR Size</th>
+                            <th>Web Size</th>
+                            <th>Weight</th>
+                            <th>Use Case</th>
+                            <th>CSS Class</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="style-name">Score</td>
+                            <td class="size-comparison">140px</td>
+                            <td class="size-comparison">70px</td>
+                            <td>Bold</td>
+                            <td>Key metrics, scores, large numbers</td>
+                            <td><code>.text-score</code></td>
+                        </tr>
+                        <tr>
+                            <td class="style-name">Marquee</td>
+                            <td class="size-comparison">96px</td>
+                            <td class="size-comparison">48px</td>
+                            <td>Bold</td>
+                            <td>Main headlines, hero text</td>
+                            <td><code>.text-marquee</code></td>
+                        </tr>
+                        <tr>
+                            <td class="style-name">Display</td>
+                            <td class="size-comparison">76px</td>
+                            <td class="size-comparison">38px</td>
+                            <td>Semibold</td>
+                            <td>Primary section headers</td>
+                            <td><code>.text-display</code></td>
+                        </tr>
+                        <tr>
+                            <td class="style-name">Title</td>
+                            <td class="size-comparison">58px</td>
+                            <td class="size-comparison">29px</td>
+                            <td>Semibold</td>
+                            <td>Subsection headers</td>
+                            <td><code>.text-title</code></td>
+                        </tr>
+                        <tr>
+                            <td class="style-name">Headline</td>
+                            <td class="size-comparison">48px</td>
+                            <td class="size-comparison">24px</td>
+                            <td>Semibold</td>
+                            <td>Component headers</td>
+                            <td><code>.text-headline</code></td>
+                        </tr>
+                        <tr>
+                            <td class="style-name">SubHeadline</td>
+                            <td class="size-comparison">38px</td>
+                            <td class="size-comparison">19px</td>
+                            <td>Medium</td>
+                            <td>Minor headers, labels</td>
+                            <td><code>.text-subheadline</code></td>
+                        </tr>
+                        <tr>
+                            <td class="style-name">Body</td>
+                            <td class="size-comparison">34px</td>
+                            <td class="size-comparison">17px</td>
+                            <td>Regular</td>
+                            <td>Main content text</td>
+                            <td><code>.text-body</code></td>
+                        </tr>
+                        <tr>
+                            <td class="style-name">Body Bold</td>
+                            <td class="size-comparison">34px</td>
+                            <td class="size-comparison">17px</td>
+                            <td>Bold</td>
+                            <td>Emphasized content</td>
+                            <td><code>.text-body-bold</code></td>
+                        </tr>
+                        <tr>
+                            <td class="style-name">System</td>
+                            <td class="size-comparison">30px</td>
+                            <td class="size-comparison">15px</td>
+                            <td>Medium</td>
+                            <td>UI elements, buttons</td>
+                            <td><code>.text-system</code></td>
+                        </tr>
+                        <tr>
+                            <td class="style-name">Legal</td>
+                            <td class="size-comparison">26px</td>
+                            <td class="size-comparison">13px</td>
+                            <td>Regular</td>
+                            <td>Fine print, disclaimers</td>
+                            <td><code>.text-legal</code></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3 class="text-headline">Visual Examples</h3>
+                <div class="typography-samples">
+                    <div class="typography-sample">
+                        <div class="typography-label">
+                            <span class="typography-name">Score</span>
+                            <span class="typography-sizes">XR → Web</span>
+                        </div>
+                        <div class="typography-example text-score">140/112</div>
+                    </div>
+                    <div class="typography-sample">
+                        <div class="typography-label">
+                            <span class="typography-name">Marquee</span>
+                            <span class="typography-sizes">XR → Web</span>
+                        </div>
+                        <div class="typography-example text-marquee">MLB XR Branding</div>
+                    </div>
+                    <div class="typography-sample">
+                        <div class="typography-label">
+                            <span class="typography-name">Display</span>
+                            <span class="typography-sizes">XR → Web</span>
+                        </div>
+                        <div class="typography-example text-display">Section Header</div>
+                    </div>
+                    <div class="typography-sample">
+                        <div class="typography-label">
+                            <span class="typography-name">Title</span>
+                            <span class="typography-sizes">XR → Web</span>
+                        </div>
+                        <div class="typography-example text-title">Subsection Title</div>
+                    </div>
+                    <div class="typography-sample">
+                        <div class="typography-label">
+                            <span class="typography-name">Headline</span>
+                            <span class="typography-sizes">XR → Web</span>
+                        </div>
+                        <div class="typography-example text-headline">Component Headline</div>
+                    </div>
+                    <div class="typography-sample">
+                        <div class="typography-label">
+                            <span class="typography-name">Body</span>
+                            <span class="typography-sizes">XR → Web</span>
+                        </div>
+                        <div class="typography-example text-body">This is body text used for main content and paragraphs.</div>
+                    </div>
+                </div>
+
+                <h3 class="text-headline">Font Specifications</h3>
+                <ul class="text-body">
+                    <li><strong>Primary Font:</strong> MLB HEX Franklin (woff2/otf available in assets)</li>
+                    <li><strong>Fallback:</strong> Inter, system-ui, -apple-system, sans-serif</li>
+                    <li><strong>Weights Available:</strong> Light (300), Regular (400), Medium (500), Semibold (600), Bold (700), Extrabold (800), Black (900)</li>
+                    <li><strong>Line Height:</strong> Ranges from 1.1 (Score) to 1.5 (Body) for optimal readability</li>
+                    <li><strong>Letter Spacing:</strong> Tighter on larger sizes (-0.02em), normal on body text</li>
+                </ul>
+
+                <h3 class="text-headline">Responsive Behavior</h3>
+                <ul class="text-body">
+                    <li><strong>Desktop:</strong> Full web sizes (50% of XR)</li>
+                    <li><strong>Tablet:</strong> 75% of web sizes</li>
+                    <li><strong>Mobile:</strong> 60% of web sizes</li>
+                </ul>
+            </div></section>
+
             </div>
         </main>
+    </div>
+
+    <!-- Sticky Navigation Buttons -->
+    <div class="sticky-nav-buttons" id="stickyNavButtons">
+        <button class="sticky-nav-btn back-to-top" id="backToTopBtn" title="Back to Top">
+            ↑
+        </button>
+        <a href="../" class="sticky-nav-btn back-to-home" title="Back to Home">
+            🏠
+        </a>
     </div>
 
     <!-- Color Preview Modal -->

@@ -93,7 +93,7 @@ cd docs && ./deploy-docs.sh
 1. **Work on MAIN branch** (default)
 2. **Make changes and commit**
 3. **Push to main**: `./deploy-main.sh`
-4. **Continue development**
+4. **Continue development`
 
 #### **Production Release:**
 1. **Ensure all changes are on MAIN**
@@ -507,22 +507,33 @@ cd docs && ./deploy-docs.sh  # Auto-sync and commit to git
 
 The documentation site can be hosted on any static hosting platform (Vercel, Netlify, GitHub Pages, etc.).
 
-## 📱 **Browser Compatibility**
+## 🎨 **Typography Scale & Style Guide**
 
-- **Modern Browsers** - Chrome, Firefox, Safari, Edge
-- **Mobile Responsive** - iOS and Android optimization
-- **Web Audio API** - Enhanced with graceful fallbacks
+The MLB XR Branding Guide uses a consistent typography system optimized for both XR applications and web interfaces. Web sizes are 50% of the original XR sizes for better readability.
 
-## 📋 **Important Reminders**
+### **Typography Breakdown**
 
-1. **Always work on MAIN branch** by default! 🎯
-2. **Use official spot colors** from the mapping system
-3. **Password for stable deployments**: `3333`
-4. **Test spot color changes** with `src/utils/spotColorTest.js`
-5. **All documentation** is now in this single README file
+| Style | XR Size | Web Size | Weight | Use Case | CSS Class |
+|-------|---------|----------|---------|----------|-----------|
+| **Score** | 140px | 70px | Bold | Key metrics, scores, large numbers | `.text-score` |
+| **Marquee** | 96px | 48px | Bold | Main headlines, hero text | `.text-marquee` |
+| **Display** | 76px | 38px | Semibold | Primary section headers | `.text-display` |
+| **Title** | 58px | 29px | Semibold | Subsection headers | `.text-title` |
+| **Headline** | 48px | 24px | Semibold | Component headers | `.text-headline` |
+| **SubHeadline** | 38px | 19px | Medium | Minor headers, labels | `.text-subheadline` |
+| **Body** | 34px | 17px | Regular | Main content text | `.text-body` |
+| **Body Bold** | 34px | 17px | Bold | Emphasized content | `.text-body-bold` |
+| **System** | 30px | 15px | Medium | UI elements, buttons | `.text-system` |
+| **Legal** | 26px | 13px | Regular | Fine print, disclaimers | `.text-legal` |
 
----
+### **Font Specifications**
+- **Primary Font**: MLB HEX Franklin (woff2/otf available in assets)
+- **Fallback**: Inter, system-ui, -apple-system, sans-serif
+- **Weights Available**: Light (300), Regular (400), Medium (500), Semibold (600), Bold (700), Extrabold (800), Black (900)
+- **Line Height**: Ranges from 1.1 (Score) to 1.5 (Body) for optimal readability
+- **Letter Spacing**: Tighter on larger sizes (-0.02em), normal on body text
 
-**Built with ⚾ for the MLB XR ecosystem**
-
-*This comprehensive README consolidates all previous documentation files (README.md, src/utils/README.md, WORKFLOW.md, DEPLOYMENT.md) into a single source of truth for the project.*
+### **Responsive Behavior**
+- **Desktop**: Full web sizes (50% of XR)
+- **Tablet**: 75% of web sizes
+- **Mobile**: 60% of web sizes

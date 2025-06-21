@@ -65,8 +65,8 @@ class ReadmeToHtmlSync {
         let currentContent = [];
         
         lines.forEach(line => {
-            // Detect section headers (## or ###)
-            const headerMatch = line.match(/^(#{2,3})\s+(.+)/);
+            // Only detect main section headers (##) not subsections (### or ####)
+            const headerMatch = line.match(/^(#{2})\s+(.+)/);
             
             if (headerMatch) {
                 // Save previous section
@@ -90,6 +90,7 @@ class ReadmeToHtmlSync {
                 };
                 currentContent = [];
             } else if (currentSection) {
+                // Include all content including subsections (### and ####)
                 currentContent.push(line);
             }
         });
@@ -216,9 +217,19 @@ class ReadmeToHtmlSync {
 
             <!-- Documentation Content -->
             <div id="documentationContent">
-                ${sections}
+${sections}
             </div>
         </main>
+    </div>
+
+    <!-- Sticky Navigation Buttons -->
+    <div class="sticky-nav-buttons" id="stickyNavButtons">
+        <button class="sticky-nav-btn back-to-top" id="backToTopBtn" title="Back to Top">
+            ↑
+        </button>
+        <a href="../" class="sticky-nav-btn back-to-home" title="Back to Home">
+            🏠
+        </a>
     </div>
 
     <!-- Color Preview Modal -->
@@ -259,50 +270,233 @@ class ReadmeToHtmlSync {
     }
 
     sectionToHtml(section) {
-        let html = `<section id="${section.id}" class="section">`;
         const cleanTitle = this.cleanEmojiContent(section.title);
         
         // Apply typography classes based on section level
         const titleClass = section.level === 2 ? 'text-title-bold' : 'text-headline-bold';
-        html += `<h2 class="${titleClass}">${cleanTitle}</h2>`;
         
-        // Convert markdown content to HTML (simplified)
-        const htmlContent = this.markdownToHtml(section.content);
-        html += htmlContent;
+        let html = `<section id="${section.id}" class="section">\n`;
+        html += `    <h2 class="${titleClass}">${cleanTitle}</h2>\n`;
         
-        html += `</section>`;
+        // Debug: Log the section content
+        console.log(`Section: ${cleanTitle}, Content length: ${section.content?.length || 0}`);
+        if (section.content) {
+            console.log(`First 100 chars: ${section.content.substring(0, 100)}`);
+        }
+        
+        // Special handling for Typography section
+        if (cleanTitle.includes('Typography') && cleanTitle.includes('Style Guide')) {
+            html += this.generateTypographyShowcase();
+        } else {
+            // Convert markdown content to HTML (simplified)
+            const htmlContent = this.markdownToHtml(section.content || '');
+            if (htmlContent.trim()) {
+                html += `    ${htmlContent.replace(/\n/g, '\n    ')}\n`;
+            } else {
+                // Add placeholder if no content
+                html += `    <p class="text-body">Content for this section is being processed...</p>\n`;
+            }
+        }
+        
+        html += `</section>\n`;
         
         return html;
     }
 
+    generateTypographyShowcase() {
+        const typographyData = [
+            { name: 'Score', xrSize: '140px', webSize: '70px', weight: 'Bold', useCase: 'Key metrics, scores, large numbers', class: 'text-score' },
+            { name: 'Marquee', xrSize: '96px', webSize: '48px', weight: 'Bold', useCase: 'Main headlines, hero text', class: 'text-marquee' },
+            { name: 'Display', xrSize: '76px', webSize: '38px', weight: 'Semibold', useCase: 'Primary section headers', class: 'text-display' },
+            { name: 'Title', xrSize: '58px', webSize: '29px', weight: 'Semibold', useCase: 'Subsection headers', class: 'text-title' },
+            { name: 'Headline', xrSize: '48px', webSize: '24px', weight: 'Semibold', useCase: 'Component headers', class: 'text-headline' },
+            { name: 'SubHeadline', xrSize: '38px', webSize: '19px', weight: 'Medium', useCase: 'Minor headers, labels', class: 'text-subheadline' },
+            { name: 'Body', xrSize: '34px', webSize: '17px', weight: 'Regular', useCase: 'Main content text', class: 'text-body' },
+            { name: 'Body Bold', xrSize: '34px', webSize: '17px', weight: 'Bold', useCase: 'Emphasized content', class: 'text-body-bold' },
+            { name: 'System', xrSize: '30px', webSize: '15px', weight: 'Medium', useCase: 'UI elements, buttons', class: 'text-system' },
+            { name: 'Legal', xrSize: '26px', webSize: '13px', weight: 'Regular', useCase: 'Fine print, disclaimers', class: 'text-legal' }
+        ];
+
+        let html = `
+            <div class="typography-showcase">
+                <p class="text-body">The MLB XR Branding Guide uses a consistent typography system optimized for both XR applications and web interfaces. Web sizes are 50% of the original XR sizes for better readability.</p>
+                
+                <h3 class="text-headline">Typography Breakdown</h3>
+                <table class="typography-table">
+                    <thead>
+                        <tr>
+                            <th>Style</th>
+                            <th>XR Size</th>
+                            <th>Web Size</th>
+                            <th>Weight</th>
+                            <th>Use Case</th>
+                            <th>CSS Class</th>
+                        </tr>
+                    </thead>
+                    <tbody>`;
+
+        typographyData.forEach(item => {
+            html += `
+                        <tr>
+                            <td class="style-name">${item.name}</td>
+                            <td class="size-comparison">${item.xrSize}</td>
+                            <td class="size-comparison">${item.webSize}</td>
+                            <td>${item.weight}</td>
+                            <td>${item.useCase}</td>
+                            <td><code>.${item.class}</code></td>
+                        </tr>`;
+        });
+
+        html += `
+                    </tbody>
+                </table>
+
+                <h3 class="text-headline">Visual Examples</h3>
+                <div class="typography-samples">`;
+
+        // Add visual examples for key typography styles
+        const exampleStyles = [
+            { name: 'Score', class: 'text-score', example: '140/112' },
+            { name: 'Marquee', class: 'text-marquee', example: 'MLB XR Branding' },
+            { name: 'Display', class: 'text-display', example: 'Section Header' },
+            { name: 'Title', class: 'text-title', example: 'Subsection Title' },
+            { name: 'Headline', class: 'text-headline', example: 'Component Headline' },
+            { name: 'Body', class: 'text-body', example: 'This is body text used for main content and paragraphs.' }
+        ];
+
+        exampleStyles.forEach(item => {
+            html += `
+                    <div class="typography-sample">
+                        <div class="typography-label">
+                            <span class="typography-name">${item.name}</span>
+                            <span class="typography-sizes">XR → Web</span>
+                        </div>
+                        <div class="typography-example ${item.class}">${item.example}</div>
+                    </div>`;
+        });
+
+        html += `
+                </div>
+
+                <h3 class="text-headline">Font Specifications</h3>
+                <ul class="text-body">
+                    <li><strong>Primary Font:</strong> MLB HEX Franklin (woff2/otf available in assets)</li>
+                    <li><strong>Fallback:</strong> Inter, system-ui, -apple-system, sans-serif</li>
+                    <li><strong>Weights Available:</strong> Light (300), Regular (400), Medium (500), Semibold (600), Bold (700), Extrabold (800), Black (900)</li>
+                    <li><strong>Line Height:</strong> Ranges from 1.1 (Score) to 1.5 (Body) for optimal readability</li>
+                    <li><strong>Letter Spacing:</strong> Tighter on larger sizes (-0.02em), normal on body text</li>
+                </ul>
+
+                <h3 class="text-headline">Responsive Behavior</h3>
+                <ul class="text-body">
+                    <li><strong>Desktop:</strong> Full web sizes (50% of XR)</li>
+                    <li><strong>Tablet:</strong> 75% of web sizes</li>
+                    <li><strong>Mobile:</strong> 60% of web sizes</li>
+                </ul>
+            </div>`;
+
+        return html;
+    }
+
     markdownToHtml(markdown) {
-        return markdown
-            // Headers with typography classes
-            .replace(/^### (.+)$/gm, '<h3 class="text-headline">$1</h3>')
-            .replace(/^#### (.+)$/gm, '<h4 class="text-subheadline">$1</h4>')
+        // First, protect code blocks by replacing them with placeholders
+        const codeBlocks = [];
+        let processedMarkdown = markdown.replace(/```(\w*)\n?([\s\S]*?)```/g, (match, language, code) => {
+            const placeholder = `__CODE_BLOCK_${codeBlocks.length}__`;
+            codeBlocks.push({ language, code: code.trim() });
+            return placeholder;
+        });
+
+        // Split into lines for better processing
+        const lines = processedMarkdown.split('\n');
+        const processedLines = [];
+        let inList = false;
+        let listType = null; // 'ul' or 'ol'
+
+        for (let i = 0; i < lines.length; i++) {
+            const line = lines[i];
+            const nextLine = lines[i + 1];
+
+            // Check if this is a list item
+            const bulletMatch = line.match(/^- (.+)$/);
+            const numberMatch = line.match(/^\d+\. (.+)$/);
             
-            // Code blocks
-            .replace(/```([\s\S]*?)```/g, '<div class="code-block"><pre class="text-code">$1</pre></div>')
-            
-            // Inline code
-            .replace(/`([^`]+)`/g, '<code class="text-code inline-code">$1</code>')
-            
+            if (bulletMatch || numberMatch) {
+                const content = bulletMatch ? bulletMatch[1] : numberMatch[1];
+                const currentListType = bulletMatch ? 'ul' : 'ol';
+                
+                // Start new list if needed
+                if (!inList) {
+                    processedLines.push(`<${currentListType}>`);
+                    inList = true;
+                    listType = currentListType;
+                } else if (listType !== currentListType) {
+                    // Switch list type
+                    processedLines.push(`</${listType}>`);
+                    processedLines.push(`<${currentListType}>`);
+                    listType = currentListType;
+                }
+                
+                processedLines.push(`<li class="text-body">${this.processInlineMarkdown(content)}</li>`);
+            } else {
+                // Close list if we were in one
+                if (inList) {
+                    processedLines.push(`</${listType}>`);
+                    inList = false;
+                    listType = null;
+                }
+                
+                // Process headers
+                if (line.match(/^### (.+)$/)) {
+                    const title = line.replace(/^### /, '').replace(/\*\*/g, '');
+                    processedLines.push(`<h3 class="text-headline">${this.processInlineMarkdown(title)}</h3>`);
+                } else if (line.match(/^#### (.+)$/)) {
+                    const title = line.replace(/^#### /, '').replace(/\*\*/g, '');
+                    processedLines.push(`<h4 class="text-subheadline">${this.processInlineMarkdown(title)}</h4>`);
+                } else if (line.includes('__CODE_BLOCK_')) {
+                    // Code block placeholder - don't wrap in paragraph
+                    processedLines.push(line);
+                } else if (line.trim() && !line.startsWith('<')) {
+                    // Regular content line
+                    processedLines.push(`<p class="text-body">${this.processInlineMarkdown(line)}</p>`);
+                } else if (line.trim() === '') {
+                    // Empty line
+                    processedLines.push('');
+                } else {
+                    // Already HTML content
+                    processedLines.push(line);
+                }
+            }
+        }
+        
+        // Close any remaining list
+        if (inList) {
+            processedLines.push(`</${listType}>`);
+        }
+
+        processedMarkdown = processedLines.join('\n');
+
+        // Clean up multiple newlines
+        processedMarkdown = processedMarkdown.replace(/\n\s*\n+/g, '\n');
+
+        // Restore code blocks
+        codeBlocks.forEach((block, index) => {
+            const placeholder = `__CODE_BLOCK_${index}__`;
+            const codeHtml = `<div class="code-block"><pre class="text-code">${block.language ? block.language + '\n' : ''}${block.code}</pre></div>`;
+            processedMarkdown = processedMarkdown.replace(placeholder, codeHtml);
+        });
+
+        return processedMarkdown.trim();
+    }
+
+    processInlineMarkdown(text) {
+        return text
             // Bold text
             .replace(/\*\*(.+?)\*\*/g, '<strong class="text-body-bold">$1</strong>')
-            
-            // Lists
-            .replace(/^- (.+)$/gm, '<li class="text-body">$1</li>')
-            .replace(/^\d+\. (.+)$/gm, '<li class="text-body">$1</li>')
-            
-            // Wrap lists (simplified)
-            .replace(/(<li>.*<\/li>)/g, '<ul>$1</ul>')
-            
-            // Paragraphs with body text class
-            .replace(/^([^<\n\r].*)$/gm, '<p class="text-body">$1</p>')
-            
-            // Clean up
-            .replace(/\n\s*\n/g, '\n')
-            .trim();
+            // Inline code
+            .replace(/`([^`]+)`/g, '<code class="text-code inline-code">$1</code>')
+            // Clean up any remaining markdown
+            .replace(/\*\*/g, '');
     }
 
     generateSectionId(title) {

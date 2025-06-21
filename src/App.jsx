@@ -629,21 +629,32 @@ function AppV2() {
             <p style={{ margin: '0 0 1rem 0', color: '#ccc', fontSize: '13px' }}>
               View the complete interactive documentation site with team colors, usage examples, development guides, and comprehensive MLB API endpoints.
             </p>
-            <a 
-              href="./docs/index.html" 
-              target="_blank" 
-              rel="noopener noreferrer"
+            <button
+              onClick={() => {
+                // Try multiple methods to open the documentation
+                try {
+                  // Method 1: Try to open in new tab (works in regular browsers)
+                  const newTab = window.open('./docs/index.html', '_blank');
+                  if (!newTab) {
+                    // Method 2: If popup blocked, navigate in same window
+                    window.location.href = './docs/index.html';
+                  }
+                } catch (e) {
+                  // Method 3: Fallback navigation
+                  window.location.href = './docs/index.html';
+                }
+              }}
               style={{ 
                 display: 'inline-block',
                 padding: '10px 20px', 
                 background: '#132448', 
                 color: '#fff', 
-                textDecoration: 'none', 
+                border: '1px solid #4fd1c5',
                 borderRadius: '6px', 
                 fontWeight: 600,
                 fontSize: '14px',
-                transition: 'all 0.2s ease',
-                border: '1px solid #4fd1c5'
+                cursor: 'pointer',
+                transition: 'all 0.2s ease'
               }}
               onMouseEnter={(e) => {
                 e.target.style.background = '#4fd1c5';
@@ -654,8 +665,8 @@ function AppV2() {
                 e.target.style.color = '#fff';
               }}
             >
-              Open Documentation Site
-            </a>
+              📚 Open Documentation Site
+            </button>
           </div>
         </footer>
       </div>

@@ -1,5 +1,69 @@
+/* MLB HEX Franklin Font Declarations */
+@font-face {
+  font-family: 'MLB HEX Franklin';
+  src: url('./Assets/MLB_typeface_2025/MLB Hex Franklin/HEX Franklin MLB Normal/HEXFranklinMLBNormal-Regular.woff2') format('woff2'),
+       url('./Assets/MLB_typeface_2025/MLB Hex Franklin/HEX Franklin MLB Normal/HEXFranklinMLBNormal-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'MLB HEX Franklin';
+  src: url('./Assets/MLB_typeface_2025/MLB Hex Franklin/HEX Franklin MLB Normal/HEXFranklinMLBNormal-Light.woff2') format('woff2'),
+       url('./Assets/MLB_typeface_2025/MLB Hex Franklin/HEX Franklin MLB Normal/HEXFranklinMLBNormal-Light.otf') format('opentype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'MLB HEX Franklin';
+  src: url('./Assets/MLB_typeface_2025/MLB Hex Franklin/HEX Franklin MLB Normal/HEXFranklinMLBNormal-Medium.woff2') format('woff2'),
+       url('./Assets/MLB_typeface_2025/MLB Hex Franklin/HEX Franklin MLB Normal/HEXFranklinMLBNormal-Medium.otf') format('opentype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'MLB HEX Franklin';
+  src: url('./Assets/MLB_typeface_2025/MLB Hex Franklin/HEX Franklin MLB Normal/HEXFranklinMLBNormal-Semibold.woff2') format('woff2'),
+       url('./Assets/MLB_typeface_2025/MLB Hex Franklin/HEX Franklin MLB Normal/HEXFranklinMLBNormal-Semibold.otf') format('opentype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'MLB HEX Franklin';
+  src: url('./Assets/MLB_typeface_2025/MLB Hex Franklin/HEX Franklin MLB Normal/HEXFranklinMLBNormal-Bold.woff2') format('woff2'),
+       url('./Assets/MLB_typeface_2025/MLB Hex Franklin/HEX Franklin MLB Normal/HEXFranklinMLBNormal-Bold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'MLB HEX Franklin';
+  src: url('./Assets/MLB_typeface_2025/MLB Hex Franklin/HEX Franklin MLB Normal/HEXFranklinMLBNormal-Extrabold.woff2') format('woff2'),
+       url('./Assets/MLB_typeface_2025/MLB Hex Franklin/HEX Franklin MLB Normal/HEXFranklinMLBNormal-Extrabold.otf') format('opentype');
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'MLB HEX Franklin';
+  src: url('./Assets/MLB_typeface_2025/MLB Hex Franklin/HEX Franklin MLB Normal/HEXFranklinMLBNormal-Black.woff2') format('woff2'),
+       url('./Assets/MLB_typeface_2025/MLB Hex Franklin/HEX Franklin MLB Normal/HEXFranklinMLBNormal-Black.otf') format('opentype');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: 'MLB HEX Franklin', system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 

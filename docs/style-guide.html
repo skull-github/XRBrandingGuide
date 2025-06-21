@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Style Guide - MLB XR Branding Guide</title>
+    <meta name="description" content="Typography and design system for the MLB XR Branding Guide">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="typography.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Navigation -->
+        <nav class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h2>Style Guide</h2>
+                <button class="menu-toggle" id="menuToggle">☰</button>
+            </div>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="#typography-scale" class="nav-link">Typography Scale</a></li>
+                <li><a href="#font-weights" class="nav-link">Font Weights</a></li>
+                <li><a href="#responsive-behavior" class="nav-link">Responsive Behavior</a></li>
+                <li><a href="#color-system" class="nav-link">Color System</a></li>
+                <li><a href="#usage-examples" class="nav-link">Usage Examples</a></li>
+                <li><a href="#developer-standards" class="nav-link">Developer Standards</a></li>
+                <li><a href="#accessibility" class="nav-link">Accessibility</a></li>
+            </ul>
+            <div class="sidebar-footer">
+                <p><a href="index.html">← Back to Documentation</a></p>
+                <p><a href="../README.md" target="_blank">View README</a></p>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content" id="mainContent">
+            <!-- Header -->
+            <header class="header">
+                <h1 class="text-marquee">MLB XR Style Guide</h1>
+                <p class="text-headline subtitle">Typography system and design standards</p>
+                <div class="status-badges">
+                    <span class="badge badge-info">📚 Style Guide</span>
+                    <span class="badge badge-success">Responsive</span>
+                </div>
+            </header>
+
+            <!-- Typography Scale -->
+            <section id="typography-scale" class="section">
+                <h2 class="text-title-bold">Typography Scale</h2>
+                <p class="text-body">Our typography system uses scaled-down sizes (50% of original design specs) for better web readability:</p>
+                
+                <div class="typography-showcase">
+                    <div class="type-sample">
+                        <div class="text-score">Score (70px)</div>
+                        <p class="text-system">Used for: Key metrics, large numbers</p>
+                        <code class="text-code">.text-score</code>
+                    </div>
+                    
+                    <div class="type-sample">
+                        <div class="text-marquee">Marquee (48px)</div>
+                        <p class="text-system">Used for: Main headlines, hero text</p>
+                        <code class="text-code">.text-marquee</code>
+                    </div>
+                    
+                    <div class="type-sample">
+                        <div class="text-display">Display (38px)</div>
+                        <p class="text-system">Used for: Section headers</p>
+                        <code class="text-code">.text-display</code>
+                    </div>
+                    
+                    <div class="type-sample">
+                        <div class="text-title">Title (29px)</div>
+                        <p class="text-system">Used for: Subsection headers</p>
+                        <code class="text-code">.text-title</code>
+                    </div>
+                    
+                    <div class="type-sample">
+                        <div class="text-headline">Headline (24px)</div>
+                        <p class="text-system">Used for: Component headers</p>
+                        <code class="text-code">.text-headline</code>
+                    </div>
+                    
+                    <div class="type-sample">
+                        <div class="text-subheadline">SubHeadline (19px)</div>
+                        <p class="text-system">Used for: Minor headers</p>
+                        <code class="text-code">.text-subheadline</code>
+                    </div>
+                    
+                    <div class="type-sample">
+                        <div class="text-body">Body (17px)</div>
+                        <p class="text-system">Used for: Main content text</p>
+                        <code class="text-code">.text-body</code>
+                    </div>
+                    
+                    <div class="type-sample">
+                        <div class="text-system">System (15px)</div>
+                        <p class="text-system">Used for: UI elements, labels</p>
+                        <code class="text-code">.text-system</code>
+                    </div>
+                    
+                    <div class="type-sample">
+                        <div class="text-legal">Legal (13px)</div>
+                        <p class="text-system">Used for: Fine print, disclaimers</p>
+                        <code class="text-code">.text-legal</code>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Font Weights -->
+            <section id="font-weights" class="section">
+                <h2 class="text-title-bold">Font Weights</h2>
+                <div class="weight-showcase">
+                    <div class="weight-sample">
+                        <div class="text-headline font-light">Light (300)</div>
+                        <code class="text-code">.font-light</code>
+                    </div>
+                    <div class="weight-sample">
+                        <div class="text-headline font-regular">Regular (400)</div>
+                        <code class="text-code">.font-regular</code>
+                    </div>
+                    <div class="weight-sample">
+                        <div class="text-headline font-medium">Medium (500)</div>
+                        <code class="text-code">.font-medium</code>
+                    </div>
+                    <div class="weight-sample">
+                        <div class="text-headline font-semibold">Semibold (600)</div>
+                        <code class="text-code">.font-semibold</code>
+                    </div>
+                    <div class="weight-sample">
+                        <div class="text-headline font-bold">Bold (700)</div>
+                        <code class="text-code">.font-bold</code>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Responsive Behavior -->
+            <section id="responsive-behavior" class="section">
+                <h2 class="text-title-bold">Responsive Behavior</h2>
+                <div class="responsive-table">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th class="text-system-bold">Device</th>
+                                <th class="text-system-bold">Breakpoint</th>
+                                <th class="text-system-bold">Scale</th>
+                                <th class="text-system-bold">Example (Marquee)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="text-body">Desktop</td>
+                                <td class="text-body">>768px</td>
+                                <td class="text-body">100%</td>
+                                <td class="text-body">48px</td>
+                            </tr>
+                            <tr>
+                                <td class="text-body">Tablet</td>
+                                <td class="text-body">≤768px</td>
+                                <td class="text-body">75%</td>
+                                <td class="text-body">36px</td>
+                            </tr>
+                            <tr>
+                                <td class="text-body">Mobile</td>
+                                <td class="text-body">≤480px</td>
+                                <td class="text-body">60%</td>
+                                <td class="text-body">29px</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Color System -->
+            <section id="color-system" class="section">
+                <h2 class="text-title-bold">Color System</h2>
+                <p class="text-body">Our color system is integrated with official MLB team colors and follows dark theme principles:</p>
+                
+                <div class="color-showcase">
+                    <div class="color-sample">
+                        <div class="color-swatch" style="background-color: var(--primary-color);"></div>
+                        <div class="color-info">
+                            <p class="text-body-bold">Primary</p>
+                            <code class="text-code">--primary-color: #132448</code>
+                        </div>
+                    </div>
+                    <div class="color-sample">
+                        <div class="color-swatch" style="background-color: var(--secondary-color);"></div>
+                        <div class="color-info">
+                            <p class="text-body-bold">Secondary</p>
+                            <code class="text-code">--secondary-color: #005A9C</code>
+                        </div>
+                    </div>
+                    <div class="color-sample">
+                        <div class="color-swatch" style="background-color: var(--accent-color);"></div>
+                        <div class="color-info">
+                            <p class="text-body-bold">Accent</p>
+                            <code class="text-code">--accent-color: #eb6e1f</code>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Usage Examples -->
+            <section id="usage-examples" class="section">
+                <h2 class="text-title-bold">Usage Examples</h2>
+                <div class="code-examples">
+                    <div class="example-block">
+                        <h3 class="text-headline">HTML Usage</h3>
+                        <pre class="text-code"><code>&lt;!-- Main page title --&gt;
+&lt;h1 class="text-marquee"&gt;MLB XR Branding Guide&lt;/h1&gt;
+
+&lt;!-- Section headers --&gt;
+&lt;h2 class="text-title-bold"&gt;Quick Start&lt;/h2&gt;
+
+&lt;!-- Body content --&gt;
+&lt;p class="text-body"&gt;This is the main content paragraph.&lt;/p&gt;
+
+&lt;!-- Code snippets --&gt;
+&lt;code class="text-code"&gt;npm install&lt;/code&gt;</code></pre>
+                    </div>
+                    
+                    <div class="example-block">
+                        <h3 class="text-headline">CSS Variables</h3>
+                        <pre class="text-code"><code>/* Typography variables */
+--font-marquee: 48px;
+--font-title: 29px;
+--font-body: 17px;
+
+/* Usage in custom CSS */
+.custom-header {
+    font-size: var(--font-marquee);
+    font-weight: var(--weight-bold);
+}</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Developer Standards -->
+            <section id="developer-standards" class="section">
+                <h2 class="text-title-bold">Developer Standards</h2>
+                <p class="text-body">Our emoji usage follows developer culture standards:</p>
+                
+                <div class="standards-grid">
+                    <div class="standard-card">
+                        <h3 class="text-headline">✅ Standard Developer Emojis</h3>
+                        <ul>
+                            <li class="text-body">🚀 Launch/Deployment</li>
+                            <li class="text-body">📚 Documentation</li>
+                            <li class="text-body">🔗 Links/APIs</li>
+                            <li class="text-body">⚾ Project-specific</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="standard-card">
+                        <h3 class="text-headline">❌ Avoid Decorative Emojis</h3>
+                        <ul>
+                            <li class="text-body">Excessive use of 🎯🎨🏗️🌐✨</li>
+                            <li class="text-body">Multiple emojis per section</li>
+                            <li class="text-body">Non-functional decorative elements</li>
+                            <li class="text-body">Duplicate emoji patterns</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Accessibility -->
+            <section id="accessibility" class="section">
+                <h2 class="text-title-bold">Accessibility</h2>
+                <div class="accessibility-checklist">
+                    <div class="checklist-item">
+                        <span class="checkmark">✅</span>
+                        <div>
+                            <p class="text-body-bold">Color Contrast</p>
+                            <p class="text-body">All text meets WCAG AA standards</p>
+                        </div>
+                    </div>
+                    <div class="checklist-item">
+                        <span class="checkmark">✅</span>
+                        <div>
+                            <p class="text-body-bold">Font Sizes</p>
+                            <p class="text-body">Minimum 13px for readability</p>
+                        </div>
+                    </div>
+                    <div class="checklist-item">
+                        <span class="checkmark">✅</span>
+                        <div>
+                            <p class="text-body-bold">Responsive Text</p>
+                            <p class="text-body">Scales appropriately on all devices</p>
+                        </div>
+                    </div>
+                    <div class="checklist-item">
+                        <span class="checkmark">✅</span>
+                        <div>
+                            <p class="text-body-bold">Semantic HTML</p>
+                            <p class="text-body">Proper heading hierarchy and structure</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

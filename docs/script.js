@@ -112,18 +112,29 @@ class DocumentationApp {
         // Scroll spy for navigation
         window.addEventListener('scroll', () => {
             this.updateActiveNavigation();
+            this.updateStickyButtons();
         });
+
+        // Sticky navigation buttons
+        this.setupStickyButtons();
     }
 
     async loadDocumentation() {
         try {
-            // In a real implementation, this would fetch the README.md
-            // For now, we'll generate the content based on our structure
-            const content = this.generateDocumentationContent();
-            this.documentationContent.innerHTML = content;
-            
-            // Setup color card click events
+            // The content is already loaded from the synced HTML
+            // Just setup the interactive features
             this.setupColorCardEvents();
+            
+            // Check if we have documentation content
+            if (!this.documentationContent || this.documentationContent.children.length === 0) {
+                console.warn('No documentation content found - HTML might not be properly synced');
+                this.documentationContent.innerHTML = `
+                    <div class="section">
+                        <h2>⚠️ Content Not Found</h2>
+                        <p>Documentation content not found. Please run the sync script: <code>node sync-readme.js</code></p>
+                    </div>
+                `;
+            }
             
         } catch (error) {
             console.error('Error loading documentation:', error);
@@ -643,6 +654,45 @@ getAllTeamSpotColors(); // Array of {teamId, spotColor} objects</pre>
             this.checkForUpdates();
         }, 5 * 60 * 1000); // 5 minutes
     }
+
+    // Sticky navigation buttons functionality
+    setupStickyButtons() {
+        this.stickyNavButtons = document.getElementById('stickyNavButtons');
+        this.backToTopBtn = document.getElementById('backToTopBtn');
+        
+        if (this.backToTopBtn) {
+            this.backToTopBtn.addEventListener('click', () => {
+                this.scrollToTop();
+            });
+        }
+        
+        // Initially hide the buttons
+        if (this.stickyNavButtons) {
+            this.stickyNavButtons.classList.add('hidden');
+        }
+    }
+
+    updateStickyButtons() {
+        if (!this.stickyNavButtons) return;
+        
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        const threshold = 300; // Show buttons after scrolling 300px
+        
+        if (scrollTop > threshold) {
+            this.stickyNavButtons.classList.remove('hidden');
+            this.stickyNavButtons.classList.add('visible');
+        } else {
+            this.stickyNavButtons.classList.remove('visible');
+            this.stickyNavButtons.classList.add('hidden');
+        }
+    }
+
+    scrollToTop() {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    }
 }
 
 // Initialize the documentation app when DOM is loaded
@@ -650,19 +700,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const app = new DocumentationApp();
     app.startAutoSync();
     
-    // Add smooth scrolling for all internal links
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
-            e.preventDefault();
-            const target = document.querySelector(this.getAttribute('href'));
-            if (target) {
-                target.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'start'
-                });
-            }
-        });
-    });
+    // Simple navigation handler - remove the conflicting one
+    console.log('Documentation app initialized');
 });
 
 // Service Worker for offline functionality (optional enhancement)

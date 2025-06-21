@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MLB XR Branding Guide - Documentation</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #0d1117;
+            color: #f0f6fc;
+            line-height: 1.6;
+        }
+        .container { display: flex; min-height: 100vh; }
+        .sidebar {
+            width: 280px;
+            background-color: #010409;
+            border-right: 1px solid #30363d;
+            padding: 1.5rem;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+        .sidebar-header { margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 1px solid #30363d; }
+        .sidebar-header h2 { font-size: 1.25rem; font-weight: 600; color: #f0f6fc; }
+        .nav-menu { list-style: none; }
+        .nav-menu li { margin-bottom: 0.25rem; }
+        .nav-link {
+            display: block;
+            padding: 0.5rem 1rem;
+            color: #8b949e;
+            text-decoration: none;
+            border-radius: 0.5rem;
+            transition: all 0.15s ease;
+        }
+        .nav-link:hover { background-color: #21262d; color: #f0f6fc; }
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 2rem;
+            max-width: calc(100vw - 280px);
+        }
+        .header { text-align: center; margin-bottom: 3rem; padding: 3rem 0; border-bottom: 1px solid #30363d; }
+        .header h1 { font-size: 2.25rem; font-weight: 700; margin-bottom: 1rem; color: #132448; }
+        .subtitle { font-size: 1.125rem; color: #8b949e; margin-bottom: 1.5rem; }
+        .section {
+            margin-bottom: 3rem;
+            padding: 2rem;
+            background-color: #21262d;
+            border-radius: 0.75rem;
+            border: 1px solid #30363d;
+        }
+        .section h2 { font-size: 1.5rem; font-weight: 600; margin-bottom: 1.5rem; color: #f0f6fc; }
+        .status-badges { display: flex; justify-content: center; gap: 0.5rem; flex-wrap: wrap; }
+        .badge {
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.75rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+            text-transform: uppercase;
+        }
+        .badge-success { background-color: #28a745; color: white; }
+        .badge-info { background-color: #17a2b8; color: white; }
+        .badge-warning { background-color: #ffc107; color: #010409; }
+    </style>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="typography.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Navigation -->
+        <nav class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h2>MLB XR Guide</h2>
+                <button class="menu-toggle" id="menuToggle" style="display: none;">☰</button>
+            </div>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="#project-overview" class="nav-link">Project Overview</a></li>
+                <li><a href="#quick-start" class="nav-link">🚀 Quick Start</a></li>
+                <li><a href="#development-workflow-branch-strategy" class="nav-link">Development Workflow & Branch Strategy</a></li>
+                <li><a href="#mlb-team-spot-colors" class="nav-link">MLB Team Spot Colors</a></li>
+                <li><a href="#technical-architecture" class="nav-link">Technical Architecture</a></li>
+                <li><a href="#mlb-api-endpoints-json-index" class="nav-link">🔗 MLB API Endpoints & JSON Index</a></li>
+                <li><a href="#deployment-configuration" class="nav-link">Deployment Configuration</a></li>
+                <li><a href="#recent-project-updates" class="nav-link">Recent Project Updates</a></li>
+                <li><a href="#project-stats-summary" class="nav-link">Project Stats & Summary</a></li>
+                <li><a href="#interactive-documentation" class="nav-link">📚 Interactive Documentation</a></li>
+                <li><a href="#typography-scale-style-guide" class="nav-link">Typography Scale & Style Guide</a></li>
+            </ul>
+            <div class="sidebar-footer" style="margin-top: auto; padding-top: 1.5rem; border-top: 1px solid #30363d; font-size: 0.875rem; color: #656d76;">
+                <p>Last Updated: <span id="lastUpdated">6/21/2025</span></p>
+                <p><a href="../README.md" target="_blank" style="color: #005A9C;">View README</a></p>
+                <p><small>Auto-synced from README.md</small></p>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content" id="mainContent">
+            <!-- Header -->
+            <header class="header">
+                <h1>MLB XR Branding Guide</h1>
+                <p class="subtitle">Official MLB team branding assets for Extended Reality applications</p>
+                <div class="status-badges">
+                    <span class="badge badge-success">Active</span>
+                    <span class="badge badge-info">📚 Documentation</span>
+                    <span class="badge badge-warning">Auto-Sync</span>
+                </div>
+            </header>
+
+            <!-- Documentation Content -->
+            <div id="documentationContent">
+                <section id="project-overview" class="section">
+                    <h2>Project Overview</h2>
+                    <p>The MLB XR Branding Guide is a modern React application that provides developers with easy access to official MLB branding assets, team data, and live game information. Built specifically for Extended Reality (XR) applications, it features a clean interface for browsing team assets, colors, and real-time game data.</p>
+                </section>
+
+                <section id="quick-start" class="section">
+                    <h2>🚀 Quick Start</h2>
+                    <p>Get started with the MLB XR Branding Guide application.</p>
+                </section>
+
+                <section id="typography-scale-style-guide" class="section">
+                    <h2>Typography Scale & Style Guide</h2>
+                    <p>Complete typography system for the MLB XR Branding Guide.</p>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
