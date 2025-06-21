@@ -3,6 +3,8 @@ import './App.css'
 import teamExtras from './team-extras.json'
 import Papa from 'papaparse';
 import { MLBSchedule } from './components/MLBSchedule.jsx';
+import { GameCarousel } from './components/GameCarousel.jsx';
+import { TeamGameCarousel } from './components/GameCarousel.jsx';
 import { getTeamSpotColor } from './utils/spotColorMapping';
 // import SpotColorWithHex from "./AppV3.jsx";
 const SpotColorWithHex = () => null; // Placeholder to prevent import error
@@ -530,6 +532,9 @@ function AppV2() {
         
         {/* MLB Schedule below anchor menu */}
         <MLBSchedule />
+        
+        {/* Game Context Carousel */}
+        <GameCarousel />
         
         {/* Teams organized by league and division */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '40px', width: '100%', marginBottom: '3rem', alignItems: 'flex-start' }}>
@@ -1309,29 +1314,8 @@ function TeamCard({ team, opts, selectedPlayerId, setSelectedPlayers, colorPrior
       </div>
       {revealed && (
         <div style={{ marginTop: 18, width: '100%' }}>
-          {/* Live Game Context and Team Schedule Side by Side */}
-          <div style={{ 
-            display: 'flex', 
-            gap: '20px', 
-            marginBottom: '2rem',
-            flexWrap: 'wrap',
-            alignItems: 'stretch'
-          }}>
-            <div style={{ 
-              flex: '1', 
-              minWidth: '300px',
-              display: 'flex'
-            }}>
-              <LiveGameContext teamId={team.teamID} />
-            </div>
-            <div style={{ 
-              flex: '1', 
-              minWidth: '300px',
-              display: 'flex'
-            }}>
-              <TeamSchedule teamId={team.teamID} daysAhead={7} />
-            </div>
-          </div>
+          {/* Team Game Carousel - Replaces the old Live Game Context + Team Schedule layout */}
+          <TeamGameCarousel teamId={team.teamID} teamName={team.teamName} />
           
           <h2 style={{ fontWeight: 800, fontSize: 24, margin: '1.5rem 0 0.5rem 0', color: '#4fd1c5', letterSpacing: 1, textAlign: 'left' }}>Team Roster</h2>
           {/* Player dropdown and card (only for regular teams, now below team name) */}
@@ -1945,154 +1929,3 @@ function InactiveLogoOverlay({ src, fallbackSrc, alt, url, title, enableModal, b
 }
 
 // Live Game Context Component (was missing)
-function LiveGameContext({ teamId }) {
-  const [gameContext, setGameContext] = useState(null);
-  const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    if (!teamId) return;
-    
-    const fetchGameContext = async () => {
-      setLoading(true);
-      try {
-        const today = new Date().toISOString().split('T')[0];
-        const scheduleUrl = `https://statsapi.mlb.com/api/v1/schedule/games/?sportId=1&startDate=${today}&endDate=${today}&teamId=${teamId}&hydrate=linescore,team`;
-        
-        const res = await fetch(scheduleUrl);
-        const data = await res.json();
-        
-        if (data.dates && data.dates.length > 0) {
-          const todaysGames = data.dates[0].games || [];
-          const teamGame = todaysGames.find(game => 
-            game.teams.away.team.id == teamId || game.teams.home.team.id == teamId
-          );
-          
-          if (teamGame) {
-            const context = {
-              gamePk: teamGame.gamePk,
-              gameDate: teamGame.gameDate,
-              teams: teamGame.teams,
-              status: teamGame.status,
-              inning: teamGame.linescore?.currentInning,
-              inningState: teamGame.linescore?.inningState,
-              outs: teamGame.linescore?.outs,
-              balls: teamGame.linescore?.balls,
-              strikes: teamGame.linescore?.strikes
-            };
-            setGameContext(context);
-          }
-        }
-      } catch (err) {
-        console.error('Game context error:', err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    
-    fetchGameContext();
-    // Refresh every 30 seconds during games
-    const interval = setInterval(fetchGameContext, 30000);
-    return () => clearInterval(interval);
-  }, [teamId]);
-
-  if (loading && !gameContext) return <div style={{ color: '#888' }}>Loading game context...</div>;
-  if (!gameContext) return null;
-
-  return (
-    <div style={{
-      background: '#1a1a1a',
-      borderRadius: 8,
-      padding: '1rem',
-      border: '1px solid #333',
-      marginBottom: '1rem',
-      width: '100%',
-      height: '100%',
-      display: 'flex',
-      flexDirection: 'column'
-    }}>
-      <h5 style={{ color: '#4fd1c5', marginBottom: '0.5rem', fontSize: 16 }}>Live Game Context</h5>
-      <div style={{ color: '#fff', fontSize: 14, lineHeight: 1.6, flex: 1 }}>
-        <div><strong>Game:</strong> {gameContext.teams.away.team.name} @ {gameContext.teams.home.team.name}</div>
-        <div><strong>Status:</strong> {gameContext.status.detailedState}</div>
-        {gameContext.inning && (
-          <>
-            <div><strong>Inning:</strong> {gameContext.inningState} {gameContext.inning}</div>
-            <div><strong>Count:</strong> {gameContext.balls}-{gameContext.strikes}, {gameContext.outs} outs</div>
-          </>
-        )}
-        <div><strong>Date:</strong> {new Date(gameContext.gameDate).toLocaleDateString()}</div>
-      </div>
-    </div>
-  );
-}
-
-// Team Schedule Component (was missing)
-function TeamSchedule({ teamId, daysAhead = 7 }) {
-  const [schedule, setSchedule] = useState(null);
-  const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    if (!teamId) return;
-    
-    const fetchSchedule = async () => {
-      setLoading(true);
-      try {
-        const today = new Date();
-        const endDate = new Date(today.getTime() + (daysAhead * 24 * 60 * 60 * 1000));
-        
-        const startDateStr = today.toISOString().split('T')[0];
-        const endDateStr = endDate.toISOString().split('T')[0];
-        
-        const scheduleUrl = `https://statsapi.mlb.com/api/v1/schedule/games/?sportId=1&startDate=${startDateStr}&endDate=${endDateStr}&teamId=${teamId}&hydrate=team`;
-        
-        const res = await fetch(scheduleUrl);
-        const data = await res.json();
-        
-        setSchedule({
-          games: data.dates || [],
-          totalGames: data.totalGames || 0,
-          totalItems: data.totalItems || 0
-        });
-      } catch (err) {
-        console.error('Schedule fetch error:', err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    
-    fetchSchedule();
-  }, [teamId, daysAhead]);
-
-  if (loading) return <div style={{ color: '#888' }}>Loading schedule...</div>;
-  if (!schedule || !schedule.games.length) return null;
-
-  return (
-    <div style={{
-      background: '#1a1a1a',
-      borderRadius: 8,
-      padding: '1rem',
-      border: '1px solid #333',
-      marginBottom: '1rem',
-      width: '100%',
-      height: '100%',
-      display: 'flex',
-      flexDirection: 'column'
-    }}>
-      <h5 style={{ color: '#4fd1c5', marginBottom: '1rem', fontSize: 16 }}>Upcoming Games</h5>
-      <div style={{ maxHeight: '200px', overflowY: 'auto', flex: 1 }}>
-        {schedule.games.map((dateEntry, index) => (
-          <div key={index} style={{ marginBottom: '1rem' }}>
-            <div style={{ color: '#fff', fontWeight: 600, fontSize: 13, marginBottom: '0.5rem' }}>
-              {new Date(dateEntry.date).toLocaleDateString()}
-            </div>
-            {dateEntry.games.map(game => (
-              <div key={game.gamePk} style={{ color: '#ccc', fontSize: 12, marginLeft: '1rem', marginBottom: '0.25rem' }}>
-                {game.teams.away.team.name} @ {game.teams.home.team.name} - {game.status.detailedState}
-              </div>
-            ))}
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}

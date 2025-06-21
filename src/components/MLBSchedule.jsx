@@ -553,7 +553,7 @@ export function MLBSchedule() {
                       textAlign: 'center',
                       letterSpacing: '0.5px'
                     }}>
-                      VIEWING
+                      LIVE
                     </div>
                   )}
                 </div>
