@@ -6,7 +6,7 @@ MLB API driven branding assets for Extended Reality applications. A comprehensiv
 
 ## 🎯 **Project Overview**
 
-The MLB XR Branding Guide is a modern React application that provides developers with easy access to official MLB branding assets, team data, and live game information. Built specifically for Extended Reality (XR) applications, it features a clean interface for browsing team assets, colors, and real-time game data.
+The MLB XR Branding Guide is a modern React application that provides developers with easy access to official MLB branding assets, team data, and live game information—explicitly built for Extended Reality (XR) applications. It features a clean interface for browsing team assets, colors, and real-time game data.
 
 ### **✨ Key Features**
 - **Official MLB spot colors** for all 30 teams (official hex values)
@@ -580,3 +580,25 @@ The following color palette is used throughout the MLB XR Branding Guide. Use th
 ```
 
 Each color is named for clarity and mapped to its HEX value as shown in the official MLB color reference.
+
+## BoxScore Component Update
+
+The BoxScore overlay now fetches and displays MLB game data dynamically when a game is selected. Key improvements:
+
+- Fetches box score data from the MLB API when opened or when the selected game changes.
+- Resets and clears state to prevent stale data.
+- Defensive checks for missing or incomplete API data.
+- Displays a fallback message if no data is available.
+- Shows loading and error states for better user feedback.
+
+**Usage:**
+
+```
+<BoxScore gamePk={gamePk} isVisible={isVisible} onClose={handleClose} />
+```
+
+- `gamePk`: MLB game ID to fetch box score for.
+- `isVisible`: Boolean to show/hide the overlay.
+- `onClose`: Function to close the overlay.
+
+See the component for more details and customization options.
