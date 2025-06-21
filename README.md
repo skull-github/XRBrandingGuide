@@ -40,18 +40,15 @@ npm run preview
 
 ### **📚 Documentation Site**
 ```bash
-# View interactive documentation
-open docs/index.html
+# View interactive documentation (now served via Vite)
+npm run dev
+# Then visit http://localhost:5174/docs/index.html
 
 # Auto-sync documentation with README
-cd docs && npm run sync
+npm run docs:sync
 
-# Serve documentation locally
-cd docs && npm run serve
-# Visit http://localhost:8080
-
-# Deploy documentation
-cd docs && ./deploy-docs.sh
+# Or manually sync from docs folder
+cd public/docs && node sync-readme.js
 ```
 
 ## 🏗️ **Development Workflow & Branch Strategy**
@@ -418,14 +415,15 @@ Stadium information, venue details, and ballpark data.
 
 ### **Files Structure (Root Level)**
 ```
-✅ package.json        # Dependencies and scripts
-✅ index.html          # Entry point  
-✅ src/                # React app source code
-✅ vite.config.js      # Vite configuration
-✅ vercel.json         # Deployment settings
-✅ dist/               # Build output (after npm run build)
-✅ deploy-main.sh      # Main branch deployment script
-✅ deploy-stable.sh    # Stable branch deployment script (password-protected)
+✅ package.json          # Dependencies and scripts
+✅ index.html            # Entry point  
+✅ src/                  # React app source code
+✅ public/docs/          # Interactive documentation site (static files)
+✅ vite.config.js        # Vite configuration
+✅ vercel.json           # Deployment settings
+✅ dist/                 # Build output (after npm run build)
+✅ deploy-main.sh        # Main branch deployment script
+✅ deploy-stable.sh      # Stable branch deployment script (password-protected)
 ```
 
 ### **Deployment Issue Resolution**
@@ -438,6 +436,7 @@ If Vercel shows wrong repository (iamdavidsantana/xr-branding-guide):
 ## 🎯 **Recent Project Updates**
 
 ### **✅ Recently Completed Features:**
+- **Documentation styling fix** - Moved docs to `/public/docs` to resolve Vite script injection issues
 - **Official MLB spot colors** for all teams (hex values mapped)
 - **Horizontal carousel layout** (logo-vs-logo design)
 - **TeamGameCarousel component** replacing vertical layout
@@ -446,6 +445,7 @@ If Vercel shows wrong repository (iamdavidsantana/xr-branding-guide):
 - **MAIN branch workflow** - Set as default working branch
 - **Schedule card improvements** - Changed "VIEWING" to "LIVE" status
 - **Complete spot color integration** - All components updated
+- **Documentation auto-sync** - Added npm script for easy updates
 
 ### **🎨 Current Team Section Layout:**
 - **Live Game Context**: Horizontal carousel with logo-vs-logo cards
@@ -491,21 +491,23 @@ This project includes a comprehensive interactive documentation site that automa
 - **🎨 Interactive Team Colors** - Clickable team color cards with details
 - **🔍 Smooth Navigation** - Sidebar with smooth scrolling
 - **🌙 Dark Theme** - MLB-inspired design
-- **🔄 Auto-Sync** - Updates when README changes
-- **⚡ Fast & Accessible** - Optimized performance
+- **🔄 Auto-Sync** - Updates when README changes via `npm run docs:sync`
+- **⚡ Fast & Accessible** - Optimized performance, served as static files
 - **📱 PWA Ready** - Offline functionality
+- **🛠️ Vite Integration** - Served alongside the main app without script injection issues
 
 ### **Access Documentation**
-- **Local**: Open `docs/index.html` in your browser
-- **Live Server**: `cd docs && npm run serve` then visit http://localhost:8080
-- **Auto-Sync**: `cd docs && npm run watch` for live README updates
+- **Development**: `npm run dev` then visit http://localhost:5174/docs/index.html
+- **Production**: Documentation is served at `/docs/` on deployed sites
+- **Auto-Sync**: `npm run docs:sync` to update documentation from README changes
 
-### **Deploy Documentation**
-```bash
-cd docs && ./deploy-docs.sh  # Auto-sync and commit to git
-```
+### **Documentation Architecture**
+- **Location**: `/public/docs/` (served as static files by Vite)
+- **Sync Script**: `public/docs/sync-readme.js` - Converts README.md to HTML
+- **Styling**: Dedicated CSS files with MLB HEX Franklin font integration
+- **Navigation**: Sticky sidebar with smooth scrolling and "Back to Top" buttons
 
-The documentation site can be hosted on any static hosting platform (Vercel, Netlify, GitHub Pages, etc.).
+The documentation site is now properly integrated with the main application and resolves previous styling issues caused by Vite development script injection.
 
 ## 🎨 **Typography Scale & Style Guide**
 

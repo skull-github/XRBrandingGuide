@@ -88,18 +88,15 @@
     ./deploy-stable.sh    # Secure deploy to stable (password: 3333)</pre></div>
     <h3 class="text-headline">Documentation Site</h3>
     <div class="code-block"><pre class="text-code">bash
-    # View interactive documentation
-    open docs/index.html
+    # View interactive documentation (now served via Vite)
+    npm run dev
+    # Then visit http://localhost:5174/docs/index.html
     
     # Auto-sync documentation with README
-    cd docs && npm run sync
+    npm run docs:sync
     
-    # Serve documentation locally
-    cd docs && npm run serve
-    # Visit http://localhost:8080
-    
-    # Deploy documentation
-    cd docs && ./deploy-docs.sh</pre></div>
+    # Or manually sync from docs folder
+    cd public/docs && node sync-readme.js</pre></div>
 </section>
 
 <section id="development-workflow-branch-strategy" class="section">
@@ -482,14 +479,15 @@
     <li class="text-body"><strong class="text-body-bold">Install Command</strong>: npm install</li>
     </ul>
     <h3 class="text-headline">Files Structure (Root Level)</h3>
-    <div class="code-block"><pre class="text-code">✅ package.json        # Dependencies and scripts
-    ✅ index.html          # Entry point  
-    ✅ src/                # React app source code
-    ✅ vite.config.js      # Vite configuration
-    ✅ vercel.json         # Deployment settings
-    ✅ dist/               # Build output (after npm run build)
-    ✅ deploy-main.sh      # Main branch deployment script
-    ✅ deploy-stable.sh    # Stable branch deployment script (password-protected)</pre></div>
+    <div class="code-block"><pre class="text-code">✅ package.json          # Dependencies and scripts
+    ✅ index.html            # Entry point  
+    ✅ src/                  # React app source code
+    ✅ public/docs/          # Interactive documentation site (static files)
+    ✅ vite.config.js        # Vite configuration
+    ✅ vercel.json           # Deployment settings
+    ✅ dist/                 # Build output (after npm run build)
+    ✅ deploy-main.sh        # Main branch deployment script
+    ✅ deploy-stable.sh      # Stable branch deployment script (password-protected)</pre></div>
     <h3 class="text-headline">Deployment Issue Resolution</h3>
     <p class="text-body">If Vercel shows wrong repository (iamdavidsantana/xr-branding-guide):</p>
     <ol>
@@ -504,6 +502,7 @@
     <h2 class="text-title-bold">Recent Project Updates</h2>
     <h3 class="text-headline">Recently Completed Features:</h3>
     <ul>
+    <li class="text-body"><strong class="text-body-bold">Documentation styling fix</strong> - Moved docs to <code class="text-code inline-code">/public/docs</code> to resolve Vite script injection issues</li>
     <li class="text-body"><strong class="text-body-bold">Official MLB spot colors</strong> for all teams (hex values mapped)</li>
     <li class="text-body"><strong class="text-body-bold">Horizontal carousel layout</strong> (logo-vs-logo design)</li>
     <li class="text-body"><strong class="text-body-bold">TeamGameCarousel component</strong> replacing vertical layout</li>
@@ -512,6 +511,7 @@
     <li class="text-body"><strong class="text-body-bold">MAIN branch workflow</strong> - Set as default working branch</li>
     <li class="text-body"><strong class="text-body-bold">Schedule card improvements</strong> - Changed "VIEWING" to "LIVE" status</li>
     <li class="text-body"><strong class="text-body-bold">Complete spot color integration</strong> - All components updated</li>
+    <li class="text-body"><strong class="text-body-bold">Documentation auto-sync</strong> - Added npm script for easy updates</li>
     </ul>
     <h3 class="text-headline">Current Team Section Layout:</h3>
     <ul>
@@ -566,20 +566,25 @@
     <li class="text-body"><strong class="text-body-bold"> Interactive Team Colors</strong> - Clickable team color cards with details</li>
     <li class="text-body"><strong class="text-body-bold"> Smooth Navigation</strong> - Sidebar with smooth scrolling</li>
     <li class="text-body"><strong class="text-body-bold"> Dark Theme</strong> - MLB-inspired design</li>
-    <li class="text-body"><strong class="text-body-bold"> Auto-Sync</strong> - Updates when README changes</li>
-    <li class="text-body"><strong class="text-body-bold"> Fast & Accessible</strong> - Optimized performance</li>
+    <li class="text-body"><strong class="text-body-bold"> Auto-Sync</strong> - Updates when README changes via <code class="text-code inline-code">npm run docs:sync</code></li>
+    <li class="text-body"><strong class="text-body-bold"> Fast & Accessible</strong> - Optimized performance, served as static files</li>
     <li class="text-body"><strong class="text-body-bold"> PWA Ready</strong> - Offline functionality</li>
+    <li class="text-body"><strong class="text-body-bold"> Vite Integration</strong> - Served alongside the main app without script injection issues</li>
     </ul>
     <h3 class="text-headline">Access Documentation</h3>
     <ul>
-    <li class="text-body"><strong class="text-body-bold">Local</strong>: Open <code class="text-code inline-code">docs/index.html</code> in your browser</li>
-    <li class="text-body"><strong class="text-body-bold">Live Server</strong>: <code class="text-code inline-code">cd docs && npm run serve</code> then visit http://localhost:8080</li>
-    <li class="text-body"><strong class="text-body-bold">Auto-Sync</strong>: <code class="text-code inline-code">cd docs && npm run watch</code> for live README updates</li>
+    <li class="text-body"><strong class="text-body-bold">Development</strong>: <code class="text-code inline-code">npm run dev</code> then visit http://localhost:5174/docs/index.html</li>
+    <li class="text-body"><strong class="text-body-bold">Production</strong>: Documentation is served at <code class="text-code inline-code">/docs/</code> on deployed sites</li>
+    <li class="text-body"><strong class="text-body-bold">Auto-Sync</strong>: <code class="text-code inline-code">npm run docs:sync</code> to update documentation from README changes</li>
     </ul>
-    <h3 class="text-headline">Deploy Documentation</h3>
-    <div class="code-block"><pre class="text-code">bash
-    cd docs && ./deploy-docs.sh  # Auto-sync and commit to git</pre></div>
-    <p class="text-body">The documentation site can be hosted on any static hosting platform (Vercel, Netlify, GitHub Pages, etc.).</p>
+    <h3 class="text-headline">Documentation Architecture</h3>
+    <ul>
+    <li class="text-body"><strong class="text-body-bold">Location</strong>: <code class="text-code inline-code">/public/docs/</code> (served as static files by Vite)</li>
+    <li class="text-body"><strong class="text-body-bold">Sync Script</strong>: <code class="text-code inline-code">public/docs/sync-readme.js</code> - Converts README.md to HTML</li>
+    <li class="text-body"><strong class="text-body-bold">Styling</strong>: Dedicated CSS files with MLB HEX Franklin font integration</li>
+    <li class="text-body"><strong class="text-body-bold">Navigation</strong>: Sticky sidebar with smooth scrolling and "Back to Top" buttons</li>
+    </ul>
+    <p class="text-body">The documentation site is now properly integrated with the main application and resolves previous styling issues caused by Vite development script injection.</p>
 </section>
 
 <section id="typography-scale-style-guide" class="section">
