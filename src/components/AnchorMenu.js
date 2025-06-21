@@ -6,6 +6,14 @@ import { playClickSound } from '../utils/audio';
 function TeamButton({ team }) {
   const spotColor = useTeamSpotColor(team.teamID);
   
+  // Get spot logo from MLB Photos API (the correct spot logo endpoint)
+  const getSpotLogo = (teamData) => {
+    if (!teamData || !teamData.teamID) return null;
+    return `https://img.mlbstatic.com/mlb-photos/image/upload/w_28,f_png,q_auto/v1/team/${teamData.teamID}/logo/spot/current`;
+  };
+
+  const spotLogo = getSpotLogo(team);
+  
   return (
     <a
       key={team.teamID}
@@ -17,7 +25,7 @@ function TeamButton({ team }) {
         textDecoration: 'none',
         padding: '0',
         borderRadius: '50%',
-        backgroundColor: spotColor,
+        backgroundColor: 'transparent',
         transition: 'all 0.2s ease',
         cursor: 'pointer',
         border: '2px solid rgba(255, 255, 255, 0.2)',
@@ -37,19 +45,49 @@ function TeamButton({ team }) {
       }}
       onClick={() => playClickSound()}
     >
-      <img
-        src={`https://img.mlbstatic.com/mlb-photos/image/upload/w_36,f_png,q_auto/v1/team/${team.teamID}/logo/spot/current`}
-        alt={`${team.clubFullName} logo`}
+      {/* Spot Logo - circular for anchor menu */}
+      <div
         style={{
           width: '28px',
           height: '28px',
-          objectFit: 'contain',
-          filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.3))'
+          backgroundColor: spotColor,
+          borderRadius: '50%',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          position: 'relative'
         }}
-        onError={(e) => {
-          e.target.style.display = 'none';
-        }}
-      />
+      >
+        {spotLogo ? (
+          <img
+            src={spotLogo}
+            alt={`${team.clubFullName} spot logo`}
+            style={{
+              width: '20px', // 70% of 28px
+              height: '20px',
+              objectFit: 'contain',
+              filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.3))'
+            }}
+            onError={(e) => {
+              e.target.style.display = 'none';
+              // Show team abbreviation as fallback
+              const textDiv = document.createElement('div');
+              textDiv.style.cssText = 'color: #fff; font-size: 7px; font-weight: 700; text-align: center;';
+              textDiv.textContent = team.abbreviation || team.teamCode?.toUpperCase() || 'TBD';
+              e.target.parentNode.appendChild(textDiv);
+            }}
+          />
+        ) : (
+          <div style={{
+            color: '#fff',
+            fontSize: '7px',
+            fontWeight: '700',
+            textAlign: 'center'
+          }}>
+            {team.abbreviation || team.teamCode?.toUpperCase() || 'TBD'}
+          </div>
+        )}
+      </div>
     </a>
   );
 }

@@ -1,54 +1,31 @@
 import { useState, useEffect } from 'react';
+import { getTeamSpotColor } from '../utils/spotColorMapping';
 
-// Custom hook for team spot color
+// Custom hook for team spot color - now uses official spot color mapping
 export function useTeamSpotColor(teamID) {
   const [spotColor, setSpotColor] = useState('#fff');
   
   useEffect(() => {
     if (!teamID) return;
     
-    async function fetchTeamColors() {
-      try {
-        const response = await fetch('https://storage.mobile.mlbinfra.com/atbatconfig/branding.json');
-        const data = await response.json();
-        const team = data.teams.find(t => t.teamID === parseInt(teamID));
-        
-        if (team?.teamColors?.primaryLight) {
-          setSpotColor(team.teamColors.primaryLight);
-        }
-      } catch (error) {
-        console.error('Error fetching team colors:', error);
-      }
-    }
-    
-    fetchTeamColors();
+    // Use the official spot color mapping
+    const officialSpotColor = getTeamSpotColor(teamID);
+    setSpotColor(officialSpotColor);
   }, [teamID]);
   
   return spotColor;
 }
 
-// Custom hook for bigpapi spot color
+// Custom hook for bigpapi spot color - now uses official spot color mapping
 export function useBigpapiSpotColor(teamID) {
   const [spotColor, setSpotColor] = useState('#fff');
   
   useEffect(() => {
     if (!teamID) return;
     
-    async function fetchBigpapiColor() {
-      try {
-        const response = await fetch('https://storage.mobile.mlbinfra.com/atbatconfig/branding.json');
-        const data = await response.json();
-        const team = data.teams.find(t => t.teamID === parseInt(teamID));
-        
-        if (team?.teamColors?.primaryLight) {
-          setSpotColor(team.teamColors.primaryLight);
-        }
-      } catch (error) {
-        console.error('Error fetching bigpapi color:', error);
-      }
-    }
-    
-    fetchBigpapiColor();
+    // Use the official spot color mapping (same as regular spot color)
+    const officialSpotColor = getTeamSpotColor(teamID);
+    setSpotColor(officialSpotColor);
   }, [teamID]);
   
   return spotColor;
