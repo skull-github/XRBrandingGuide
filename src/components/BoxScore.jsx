@@ -94,6 +94,42 @@ export function BoxScore({ gamePk, onClose, isVisible }) {
     };
   };
 
+  const formatBenchStats = (stats) => {
+    if (!stats || !stats.batting) {
+      return {
+        avg: '.000', gp: 0, r: 0, h: 0, hr: 0, rbi: 0, sb: 0
+      };
+    }
+    
+    const batting = stats.batting;
+    return {
+      avg: batting.avg || '.000',
+      gp: batting.gamesPlayed || 0,
+      r: batting.runs || 0,
+      h: batting.hits || 0,
+      hr: batting.homeRuns || 0,
+      rbi: batting.rbi || 0,
+      sb: batting.stolenBases || 0
+    };
+  };
+
+  const formatBullpenStats = (stats) => {
+    if (!stats || !stats.pitching) {
+      return {
+        era: '0.00', ip: '0.0', h: 0, bb: 0, so: 0
+      };
+    }
+    
+    const pitching = stats.pitching;
+    return {
+      era: pitching.era || '0.00',
+      ip: pitching.inningsPitched || '0.0',
+      h: pitching.hits || 0,
+      bb: pitching.baseOnBalls || 0,
+      so: pitching.strikeOuts || 0
+    };
+  };
+
   const renderBattingTable = (team, teamData) => {
     if (!teamData || !teamData.batters) return null;
 
@@ -122,10 +158,11 @@ export function BoxScore({ gamePk, onClose, isVisible }) {
 
     return (
       <div>
+        {/* Header */}
         <div style={{
           display: 'grid',
-          gridTemplateColumns: '200px 40px 30px 30px 30px 30px 30px 30px 30px 50px 50px',
-          gap: '8px',
+          gridTemplateColumns: '200px 50px 40px 30px 30px 40px 40px 30px 30px 50px 50px',
+          gap: '4px',
           backgroundColor: '#1a1a1a',
           padding: '8px',
           borderRadius: '4px',
@@ -135,6 +172,7 @@ export function BoxScore({ gamePk, onClose, isVisible }) {
           marginBottom: '2px'
         }}>
           <div>BATTING</div>
+          <div>POS</div>
           <div>AB</div>
           <div>R</div>
           <div>H</div>
@@ -147,13 +185,14 @@ export function BoxScore({ gamePk, onClose, isVisible }) {
           <div>OPS</div>
         </div>
 
+        {/* Batting lineup */}
         {batters.map((player, index) => (
           <div
             key={player.person.id}
             style={{
               display: 'grid',
-              gridTemplateColumns: '200px 40px 30px 30px 30px 30px 30px 30px 30px 50px 50px',
-              gap: '8px',
+              gridTemplateColumns: '200px 50px 40px 30px 30px 40px 40px 30px 30px 50px 50px',
+              gap: '4px',
               padding: '6px 8px',
               backgroundColor: index % 2 === 0 ? '#2a2a2a' : '#242424',
               fontSize: '12px',
@@ -161,8 +200,11 @@ export function BoxScore({ gamePk, onClose, isVisible }) {
               alignItems: 'center'
             }}
           >
-            <div style={{ fontWeight: index === 0 ? '600' : '400' }}>
+            <div style={{ fontWeight: '400' }}>
               {formatPlayerName(player)}
+            </div>
+            <div style={{ fontSize: '10px', color: '#ccc' }}>
+              {formatPosition(player.position)}
             </div>
             <div>{player.stats.ab}</div>
             <div>{player.stats.r}</div>
@@ -172,16 +214,16 @@ export function BoxScore({ gamePk, onClose, isVisible }) {
             <div>{player.stats.so}</div>
             <div>{player.stats.k}</div>
             <div>{player.stats.lob}</div>
-            <div>{player.stats.avg}</div>
-            <div>{player.stats.ops}</div>
+            <div style={{ fontSize: '10px' }}>{player.stats.avg}</div>
+            <div style={{ fontSize: '10px' }}>{player.stats.ops}</div>
           </div>
         ))}
 
         {/* Team Totals */}
         <div style={{
           display: 'grid',
-          gridTemplateColumns: '200px 40px 30px 30px 30px 30px 30px 30px 30px 50px 50px',
-          gap: '8px',
+          gridTemplateColumns: '200px 50px 40px 30px 30px 40px 40px 30px 30px 50px 50px',
+          gap: '4px',
           padding: '8px',
           backgroundColor: '#1a2a3a',
           fontSize: '12px',
@@ -191,6 +233,7 @@ export function BoxScore({ gamePk, onClose, isVisible }) {
           borderRadius: '4px'
         }}>
           <div>TOTALS</div>
+          <div>-</div>
           <div>{teamTotals.ab}</div>
           <div>{teamTotals.r}</div>
           <div>{teamTotals.h}</div>
@@ -232,10 +275,11 @@ export function BoxScore({ gamePk, onClose, isVisible }) {
 
     return (
       <div style={{ marginTop: '20px' }}>
+        {/* Header */}
         <div style={{
           display: 'grid',
-          gridTemplateColumns: '200px 60px 30px 30px 30px 30px 30px 30px 50px 50px',
-          gap: '8px',
+          gridTemplateColumns: '200px 50px 60px 30px 30px 30px 40px 30px 30px 50px 50px',
+          gap: '4px',
           backgroundColor: '#1a1a1a',
           padding: '8px',
           borderRadius: '4px',
@@ -245,6 +289,7 @@ export function BoxScore({ gamePk, onClose, isVisible }) {
           marginBottom: '2px'
         }}>
           <div>PITCHERS</div>
+          <div>POS</div>
           <div>IP</div>
           <div>H</div>
           <div>R</div>
@@ -261,8 +306,8 @@ export function BoxScore({ gamePk, onClose, isVisible }) {
             key={player.person.id}
             style={{
               display: 'grid',
-              gridTemplateColumns: '200px 60px 30px 30px 30px 30px 30px 30px 50px 50px',
-              gap: '8px',
+              gridTemplateColumns: '200px 50px 60px 30px 30px 30px 40px 30px 30px 50px 50px',
+              gap: '4px',
               padding: '6px 8px',
               backgroundColor: index % 2 === 0 ? '#2a2a2a' : '#242424',
               fontSize: '12px',
@@ -270,8 +315,11 @@ export function BoxScore({ gamePk, onClose, isVisible }) {
               alignItems: 'center'
             }}
           >
-            <div style={{ fontWeight: index === 0 ? '600' : '400' }}>
+            <div style={{ fontWeight: '400' }}>
               {formatPlayerName(player)}
+            </div>
+            <div style={{ fontSize: '10px', color: '#ccc' }}>
+              {formatPosition(player.position)}
             </div>
             <div>{player.stats.ip}</div>
             <div>{player.stats.h}</div>
@@ -280,16 +328,16 @@ export function BoxScore({ gamePk, onClose, isVisible }) {
             <div>{player.stats.bb}</div>
             <div>{player.stats.so}</div>
             <div>{player.stats.hr}</div>
-            <div>{player.stats.whip}</div>
-            <div>{player.stats.era}</div>
+            <div style={{ fontSize: '10px' }}>{player.stats.whip}</div>
+            <div style={{ fontSize: '10px' }}>{player.stats.era}</div>
           </div>
         ))}
 
         {/* Team Totals */}
         <div style={{
           display: 'grid',
-          gridTemplateColumns: '200px 60px 30px 30px 30px 30px 30px 30px 50px 50px',
-          gap: '8px',
+          gridTemplateColumns: '200px 50px 60px 30px 30px 30px 40px 30px 30px 50px 50px',
+          gap: '4px',
           padding: '8px',
           backgroundColor: '#1a2a3a',
           fontSize: '12px',
@@ -300,6 +348,7 @@ export function BoxScore({ gamePk, onClose, isVisible }) {
         }}>
           <div>TOTALS</div>
           <div>-</div>
+          <div>-</div>
           <div>{teamTotals.h}</div>
           <div>{teamTotals.r}</div>
           <div>{teamTotals.er}</div>
@@ -309,6 +358,142 @@ export function BoxScore({ gamePk, onClose, isVisible }) {
           <div>-</div>
           <div>-</div>
         </div>
+      </div>
+    );
+  };
+
+  const renderBenchTable = (team, teamData) => {
+    if (!teamData || !teamData.bench || teamData.bench.length === 0) return null;
+
+    const benchPlayers = teamData.bench.map(benchId => {
+      const player = teamData.players[`ID${benchId}`];
+      return {
+        ...player,
+        stats: formatBenchStats(player.seasonStats)
+      };
+    });
+
+    return (
+      <div style={{ marginTop: '20px' }}>
+        {/* Header */}
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: '200px 50px 60px 30px 30px 30px 40px 30px 30px',
+          gap: '4px',
+          backgroundColor: '#1a1a1a',
+          padding: '8px',
+          borderRadius: '4px',
+          fontSize: '11px',
+          fontWeight: '600',
+          color: '#ccc',
+          marginBottom: '2px'
+        }}>
+          <div>BENCH</div>
+          <div>POS</div>
+          <div>AVG</div>
+          <div>GP</div>
+          <div>R</div>
+          <div>H</div>
+          <div>HR</div>
+          <div>RBI</div>
+          <div>SB</div>
+        </div>
+
+        {benchPlayers.map((player, index) => (
+          <div
+            key={player.person.id}
+            style={{
+              display: 'grid',
+              gridTemplateColumns: '200px 50px 60px 30px 30px 30px 40px 30px 30px',
+              gap: '4px',
+              padding: '6px 8px',
+              backgroundColor: index % 2 === 0 ? '#2a2a2a' : '#242424',
+              fontSize: '12px',
+              color: '#fff',
+              alignItems: 'center'
+            }}
+          >
+            <div style={{ fontWeight: '400' }}>
+              {formatPlayerName(player)}
+            </div>
+            <div style={{ fontSize: '10px', color: '#ccc' }}>
+              {formatPosition(player.position)}
+            </div>
+            <div style={{ fontSize: '10px' }}>{player.stats.avg}</div>
+            <div>{player.stats.gp}</div>
+            <div>{player.stats.r}</div>
+            <div>{player.stats.h}</div>
+            <div>{player.stats.hr}</div>
+            <div>{player.stats.rbi}</div>
+            <div>{player.stats.sb}</div>
+          </div>
+        ))}
+      </div>
+    );
+  };
+
+  const renderBullpenTable = (team, teamData) => {
+    if (!teamData || !teamData.bullpen || teamData.bullpen.length === 0) return null;
+
+    const bullpenPlayers = teamData.bullpen.map(bullpenId => {
+      const player = teamData.players[`ID${bullpenId}`];
+      return {
+        ...player,
+        stats: formatBullpenStats(player.seasonStats)
+      };
+    });
+
+    return (
+      <div style={{ marginTop: '20px' }}>
+        {/* Header */}
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: '200px 50px 60px 30px 30px 30px 30px',
+          gap: '4px',
+          backgroundColor: '#1a1a1a',
+          padding: '8px',
+          borderRadius: '4px',
+          fontSize: '11px',
+          fontWeight: '600',
+          color: '#ccc',
+          marginBottom: '2px'
+        }}>
+          <div>BULLPEN</div>
+          <div>POS</div>
+          <div>ERA</div>
+          <div>IP</div>
+          <div>H</div>
+          <div>BB</div>
+          <div>SO</div>
+        </div>
+
+        {bullpenPlayers.map((player, index) => (
+          <div
+            key={player.person.id}
+            style={{
+              display: 'grid',
+              gridTemplateColumns: '200px 50px 60px 30px 30px 30px 30px',
+              gap: '4px',
+              padding: '6px 8px',
+              backgroundColor: index % 2 === 0 ? '#2a2a2a' : '#242424',
+              fontSize: '12px',
+              color: '#fff',
+              alignItems: 'center'
+            }}
+          >
+            <div style={{ fontWeight: '400' }}>
+              {formatPlayerName(player)}
+            </div>
+            <div style={{ fontSize: '10px', color: '#ccc' }}>
+              {formatPosition(player.position)}
+            </div>
+            <div style={{ fontSize: '10px' }}>{player.stats.era}</div>
+            <div>{player.stats.ip}</div>
+            <div>{player.stats.h}</div>
+            <div>{player.stats.bb}</div>
+            <div>{player.stats.so}</div>
+          </div>
+        ))}
       </div>
     );
   };
@@ -482,6 +667,8 @@ export function BoxScore({ gamePk, onClose, isVisible }) {
                   </h3>
                   {renderBattingTable(boxScoreData.teams.away.team, boxScoreData.teams.away)}
                   {renderPitchingTable(boxScoreData.teams.away.team, boxScoreData.teams.away)}
+                  {renderBenchTable(boxScoreData.teams.away.team, boxScoreData.teams.away)}
+                  {renderBullpenTable(boxScoreData.teams.away.team, boxScoreData.teams.away)}
                 </div>
               )}
 
@@ -497,6 +684,8 @@ export function BoxScore({ gamePk, onClose, isVisible }) {
                   </h3>
                   {renderBattingTable(boxScoreData.teams.home.team, boxScoreData.teams.home)}
                   {renderPitchingTable(boxScoreData.teams.home.team, boxScoreData.teams.home)}
+                  {renderBenchTable(boxScoreData.teams.home.team, boxScoreData.teams.home)}
+                  {renderBullpenTable(boxScoreData.teams.home.team, boxScoreData.teams.home)}
                 </div>
               )}
             </div>
