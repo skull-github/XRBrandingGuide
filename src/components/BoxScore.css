@@ -1,0 +1,650 @@
+/* MLB BoxScore Overlay Styles - Dark Theme Matching Design */
+
+.boxscore-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  /* Removed screen scrim - no background overlay */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 16px;
+}
+
+.boxscore-modal {
+  /* Dark blur background matching AnchorMenu */
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  /* Enhanced drop shadow to make it appear above the screen */
+  box-shadow: 0 32px 64px rgba(0, 0, 0, 0.6), 0 8px 24px rgba(0, 0, 0, 0.4);
+  width: 100%;
+  max-width: 1400px;
+  max-height: 95vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  font-family: "MLB HEX Franklin", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  color: #ffffff;
+}
+
+.stats-section {
+  margin-bottom: 32px;
+}
+
+.section-header {
+  background: #2c3e50;
+  padding: 8px 16px;
+  margin-bottom: 0;
+  border-radius: 4px 4px 0 0;
+}
+
+.section-label {
+  font-size: 14px;
+  font-weight: 700;
+  color: #ffffff;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.boxscore-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  border-bottom: 1px solid #333333;
+  background: #1a1a1a;
+}
+
+.boxscore-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.title-icon {
+  width: 20px;
+  height: 20px;
+  opacity: 0.8;
+  filter: brightness(0) invert(1);
+}
+
+.boxscore-title h2 {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0;
+  color: #ffffff;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+}
+
+.close-button {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 8px;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.close-button:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.close-button img {
+  width: 20px;
+  height: 20px;
+  filter: brightness(0) invert(1);
+  opacity: 0.9;
+}
+
+.boxscore-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px 24px 24px;
+  background: #1a1a1a;
+}
+
+.loading-state,
+.error-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 300px;
+  gap: 16px;
+  color: #888888;
+  font-size: 16px;
+}
+
+.loading-icon,
+.error-icon {
+  width: 32px;
+  height: 32px;
+  opacity: 0.6;
+  filter: brightness(0) invert(1);
+}
+
+.loading-icon {
+  animation: pulse 2s infinite;
+}
+
+.error-state {
+  color: #ff6b6b;
+}
+
+/* --- TEAM TABS (Figma-accurate, deduped, final) --- */
+.team-tabs {
+  display: flex;
+  gap: 0;
+  margin-bottom: 0;
+  border-radius: 10px 10px 0 0;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+  background: none;
+  padding-top: 0;
+}
+
+.team-tab {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 18px 40px 18px 32px;
+  border: none;
+  background: #232a36;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+  font-family: inherit;
+  font-size: 18px;
+  font-weight: 700;
+  color: #e6e6e6;
+  flex: 1;
+  position: relative;
+  outline: none;
+  min-width: 0;
+  border-radius: 0;
+}
+
+.team-tab:first-child {
+  border-radius: 10px 0 0 0;
+}
+
+.team-tab:last-child {
+  border-radius: 0 10px 0 0;
+}
+
+.team-tab:hover,
+.team-tab:focus {
+  background: #2c3e50;
+  color: #fff;
+}
+
+.team-tab.active {
+  background: var(--team-color, #1e3a5c);
+  color: #fff;
+  z-index: 1;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.22);
+}
+
+.team-tab.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: #fff;
+  opacity: 0.18;
+}
+
+.team-logo {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  border-radius: 0 !important;
+  background: none !important;
+  box-shadow: none !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.team-name {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  color: inherit;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media (max-width: 768px) {
+  .team-tabs {
+    flex-direction: column;
+    gap: 12px;
+    border-radius: 10px;
+    box-shadow: none;
+  }
+  .team-tab {
+    min-width: auto;
+    padding: 12px 16px;
+    font-size: 14px;
+    border-radius: 8px;
+    gap: 12px;
+  }
+  .team-logo {
+    width: 24px;
+    height: 24px;
+    border-radius: 0 !important;
+    background: none !important;
+    box-shadow: none !important;
+  }
+  .team-name {
+    font-size: 14px;
+  }
+}
+
+.stats-table-container {
+  margin-bottom: 0;
+  border-radius: 0 0 4px 4px;
+  overflow-x: auto;
+  background: #1a1a1a;
+}
+
+.stats-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.stats-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #ffffff;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.lineup-header {
+  font-size: 14px;
+  font-weight: 700;
+  color: #ffffff;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.stats-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  background: #2a2a2a;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.stats-table th {
+  background: #333333;
+  padding: 8px 6px;
+  text-align: center;
+  font-weight: 600;
+  color: #cccccc;
+  border-bottom: 1px solid #444444;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.stats-table th.name-column {
+  text-align: left;
+  padding-left: 12px;
+  width: 200px;
+}
+
+.stats-table th.pos-column {
+  text-align: center;
+  width: 40px;
+}
+
+.stats-table th.lineup-column {
+  text-align: center;
+  width: 60px;
+}
+
+.stats-table td {
+  padding: 8px 6px;
+  border-bottom: 1px solid #333333;
+  color: #ffffff;
+  font-weight: 400;
+  text-align: center;
+  font-size: 12px;
+}
+
+.stats-table td.name-cell {
+  text-align: left;
+  padding-left: 12px;
+  font-weight: 500;
+}
+
+.stats-table td.pos-cell {
+  text-align: center;
+  color: #cccccc;
+  font-size: 11px;
+}
+
+.stats-table td.lineup-cell {
+  text-align: center;
+  font-weight: 600;
+}
+
+.stats-table tbody tr:hover {
+  background: #333333;
+}
+
+.totals-row {
+  background: #404040 !important;
+  border-top: 2px solid #555555;
+}
+
+.totals-row td {
+  font-weight: 700;
+  color: #ffffff;
+  border-bottom: none;
+}
+
+.totals-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  text-align: left !important;
+}
+
+.no-data {
+  text-align: center;
+  padding: 48px 24px;
+  color: #888888;
+  font-style: italic;
+  font-size: 14px;
+}
+
+.game-info {
+  margin-top: 32px;
+  padding: 16px;
+  background: #2a2a2a;
+  border-radius: 6px;
+  border: 1px solid #333333;
+}
+
+.game-info-row {
+  margin-bottom: 8px;
+  font-size: 12px;
+  color: #cccccc;
+  line-height: 1.4;
+}
+
+.game-info-row:last-child {
+  margin-bottom: 0;
+}
+
+.mobile-scroll-hint {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: center;
+  padding: 16px;
+  background: rgba(0, 102, 204, 0.1);
+  border: 1px solid rgba(0, 102, 204, 0.3);
+  border-radius: 8px;
+  margin-top: 24px;
+  font-size: 14px;
+  color: #66b3ff;
+}
+
+.hint-icon {
+  width: 16px;
+  height: 16px;
+  opacity: 0.8;
+  filter: brightness(0) invert(1);
+}
+
+.loading-icon,
+.error-icon {
+  width: 32px;
+  height: 32px;
+  opacity: 0.6;
+}
+
+.loading-icon {
+  animation: pulse 2s infinite;
+}
+
+.error-state {
+  color: #dc2626;
+}
+
+.stats-section {
+  margin-bottom: 40px;
+}
+
+.section-title {
+  /* Using MLB Type Scale - Half XR Size: Headline becomes 20px (was 40px in XR) */
+  font-size: 20px;
+  font-weight: 700;
+  color: #1f2937;
+  margin: 0 0 16px 0;
+  letter-spacing: -0.01em;
+  line-height: 1.25;
+}
+
+.boxscore-table-container {
+  overflow-x: auto;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  background: #ffffff;
+}
+
+.boxscore-table {
+  width: 100%;
+  border-collapse: collapse;
+  /* Using MLB Type Scale - Half XR Size: Body Medium becomes 14px (was 28px in XR) */
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.4;
+  min-width: 800px;
+}
+
+.boxscore-table th {
+  background: #f8fafc;
+  padding: 12px 8px;
+  text-align: left;
+  font-weight: 700;
+  color: #374151;
+  border-bottom: 2px solid #e5e7eb;
+  /* Using MLB Type Scale - Half XR Size: Body Small becomes 12px (was 24px in XR) */
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  line-height: 1.3;
+}
+
+.boxscore-table th:first-child {
+  padding-left: 16px;
+  width: 200px;
+}
+
+.boxscore-table td {
+  padding: 12px 8px;
+  border-bottom: 1px solid #f3f4f6;
+  color: #374151;
+  font-weight: 500;
+}
+
+.boxscore-table td:first-child {
+  padding-left: 16px;
+}
+
+.boxscore-table tbody tr:hover {
+  background: #f8fafc;
+}
+
+.player-cell {
+  font-weight: 600;
+}
+
+.player-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.player-name {
+  font-weight: 600;
+  color: #1f2937;
+  /* Using MLB Type Scale - Half XR Size: Body Medium becomes 14px (was 28px in XR) */
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.player-position {
+  /* Using MLB Type Scale - Half XR Size: Body Small becomes 12px (was 24px in XR) */
+  font-size: 12px;
+  color: #6b7280;
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+.totals-row {
+  background: #f8fafc;
+  border-top: 2px solid #e5e7eb;
+}
+
+.totals-row td {
+  font-weight: 700;
+  color: #1f2937;
+  border-bottom: none;
+}
+
+.totals-label {
+  /* Using MLB Type Scale - Half XR Size: Body Small becomes 12px (was 24px in XR) */
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  line-height: 1.3;
+}
+
+.no-data {
+  text-align: center;
+  padding: 48px 24px;
+  color: #6b7280;
+  font-style: italic;
+  /* Using MLB Type Scale - Half XR Size: Body Large becomes 16px (was 32px in XR) */
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.mobile-scroll-hint {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: center;
+  padding: 16px;
+  background: #f0f9ff;
+  border: 1px solid #bae6fd;
+  border-radius: 8px;
+  margin-top: 24px;
+  /* Using MLB Type Scale - Half XR Size: Body Medium becomes 14px (was 28px in XR) */
+  font-size: 14px;
+  color: #0369a1;
+  line-height: 1.4;
+}
+
+.hint-icon {
+  width: 16px;
+  height: 16px;
+  opacity: 0.8;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* Mobile Responsive Styles */
+@media (max-width: 768px) {
+  .boxscore-overlay {
+    padding: 8px;
+  }
+
+  .boxscore-header {
+    padding: 16px 20px;
+  }
+
+  .boxscore-title h2 {
+    /* Using MLB Type Scale - Half XR Size: Title 3 becomes 20px for mobile (was 40px in XR) */
+    font-size: 20px;
+  }
+
+  .boxscore-content {
+    padding: 0 20px 20px;
+  }
+
+  .team-tabs {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .team-tab {
+    min-width: auto;
+    padding: 12px 16px;
+    /* Using MLB Type Scale - Half XR Size: Body Medium becomes 14px for mobile (was 28px in XR) */
+    font-size: 14px;
+  }
+
+  .team-logo {
+    width: 24px;
+    height: 24px;
+    border-radius: 0 !important;
+    background: none !important;
+    box-shadow: none !important;
+  }
+
+  .section-title {
+    /* Using MLB Type Scale - Half XR Size: Title 4 becomes 18px for mobile (was 36px in XR) */
+    font-size: 18px;
+  }
+
+  .boxscore-table {
+    /* Using MLB Type Scale - Half XR Size: Body Small becomes 12px for mobile (was 24px in XR) */
+    font-size: 12px;
+  }
+
+  .boxscore-table th,
+  .boxscore-table td {
+    padding: 8px 6px;
+  }
+
+  .boxscore-table th:first-child,
+  .boxscore-table td:first-child {
+    padding-left: 12px;
+  }
+
+  .player-name {
+    /* Using MLB Type Scale - Half XR Size: Body Small becomes 12px for mobile (was 24px in XR) */
+    font-size: 12px;
+  }
+
+  .player-position {
+    /* Using MLB Type Scale - Half XR Size: Caption becomes 11px for mobile (was 22px in XR) */
+    font-size: 11px;
+  }
+}
