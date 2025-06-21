@@ -19,9 +19,9 @@ const path = require('path');
 
 class ReadmeToHtmlSync {
     constructor() {
-        this.rootDir = path.join(__dirname, '..');
+        this.rootDir = path.join(__dirname, '..', '..');
         this.readmePath = path.join(this.rootDir, 'README.md');
-        this.docsDir = path.join(this.rootDir, 'docs');
+        this.docsDir = path.join(__dirname);
         this.templatePath = path.join(this.docsDir, 'template.html');
         this.outputPath = path.join(this.docsDir, 'index.html');
         
@@ -260,10 +260,11 @@ ${sections}
             .filter(section => section.level === 2)
             .map(section => {
                 const cleanTitle = this.cleanEmojiContent(section.title);
-                // Add developer-standard emojis back for specific sections
+                // Only add minimal developer-standard emojis for key sections
                 let displayTitle = cleanTitle;
-                if (cleanTitle.includes('Quick Start')) displayTitle = '🚀 ' + cleanTitle;
-                if (cleanTitle.includes('API Endpoints')) displayTitle = '🔗 ' + cleanTitle;
+                if (cleanTitle.toLowerCase().includes('quick start')) displayTitle = '🚀 ' + cleanTitle;
+                if (cleanTitle.toLowerCase().includes('api endpoints')) displayTitle = '🔗 ' + cleanTitle;
+                if (cleanTitle.toLowerCase().includes('interactive documentation')) displayTitle = '📚 ' + cleanTitle;
                 return `<li><a href="#${section.id}" class="nav-link">${displayTitle}</a></li>`;
             })
             .join('\n                ');
@@ -491,12 +492,28 @@ ${sections}
 
     processInlineMarkdown(text) {
         return text
+            // Clean emojis first
+            .replace(/[\u{1F600}-\u{1F64F}]/gu, '') // Emoticons
+            .replace(/[\u{1F300}-\u{1F5FF}]/gu, '') // Misc Symbols and Pictographs
+            .replace(/[\u{1F680}-\u{1F6FF}]/gu, '') // Transport and Map
+            .replace(/[\u{1F700}-\u{1F77F}]/gu, '') // Alchemical Symbols
+            .replace(/[\u{1F780}-\u{1F7FF}]/gu, '') // Geometric Shapes Extended
+            .replace(/[\u{1F800}-\u{1F8FF}]/gu, '') // Supplemental Arrows-C
+            .replace(/[\u{1F900}-\u{1F9FF}]/gu, '') // Supplemental Symbols and Pictographs
+            .replace(/[\u{1FA00}-\u{1FA6F}]/gu, '') // Chess Symbols
+            .replace(/[\u{1FA70}-\u{1FAFF}]/gu, '') // Symbols and Pictographs Extended-A
+            .replace(/[\u{2600}-\u{26FF}]/gu, '')   // Misc symbols
+            .replace(/[\u{2700}-\u{27BF}]/gu, '')   // Dingbats
+            .replace(/[\u{FE00}-\u{FE0F}]/gu, '')   // Variation Selectors
+            .replace(/[\u{1F1E0}-\u{1F1FF}]/gu, '') // Flags
             // Bold text
             .replace(/\*\*(.+?)\*\*/g, '<strong class="text-body-bold">$1</strong>')
             // Inline code
             .replace(/`([^`]+)`/g, '<code class="text-code inline-code">$1</code>')
-            // Clean up any remaining markdown
-            .replace(/\*\*/g, '');
+            // Clean up any remaining markdown and extra spaces
+            .replace(/\*\*/g, '')
+            .replace(/\s+/g, ' ')
+            .trim();
     }
 
     generateSectionId(title) {
@@ -514,25 +531,23 @@ ${sections}
 
     // Clean up emojis, keeping only developer-standard ones
     cleanEmojiContent(text) {
-        // Keep only developer-standard emojis: 🚀 (deployment/launch), 📚 (documentation), 🔗 (links/APIs), ⚾ (baseball/project specific)
-        // Remove excessive/decorative emojis but preserve meaningful ones
+        // Remove all emojis first, then we'll add back only specific ones in navigation
         return text
-            .replace(/🏗️\s*/g, '') // Remove construction emoji (not standard for dev)
-            .replace(/🎯\s*/g, '') // Remove target emoji
-            .replace(/🎨\s*/g, '') // Remove art emoji
-            .replace(/🌐\s*/g, '') // Remove globe emoji
-            .replace(/✨\s*/g, '') // Remove sparkles emoji
-            .replace(/🔧\s*/g, '') // Remove wrench emoji
-            .replace(/📦\s*/g, '') // Remove package emoji (keep for actual packages)
-            .replace(/📱\s*/g, '') // Remove mobile emoji
-            .replace(/📋\s*/g, '') // Remove clipboard emoji
-            .replace(/📊\s*/g, '') // Remove chart emoji
-            .replace(/🛡️\s*/g, '') // Remove shield emoji
-            .replace(/🎵\s*/g, '') // Remove music emoji
-            .replace(/✅\s*/g, '') // Remove checkmark emoji (not standard)
-            .replace(/🔄\s*/g, '') // Remove refresh emoji (not standard)
-            .replace(/⚠️\s*/g, '') // Remove warning emoji (not standard)
-            // Clean up duplicate spaces and markdown
+            // Remove emoji unicode ranges
+            .replace(/[\u{1F600}-\u{1F64F}]/gu, '') // Emoticons
+            .replace(/[\u{1F300}-\u{1F5FF}]/gu, '') // Misc Symbols and Pictographs
+            .replace(/[\u{1F680}-\u{1F6FF}]/gu, '') // Transport and Map
+            .replace(/[\u{1F700}-\u{1F77F}]/gu, '') // Alchemical Symbols
+            .replace(/[\u{1F780}-\u{1F7FF}]/gu, '') // Geometric Shapes Extended
+            .replace(/[\u{1F800}-\u{1F8FF}]/gu, '') // Supplemental Arrows-C
+            .replace(/[\u{1F900}-\u{1F9FF}]/gu, '') // Supplemental Symbols and Pictographs
+            .replace(/[\u{1FA00}-\u{1FA6F}]/gu, '') // Chess Symbols
+            .replace(/[\u{1FA70}-\u{1FAFF}]/gu, '') // Symbols and Pictographs Extended-A
+            .replace(/[\u{2600}-\u{26FF}]/gu, '')   // Misc symbols
+            .replace(/[\u{2700}-\u{27BF}]/gu, '')   // Dingbats
+            .replace(/[\u{FE00}-\u{FE0F}]/gu, '')   // Variation Selectors
+            .replace(/[\u{1F1E0}-\u{1F1FF}]/gu, '') // Flags
+            // Clean up text artifacts
             .replace(/\*\*([^*]+)\*\*/g, '$1') // Clean markdown bold
             .replace(/\s+/g, ' ') // Clean multiple spaces
             .trim();

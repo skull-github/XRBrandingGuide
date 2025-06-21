@@ -634,14 +634,14 @@ function AppV2() {
                 // Try multiple methods to open the documentation
                 try {
                   // Method 1: Try to open in new tab (works in regular browsers)
-                  const newTab = window.open('./docs/index.html', '_blank');
+                  const newTab = window.open('/docs/index.html', '_blank');
                   if (!newTab) {
                     // Method 2: If popup blocked, navigate in same window
-                    window.location.href = './docs/index.html';
+                    window.location.href = '/docs/index.html';
                   }
                 } catch (e) {
                   // Method 3: Fallback navigation
-                  window.location.href = './docs/index.html';
+                  window.location.href = '/docs/index.html';
                 }
               }}
               style={{ 

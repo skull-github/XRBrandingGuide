@@ -23,11 +23,11 @@
             </div>
             <ul class="nav-menu" id="navMenu">
                 <li><a href="#project-overview" class="nav-link">Project Overview</a></li>
-                <li><a href="#quick-start" class="nav-link">🚀 🚀 Quick Start</a></li>
+                <li><a href="#quick-start" class="nav-link">🚀 Quick Start</a></li>
                 <li><a href="#development-workflow-branch-strategy" class="nav-link">Development Workflow & Branch Strategy</a></li>
                 <li><a href="#mlb-team-spot-colors" class="nav-link">MLB Team Spot Colors</a></li>
                 <li><a href="#technical-architecture" class="nav-link">Technical Architecture</a></li>
-                <li><a href="#mlb-api-endpoints-json-index" class="nav-link">🔗 🔗 MLB API Endpoints & JSON Index</a></li>
+                <li><a href="#mlb-api-endpoints-json-index" class="nav-link">🔗 MLB API Endpoints & JSON Index</a></li>
                 <li><a href="#deployment-configuration" class="nav-link">Deployment Configuration</a></li>
                 <li><a href="#recent-project-updates" class="nav-link">Recent Project Updates</a></li>
                 <li><a href="#project-stats-summary" class="nav-link">Project Stats & Summary</a></li>
@@ -59,7 +59,7 @@
 <section id="project-overview" class="section">
     <h2 class="text-title-bold">Project Overview</h2>
     <p class="text-body">The MLB XR Branding Guide is a modern React application that provides developers with easy access to official MLB branding assets, team data, and live game information. Built specifically for Extended Reality (XR) applications, it features a clean interface for browsing team assets, colors, and real-time game data.</p>
-    <h3 class="text-headline">✨ Key Features</h3>
+    <h3 class="text-headline">Key Features</h3>
     <ul>
     <li class="text-body"><strong class="text-body-bold">Official MLB spot colors</strong> for all 30 teams (official hex values)</li>
     <li class="text-body"><strong class="text-body-bold">Live game carousel</strong> with horizontal logo-vs-logo design</li>
@@ -73,7 +73,7 @@
 </section>
 
 <section id="quick-start" class="section">
-    <h2 class="text-title-bold">🚀 Quick Start</h2>
+    <h2 class="text-title-bold">Quick Start</h2>
     <h3 class="text-headline">Development</h3>
     <div class="code-block"><pre class="text-code">bash
     npm install
@@ -86,7 +86,7 @@
     <div class="code-block"><pre class="text-code">bash
     ./deploy-main.sh      # Quick deploy to main (no password)
     ./deploy-stable.sh    # Secure deploy to stable (password: 3333)</pre></div>
-    <h3 class="text-headline">📚 Documentation Site</h3>
+    <h3 class="text-headline">Documentation Site</h3>
     <div class="code-block"><pre class="text-code">bash
     # View interactive documentation
     open docs/index.html
@@ -104,21 +104,21 @@
 
 <section id="development-workflow-branch-strategy" class="section">
     <h2 class="text-title-bold">Development Workflow & Branch Strategy</h2>
-    <h3 class="text-headline">🔄 Branch Strategy</h3>
+    <h3 class="text-headline">Branch Strategy</h3>
     <h4 class="text-subheadline">MAIN Branch (Default Working Branch)</h4>
     <ul>
-    <li class="text-body">✅ <strong class="text-body-bold">Primary development branch</strong></li>
-    <li class="text-body">✅ <strong class="text-body-bold">Always work here by default</strong></li>
-    <li class="text-body">✅ <strong class="text-body-bold">All new features and changes</strong></li>
-    <li class="text-body">✅ <strong class="text-body-bold">Quick iterations and testing</strong></li>
+    <li class="text-body"><strong class="text-body-bold">Primary development branch</strong></li>
+    <li class="text-body"><strong class="text-body-bold">Always work here by default</strong></li>
+    <li class="text-body"><strong class="text-body-bold">All new features and changes</strong></li>
+    <li class="text-body"><strong class="text-body-bold">Quick iterations and testing</strong></li>
     </ul>
     <h4 class="text-subheadline">STABLE Branch (Production Branch)</h4>
     <ul>
-    <li class="text-body">🔐 <strong class="text-body-bold">Password-protected deployments only</strong></li>
-    <li class="text-body">🎯 <strong class="text-body-bold">Stable, tested features only</strong></li>
-    <li class="text-body">📦 <strong class="text-body-bold">Production-ready releases</strong></li>
+    <li class="text-body"><strong class="text-body-bold">Password-protected deployments only</strong></li>
+    <li class="text-body"><strong class="text-body-bold">Stable, tested features only</strong></li>
+    <li class="text-body"><strong class="text-body-bold">Production-ready releases</strong></li>
     </ul>
-    <h3 class="text-headline">🚀 Deployment Scripts</h3>
+    <h3 class="text-headline">Deployment Scripts</h3>
     <h4 class="text-subheadline">Quick Deploy to Main (<code class="text-code inline-code">./deploy-main.sh</code>)</h4>
     <div class="code-block"><pre class="text-code">bash
     ./deploy-main.sh</pre></div>
@@ -135,7 +135,7 @@
     <li class="text-body"><strong class="text-body-bold">Final confirmation required</strong>: <code class="text-code inline-code">yes</code></li>
     <li class="text-body"><strong class="text-body-bold">Use this for production releases only</strong></li>
     </ul>
-    <h3 class="text-headline">📋 Recommended Daily Workflow</h3>
+    <h3 class="text-headline">Recommended Daily Workflow</h3>
     <h4 class="text-subheadline">Daily Development:</h4>
     <ol>
     <li class="text-body"><strong class="text-body-bold">Work on MAIN branch</strong> (default)</li>
@@ -151,7 +151,7 @@
     <li class="text-body"><strong class="text-body-bold">Enter password</strong>: <code class="text-code inline-code">3333</code></li>
     <li class="text-body"><strong class="text-body-bold">Confirm deployment</strong>: <code class="text-code inline-code">yes</code></li>
     </ol>
-    <h3 class="text-headline">🛡️ Security Features</h3>
+    <h3 class="text-headline">Security Features</h3>
     <ul>
     <li class="text-body"><strong class="text-body-bold">Stable branch</strong>: Protected with password "3333"</li>
     <li class="text-body"><strong class="text-body-bold">Main branch</strong>: Open for development</li>
@@ -273,7 +273,7 @@
     <p class="text-body">The following components have been updated to use the official spot color mapping:</p>
     <ul>
     <li class="text-body"><code class="text-code inline-code">/src/components/MLBSchedule.jsx</code> - Schedule cards now use official spot colors</li>
-    <li class="text-body"><code class="text-code inline-code">/src/components/AnchorMenu.js</code> - Team buttons use official spot colors  </li>
+    <li class="text-body"><code class="text-code inline-code">/src/components/AnchorMenu.js</code> - Team buttons use official spot colors</li>
     <li class="text-body"><code class="text-code inline-code">/src/hooks/useTeamData.js</code> - React hooks now use the mapping</li>
     <li class="text-body"><code class="text-code inline-code">/src/App.jsx</code> - Main app components use the mapping</li>
     <li class="text-body"><code class="text-code inline-code">/src/components/GameCarousel.jsx</code> - Team game carousel uses spot colors</li>
@@ -283,7 +283,7 @@
 
 <section id="technical-architecture" class="section">
     <h2 class="text-title-bold">Technical Architecture</h2>
-    <h3 class="text-headline">📦 Core Dependencies</h3>
+    <h3 class="text-headline">Core Dependencies</h3>
     <h4 class="text-subheadline">Production (3 dependencies)</h4>
     <div class="code-block"><pre class="text-code">json
     {
@@ -304,34 +304,34 @@
       "@types/react": "^19.1.2",                 // TypeScript React types
       "@types/react-dom": "^19.1.2"              // TypeScript React DOM types
     }</pre></div>
-    <h3 class="text-headline">🌐 External APIs & Services</h3>
+    <h3 class="text-headline">External APIs & Services</h3>
     <h4 class="text-subheadline">MLB Official APIs</h4>
     <ol>
     <li class="text-body"><strong class="text-body-bold">MLB Stats API</strong> (<code class="text-code inline-code">statsapi.mlb.com</code>)</li>
     </ol>
-    <p class="text-body">   - Team rosters and player data</p>
-    <p class="text-body">   - Game schedules and live scores</p>
-    <p class="text-body">   - Season statistics and metrics</p>
+    <p class="text-body">- Team rosters and player data</p>
+    <p class="text-body">- Game schedules and live scores</p>
+    <p class="text-body">- Season statistics and metrics</p>
     <ol>
     <li class="text-body"><strong class="text-body-bold">MLB Image CDN</strong> (<code class="text-code inline-code">img.mlbstatic.com</code>)</li>
     </ol>
-    <p class="text-body">   - Official team logos (spot, cap, wordmarks)</p>
-    <p class="text-body">   - Player photos (headshots, action shots)</p>
-    <p class="text-body">   - Responsive image optimization</p>
+    <p class="text-body">- Official team logos (spot, cap, wordmarks)</p>
+    <p class="text-body">- Player photos (headshots, action shots)</p>
+    <p class="text-body">- Responsive image optimization</p>
     <ol>
     <li class="text-body"><strong class="text-body-bold">MLB Mobile Infrastructure</strong> (<code class="text-code inline-code">storage.mobile.mlbinfra.com</code>)</li>
     </ol>
-    <p class="text-body">   - Complete branding configuration</p>
-    <p class="text-body">   - MLB.TV assets and backgrounds</p>
+    <p class="text-body">- Complete branding configuration</p>
+    <p class="text-body">- MLB.TV assets and backgrounds</p>
     <ol>
     <li class="text-body"><strong class="text-body-bold">Google Sheets Integration</strong></li>
     </ol>
-    <p class="text-body">   - Team metadata and configuration</p>
-    <p class="text-body">   - CSV export for dynamic data updates</p>
+    <p class="text-body">- Team metadata and configuration</p>
+    <p class="text-body">- CSV export for dynamic data updates</p>
 </section>
 
 <section id="mlb-api-endpoints-json-index" class="section">
-    <h2 class="text-title-bold">🔗 MLB API Endpoints & JSON Index</h2>
+    <h2 class="text-title-bold">MLB API Endpoints & JSON Index</h2>
     <h3 class="text-headline">MLB Branding API</h3>
     <p class="text-body">Team branding, colors, logos, wordmarks, MLB.TV assets, and All-Star teams.</p>
     <ul>
@@ -400,7 +400,7 @@
     <li class="text-body"><strong class="text-body-bold">[WIDTH]</strong>: Image width in pixels</li>
     <li class="text-body"><strong class="text-body-bold">[VENUE_ID]</strong>: Venue ID from venues API</li>
     </ul>
-    <h3 class="text-headline">📁 Custom Module System</h3>
+    <h3 class="text-headline">Custom Module System</h3>
     <h4 class="text-subheadline">Utilities (<code class="text-code inline-code">src/utils/</code>)</h4>
     <ul>
     <li class="text-body"><strong class="text-body-bold"><code class="text-code inline-code">spotColorMapping.js</code></strong> - Official MLB team spot colors (hex values)</li>
@@ -425,7 +425,7 @@
     <li class="text-body"><strong class="text-body-bold"><code class="text-code inline-code">team-extras.json</code></strong> - Additional team metadata</li>
     <li class="text-body"><strong class="text-body-bold">Configuration files</strong> - Various JSON configurations</li>
     </ul>
-    <h3 class="text-headline">🎨 Styling & UI Architecture</h3>
+    <h3 class="text-headline">Styling & UI Architecture</h3>
     <ul>
     <li class="text-body"><strong class="text-body-bold">No CSS Framework</strong> - Pure CSS with strategic inline styles</li>
     <li class="text-body"><strong class="text-body-bold">Dark Theme</strong> - Custom MLB-inspired color palette</li>
@@ -433,7 +433,7 @@
     <li class="text-body"><strong class="text-body-bold">Responsive Design</strong> - Mobile-first approach</li>
     <li class="text-body"><strong class="text-body-bold">Component-Scoped Styles</strong> - Mix of CSS classes and React inline styles</li>
     </ul>
-    <h3 class="text-headline">🚀 Build & Deployment</h3>
+    <h3 class="text-headline">Build & Deployment</h3>
     <h4 class="text-subheadline">Build System</h4>
     <ul>
     <li class="text-body"><strong class="text-body-bold">Vite</strong> - Modern, fast bundler with HMR</li>
@@ -447,7 +447,7 @@
     <li class="text-body"><strong class="text-body-bold">SPA Configuration</strong> - Single-page app routing</li>
     <li class="text-body"><strong class="text-body-bold">Automatic Deployments</strong> - Git-based workflow</li>
     </ul>
-    <h3 class="text-headline">🔧 Development Workflow</h3>
+    <h3 class="text-headline">Development Workflow</h3>
     <h4 class="text-subheadline">Branch Strategy</h4>
     <ul>
     <li class="text-body"><strong class="text-body-bold">MAIN</strong> - Default development branch (daily work)</li>
@@ -502,7 +502,7 @@
 
 <section id="recent-project-updates" class="section">
     <h2 class="text-title-bold">Recent Project Updates</h2>
-    <h3 class="text-headline">✅ Recently Completed Features:</h3>
+    <h3 class="text-headline">Recently Completed Features:</h3>
     <ul>
     <li class="text-body"><strong class="text-body-bold">Official MLB spot colors</strong> for all teams (hex values mapped)</li>
     <li class="text-body"><strong class="text-body-bold">Horizontal carousel layout</strong> (logo-vs-logo design)</li>
@@ -513,27 +513,27 @@
     <li class="text-body"><strong class="text-body-bold">Schedule card improvements</strong> - Changed "VIEWING" to "LIVE" status</li>
     <li class="text-body"><strong class="text-body-bold">Complete spot color integration</strong> - All components updated</li>
     </ul>
-    <h3 class="text-headline">🎨 Current Team Section Layout:</h3>
+    <h3 class="text-headline">Current Team Section Layout:</h3>
     <ul>
     <li class="text-body"><strong class="text-body-bold">Live Game Context</strong>: Horizontal carousel with logo-vs-logo cards</li>
     <li class="text-body"><strong class="text-body-bold">Upcoming Games</strong>: Clean vertical list format</li>
     <li class="text-body"><strong class="text-body-bold">Official spot colors</strong> used throughout all team displays</li>
     <li class="text-body"><strong class="text-body-bold">Responsive design</strong> for all screen sizes</li>
     </ul>
-    <h3 class="text-headline">🛡️ Security & Workflow:</h3>
+    <h3 class="text-headline">Security & Workflow:</h3>
     <ul>
     <li class="text-body"><strong class="text-body-bold">Password-protected stable deployments</strong> (password: "3333")</li>
     <li class="text-body"><strong class="text-body-bold">Main branch</strong> for daily development (no password)</li>
     <li class="text-body"><strong class="text-body-bold">All deployments logged</strong> with timestamps</li>
     <li class="text-body"><strong class="text-body-bold">Secure API integration</strong> with proper error handling</li>
     </ul>
-    <h3 class="text-headline">🎵 Audio System</h3>
+    <h3 class="text-headline">Audio System</h3>
     <ul>
     <li class="text-body"><strong class="text-body-bold">Web Audio API</strong> - Native browser audio capabilities</li>
     <li class="text-body"><strong class="text-body-bold">Interactive Sounds</strong> - Hover and click feedback</li>
     <li class="text-body"><strong class="text-body-bold">User Gesture Activation</strong> - Proper audio context management</li>
     </ul>
-    <h3 class="text-headline">📊 Performance Features</h3>
+    <h3 class="text-headline">Performance Features</h3>
     <ul>
     <li class="text-body"><strong class="text-body-bold">Lazy Loading</strong> - Components loaded on demand</li>
     <li class="text-body"><strong class="text-body-bold">Image Optimization</strong> - MLB CDN with responsive sizing</li>
@@ -558,17 +558,17 @@
 </section>
 
 <section id="interactive-documentation" class="section">
-    <h2 class="text-title-bold">📚 Interactive Documentation</h2>
+    <h2 class="text-title-bold">Interactive Documentation</h2>
     <p class="text-body">This project includes a comprehensive interactive documentation site that automatically syncs with this README:</p>
     <h3 class="text-headline">Features</h3>
     <ul>
-    <li class="text-body"><strong class="text-body-bold">📱 Responsive Design</strong> - Works on all devices</li>
-    <li class="text-body"><strong class="text-body-bold">🎨 Interactive Team Colors</strong> - Clickable team color cards with details</li>
-    <li class="text-body"><strong class="text-body-bold">🔍 Smooth Navigation</strong> - Sidebar with smooth scrolling</li>
-    <li class="text-body"><strong class="text-body-bold">🌙 Dark Theme</strong> - MLB-inspired design</li>
-    <li class="text-body"><strong class="text-body-bold">🔄 Auto-Sync</strong> - Updates when README changes</li>
-    <li class="text-body"><strong class="text-body-bold">⚡ Fast & Accessible</strong> - Optimized performance</li>
-    <li class="text-body"><strong class="text-body-bold">📱 PWA Ready</strong> - Offline functionality</li>
+    <li class="text-body"><strong class="text-body-bold"> Responsive Design</strong> - Works on all devices</li>
+    <li class="text-body"><strong class="text-body-bold"> Interactive Team Colors</strong> - Clickable team color cards with details</li>
+    <li class="text-body"><strong class="text-body-bold"> Smooth Navigation</strong> - Sidebar with smooth scrolling</li>
+    <li class="text-body"><strong class="text-body-bold"> Dark Theme</strong> - MLB-inspired design</li>
+    <li class="text-body"><strong class="text-body-bold"> Auto-Sync</strong> - Updates when README changes</li>
+    <li class="text-body"><strong class="text-body-bold"> Fast & Accessible</strong> - Optimized performance</li>
+    <li class="text-body"><strong class="text-body-bold"> PWA Ready</strong> - Offline functionality</li>
     </ul>
     <h3 class="text-headline">Access Documentation</h3>
     <ul>
