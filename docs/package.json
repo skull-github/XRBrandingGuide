@@ -1,0 +1,21 @@
+{
+  "name": "mlb-xr-branding-guide-docs",
+  "version": "1.0.0",
+  "description": "Auto-syncing documentation site for MLB XR Branding Guide",
+  "scripts": {
+    "sync": "node sync-readme.js",
+    "watch": "node sync-readme.js --watch",
+    "serve": "python3 -m http.server 8080",
+    "build": "npm run sync",
+    "dev": "npm run sync && npm run serve"
+  },
+  "keywords": [
+    "mlb",
+    "documentation",
+    "xr",
+    "branding",
+    "auto-sync"
+  ],
+  "author": "MLB XR Team",
+  "license": "MIT"
+}
