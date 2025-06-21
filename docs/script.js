@@ -20,46 +20,46 @@ class DocumentationApp {
         // MLB Team Colors Data (synced from spot color mapping)
         this.teamColors = {
             // American League East
-            110: { name: 'Baltimore Orioles', color: '#df4601', division: 'AL East' },
-            111: { name: 'Boston Red Sox', color: '#0d2b56', division: 'AL East' },
-            147: { name: 'New York Yankees', color: '#132448', division: 'AL East' },
-            139: { name: 'Tampa Bay Rays', color: '#8fbce6', division: 'AL East' },
-            141: { name: 'Toronto Blue Jays', color: '#134a8e', division: 'AL East' },
+            110: { name: 'Baltimore Orioles', color: '#df4601', division: 'AL East', teamUrl: 'https://www.mlb.com/baltimore-orioles', regVenue: 'Oriole Park at Camden Yards' },
+            111: { name: 'Boston Red Sox', color: '#0d2b56', division: 'AL East', teamUrl: 'https://www.mlb.com/boston-red-sox', regVenue: 'Fenway Park' },
+            147: { name: 'New York Yankees', color: '#132448', division: 'AL East', teamUrl: 'https://www.mlb.com/new-york-yankees', regVenue: 'Yankee Stadium' },
+            139: { name: 'Tampa Bay Rays', color: '#8fbce6', division: 'AL East', teamUrl: 'https://www.mlb.com/tampa-bay-rays', regVenue: 'Tropicana Field' },
+            141: { name: 'Toronto Blue Jays', color: '#134a8e', division: 'AL East', teamUrl: 'https://www.mlb.com/toronto-blue-jays', regVenue: 'Rogers Centre' },
             
             // American League Central
-            145: { name: 'Chicago White Sox', color: '#333333', division: 'AL Central' },
-            114: { name: 'Cleveland Guardians', color: '#002b5c', division: 'AL Central' },
-            116: { name: 'Detroit Tigers', color: '#0c2c56', division: 'AL Central' },
-            118: { name: 'Kansas City Royals', color: '#004687', division: 'AL Central' },
-            142: { name: 'Minnesota Twins', color: '#002b5c', division: 'AL Central' },
+            145: { name: 'Chicago White Sox', color: '#333333', division: 'AL Central', teamUrl: 'https://www.mlb.com/chicago-white-sox', regVenue: 'Guaranteed Rate Field' },
+            114: { name: 'Cleveland Guardians', color: '#002b5c', division: 'AL Central', teamUrl: 'https://www.mlb.com/cleveland-guardians', regVenue: 'Progressive Field' },
+            116: { name: 'Detroit Tigers', color: '#0c2c56', division: 'AL Central', teamUrl: 'https://www.mlb.com/detroit-tigers', regVenue: 'Comerica Park' },
+            118: { name: 'Kansas City Royals', color: '#004687', division: 'AL Central', teamUrl: 'https://www.mlb.com/kansas-city-royals', regVenue: 'Kauffman Stadium' },
+            142: { name: 'Minnesota Twins', color: '#002b5c', division: 'AL Central', teamUrl: 'https://www.mlb.com/minnesota-twins', regVenue: 'Target Field' },
             
             // American League West
-            117: { name: 'Houston Astros', color: '#eb6e1f', division: 'AL West' },
-            108: { name: 'Los Angeles Angels', color: '#862633', division: 'AL West' },
-            133: { name: 'Oakland Athletics', color: '#003831', division: 'AL West' },
-            136: { name: 'Seattle Mariners', color: '#0c2c56', division: 'AL West' },
-            140: { name: 'Texas Rangers', color: '#003278', division: 'AL West' },
+            117: { name: 'Houston Astros', color: '#eb6e1f', division: 'AL West', teamUrl: 'https://www.mlb.com/houston-astros', regVenue: 'Minute Maid Park' },
+            108: { name: 'Los Angeles Angels', color: '#862633', division: 'AL West', teamUrl: 'https://www.mlb.com/los-angeles-angels', regVenue: 'Angel Stadium' },
+            133: { name: 'Oakland Athletics', color: '#003831', division: 'AL West', teamUrl: 'https://www.mlb.com/oakland-athletics', regVenue: 'Oakland Coliseum' },
+            136: { name: 'Seattle Mariners', color: '#0c2c56', division: 'AL West', teamUrl: 'https://www.mlb.com/seattle-mariners', regVenue: 'T-Mobile Park' },
+            140: { name: 'Texas Rangers', color: '#003278', division: 'AL West', teamUrl: 'https://www.mlb.com/texas-rangers', regVenue: 'Globe Life Field' },
             
             // National League East
-            144: { name: 'Atlanta Braves', color: '#0c2340', division: 'NL East' },
-            146: { name: 'Miami Marlins', color: '#00a3e0', division: 'NL East' },
-            121: { name: 'New York Mets', color: '#002d72', division: 'NL East' },
-            143: { name: 'Philadelphia Phillies', color: '#e81828', division: 'NL East' },
-            120: { name: 'Washington Nationals', color: '#ab0003', division: 'NL East' },
+            144: { name: 'Atlanta Braves', color: '#0c2340', division: 'NL East', teamUrl: 'https://www.mlb.com/atlanta-braves', regVenue: 'Truist Park' },
+            146: { name: 'Miami Marlins', color: '#00a3e0', division: 'NL East', teamUrl: 'https://www.mlb.com/miami-marlins', regVenue: 'loanDepot park' },
+            121: { name: 'New York Mets', color: '#002d72', division: 'NL East', teamUrl: 'https://www.mlb.com/new-york-mets', regVenue: 'Citi Field' },
+            143: { name: 'Philadelphia Phillies', color: '#e81828', division: 'NL East', teamUrl: 'https://www.mlb.com/philadelphia-phillies', regVenue: 'Citizens Bank Park' },
+            120: { name: 'Washington Nationals', color: '#ab0003', division: 'NL East', teamUrl: 'https://www.mlb.com/washington-nationals', regVenue: 'Nationals Park' },
             
             // National League Central
-            112: { name: 'Chicago Cubs', color: '#0e3386', division: 'NL Central' },
-            113: { name: 'Cincinnati Reds', color: '#c6011f', division: 'NL Central' },
-            158: { name: 'Milwaukee Brewers', color: '#13294b', division: 'NL Central' },
-            134: { name: 'Pittsburgh Pirates', color: '#333333', division: 'NL Central' },
-            138: { name: 'St. Louis Cardinals', color: '#be0a14', division: 'NL Central' },
+            112: { name: 'Chicago Cubs', color: '#0e3386', division: 'NL Central', teamUrl: 'https://www.mlb.com/chicago-cubs', regVenue: 'Wrigley Field' },
+            113: { name: 'Cincinnati Reds', color: '#c6011f', division: 'NL Central', teamUrl: 'https://www.mlb.com/cincinnati-reds', regVenue: 'Great American Ball Park' },
+            158: { name: 'Milwaukee Brewers', color: '#13294b', division: 'NL Central', teamUrl: 'https://www.mlb.com/milwaukee-brewers', regVenue: 'American Family Field' },
+            134: { name: 'Pittsburgh Pirates', color: '#333333', division: 'NL Central', teamUrl: 'https://www.mlb.com/pittsburgh-pirates', regVenue: 'PNC Park' },
+            138: { name: 'St. Louis Cardinals', color: '#be0a14', division: 'NL Central', teamUrl: 'https://www.mlb.com/st-louis-cardinals', regVenue: 'Busch Stadium' },
             
             // National League West
-            109: { name: 'Arizona Diamondbacks', color: '#aa182c', division: 'NL West' },
-            115: { name: 'Colorado Rockies', color: '#33006f', division: 'NL West' },
-            119: { name: 'Los Angeles Dodgers', color: '#005a9c', division: 'NL West' },
-            135: { name: 'San Diego Padres', color: '#ffc425', division: 'NL West' },
-            137: { name: 'San Francisco Giants', color: '#fd5a1e', division: 'NL West' },
+            109: { name: 'Arizona Diamondbacks', color: '#aa182c', division: 'NL West', teamUrl: 'https://www.mlb.com/arizona-diamondbacks', regVenue: 'Chase Field' },
+            115: { name: 'Colorado Rockies', color: '#33006f', division: 'NL West', teamUrl: 'https://www.mlb.com/colorado-rockies', regVenue: 'Coors Field' },
+            119: { name: 'Los Angeles Dodgers', color: '#005a9c', division: 'NL West', teamUrl: 'https://www.mlb.com/los-angeles-dodgers', regVenue: 'Dodger Stadium' },
+            135: { name: 'San Diego Padres', color: '#ffc425', division: 'NL West', teamUrl: 'https://www.mlb.com/san-diego-padres', regVenue: 'Petco Park' },
+            137: { name: 'San Francisco Giants', color: '#fd5a1e', division: 'NL West', teamUrl: 'https://www.mlb.com/san-francisco-giants', regVenue: 'Oracle Park' },
             
             // Additional Teams
             159: { name: 'Team 159', color: '#bc0022', division: 'Additional' },
@@ -532,12 +532,26 @@ getAllTeamSpotColors(); // Array of {teamId, spotColor} objects</pre>
     showColorModal(teamId, teamName, color) {
         const modal = this.colorModal;
         const rgb = this.hexToRgb(color);
+        const team = this.teamColors[teamId] || {};
         
         document.getElementById('modalTeamName').textContent = teamName;
         document.getElementById('modalColorPreview').style.backgroundColor = color;
         document.getElementById('modalHex').textContent = color;
         document.getElementById('modalRgb').textContent = `rgb(${rgb.r}, ${rgb.g}, ${rgb.b})`;
         document.getElementById('modalTeamId').textContent = teamId;
+        document.getElementById('modalDivision').textContent = team.division || 'Unknown';
+        document.getElementById('modalVenue').textContent = team.regVenue || 'Not available';
+        
+        const teamUrlElement = document.getElementById('modalTeamUrl');
+        if (team.teamUrl) {
+            teamUrlElement.href = team.teamUrl;
+            teamUrlElement.style.display = 'inline';
+            teamUrlElement.style.color = 'var(--secondary-color)';
+            teamUrlElement.style.textDecoration = 'underline';
+        } else {
+            teamUrlElement.style.display = 'none';
+        }
+        
         document.getElementById('modalUsageCode').textContent = 
             `import { getTeamSpotColor } from './src/utils/spotColorMapping';\n\nconst ${teamName.replace(/\s+/g, '').toLowerCase()}Color = getTeamSpotColor(${teamId}); // ${color}`;
         

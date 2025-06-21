@@ -716,10 +716,43 @@ function AppV2() {
         {/* Footer with version and legal line */}
         <footer style={{ marginTop: '3rem', padding: '2rem', textAlign: 'center', color: '#888', fontSize: 14, borderTop: '1px solid #333' }}>
           <p style={{ margin: '0 0 1rem 0', fontWeight: 600 }}>MLB XR Branding Guide v1.6</p>
-          <p style={{ margin: 0, lineHeight: 1.5 }}>
+          <p style={{ margin: '0 0 1rem 0', lineHeight: 1.5 }}>
             This application is for internal use only. All MLB trademarks, logos, and content are property of Major League Baseball.
             Player images and team assets are sourced from MLB's official APIs and CDN.
           </p>
+          <div style={{ marginTop: '1.5rem', padding: '1rem', background: '#1a1a1a', borderRadius: '8px', border: '1px solid #333' }}>
+            <p style={{ margin: '0 0 0.5rem 0', color: '#4fd1c5', fontWeight: 600, fontSize: '15px' }}>📚 Documentation</p>
+            <p style={{ margin: '0 0 1rem 0', color: '#ccc', fontSize: '13px' }}>
+              View the complete interactive documentation site with team colors, usage examples, and development guides.
+            </p>
+            <a 
+              href="./docs/index.html" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              style={{ 
+                display: 'inline-block',
+                padding: '10px 20px', 
+                background: 'linear-gradient(135deg, #132448, #005A9C)', 
+                color: '#fff', 
+                textDecoration: 'none', 
+                borderRadius: '6px', 
+                fontWeight: 600,
+                fontSize: '14px',
+                transition: 'all 0.2s ease',
+                boxShadow: '0 2px 8px rgba(0, 0, 0, 0.3)'
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.transform = 'translateY(-1px)';
+                e.target.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.4)';
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.transform = 'translateY(0)';
+                e.target.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.3)';
+              }}
+            >
+              🚀 Open Documentation Site
+            </a>
+          </div>
         </footer>
       </div>
     );

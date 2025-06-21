@@ -109,6 +109,19 @@ class ReadmeToHtmlSync {
         console.log('🎨 Loading team colors...');
         
         const spotColorPath = path.join(this.rootDir, 'src', 'utils', 'spotColorMapping.js');
+        const teamExtrasPath = path.join(this.rootDir, 'src', 'team-extras.json');
+        
+        // Load team extras (venue info, URLs)
+        let teamExtras = {};
+        if (fs.existsSync(teamExtrasPath)) {
+            try {
+                const teamExtrasContent = fs.readFileSync(teamExtrasPath, 'utf8');
+                teamExtras = JSON.parse(teamExtrasContent);
+                console.log(`📋 Loaded team extras for ${Object.keys(teamExtras).length} teams`);
+            } catch (error) {
+                console.warn('⚠️  Could not parse team extras:', error.message);
+            }
+        }
         
         if (fs.existsSync(spotColorPath)) {
             try {
@@ -122,6 +135,8 @@ class ReadmeToHtmlSync {
                         const [, teamId, color] = match.match(/(\d+):\s*['"`]([#\w]+)['"`]/);
                         this.teamColors[teamId] = {
                             color,
+                            // Add team extras if available
+                            ...(teamExtras[teamId] || {}),
                             // You could enhance this to extract team names from other files
                             name: `Team ${teamId}`
                         };
