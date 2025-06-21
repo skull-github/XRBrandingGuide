@@ -3,7 +3,6 @@ import './App.css'
 import teamExtras from './team-extras.json'
 import Papa from 'papaparse';
 import { MLBSchedule } from './components/MLBSchedule.jsx';
-import { GameCarousel } from './components/GameCarousel.jsx';
 import { TeamGameCarousel } from './components/GameCarousel.jsx';
 import { getTeamSpotColor } from './utils/spotColorMapping';
 // import SpotColorWithHex from "./AppV3.jsx";
@@ -532,9 +531,6 @@ function AppV2() {
         
         {/* MLB Schedule below anchor menu */}
         <MLBSchedule />
-        
-        {/* Game Context Carousel */}
-        <GameCarousel />
         
         {/* Teams organized by league and division */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '40px', width: '100%', marginBottom: '3rem', alignItems: 'flex-start' }}>
@@ -1315,7 +1311,7 @@ function TeamCard({ team, opts, selectedPlayerId, setSelectedPlayers, colorPrior
       {revealed && (
         <div style={{ marginTop: 18, width: '100%' }}>
           {/* Team Game Carousel - Replaces the old Live Game Context + Team Schedule layout */}
-          <TeamGameCarousel teamId={team.teamID} teamName={team.teamName} />
+          <TeamGameCarousel teamId={team.teamID} teamName={team.clubFullName} />
           
           <h2 style={{ fontWeight: 800, fontSize: 24, margin: '1.5rem 0 0.5rem 0', color: '#4fd1c5', letterSpacing: 1, textAlign: 'left' }}>Team Roster</h2>
           {/* Player dropdown and card (only for regular teams, now below team name) */}
