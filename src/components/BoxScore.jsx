@@ -16,7 +16,10 @@ export function BoxScore({ gamePk, onClose, isVisible }) {
 
   useEffect(() => {
     if (gamePk && isVisible) {
+      setBoxScoreData(null); // Reset data when opening or changing game
       fetchBoxScore();
+    } else {
+      setBoxScoreData(null); // Clear data if closed
     }
   }, [gamePk, isVisible]);
 
@@ -471,7 +474,7 @@ export function BoxScore({ gamePk, onClose, isVisible }) {
             </div>
           )}
 
-          {boxScoreData && !loading && !error && (
+          {boxScoreData && !loading && !error && boxScoreData.teams && boxScoreData.teams.away && boxScoreData.teams.home ? (
             <div className="boxscore-data">
               {/* Team Selection Buttons */}
               <div className="team-tabs">
@@ -507,7 +510,7 @@ export function BoxScore({ gamePk, onClose, isVisible }) {
 
               {/* Team Stats */}
               <div className="team-stats">
-                {activeTab === 'away' && (
+                {activeTab === 'away' && boxScoreData.teams.away && (
                   <div className="team-section">
                     <div className="stats-section">
                       <div className="section-header">
@@ -540,7 +543,7 @@ export function BoxScore({ gamePk, onClose, isVisible }) {
                   </div>
                 )}
 
-                {activeTab === 'home' && (
+                {activeTab === 'home' && boxScoreData.teams.home && (
                   <div className="team-section">
                     <div className="stats-section">
                       <div className="section-header">
@@ -589,6 +592,11 @@ export function BoxScore({ gamePk, onClose, isVisible }) {
                 </div>
               )}
             </div>
+          ) : null}
+
+          {/* Fallback if no data is available after loading */}
+          {!loading && !error && (!boxScoreData || !boxScoreData.teams) && (
+            <div className="no-data">No box score data available for this game.</div>
           )}
         </div>
       </div>
