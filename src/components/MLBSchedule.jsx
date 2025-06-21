@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { getTeamSpotColor } from '../utils/spotColorMapping';
+import { BoxScore } from './BoxScore.jsx';
 
 export function MLBSchedule() {
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -8,6 +9,8 @@ export function MLBSchedule() {
   const [standings, setStandings] = useState([]);
   const [loading, setLoading] = useState(false);
   const [showCalendar, setShowCalendar] = useState(false);
+  const [selectedGamePk, setSelectedGamePk] = useState(null);
+  const [showBoxScore, setShowBoxScore] = useState(false);
 
   // Fetch team branding data and standings on component mount
   useEffect(() => {
@@ -416,6 +419,10 @@ export function MLBSchedule() {
                   cursor: 'pointer',
                   transition: 'all 0.2s ease'
                 }}
+                onClick={() => {
+                  setSelectedGamePk(game.gamePk);
+                  setShowBoxScore(true);
+                }}
                 onMouseEnter={(e) => {
                   const card = e.currentTarget.querySelector('.game-card');
                   card.style.transform = 'translateY(-2px)';
@@ -590,6 +597,16 @@ export function MLBSchedule() {
           })}
         </div>
       )}
+
+      {/* Box Score Overlay */}
+      <BoxScore 
+        gamePk={selectedGamePk}
+        isVisible={showBoxScore}
+        onClose={() => {
+          setShowBoxScore(false);
+          setSelectedGamePk(null);
+        }}
+      />
     </div>
   );
 }
