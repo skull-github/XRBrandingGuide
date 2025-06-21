@@ -1,5 +1,8 @@
-/* Typography System - Imported via HTML link tag */
-/* @import url('typography.css'); */
+/*
+ * MLB Docs Styles
+ * NOTE: Use global color and font variables from src/index.css for all MLB branding colors.
+ *       Remove or override local color variables with global ones for consistency.
+ */
 
 /* Reset and Base Styles */
 * {
@@ -9,25 +12,8 @@
 }
 
 :root {
-    /* MLB-inspired Color Palette */
-    --primary-color: #132448;
-    --secondary-color: #005A9C;
-    --accent-color: #eb6e1f;
-    --success-color: #28a745;
-    --warning-color: #ffc107;
-    --danger-color: #dc3545;
-    --info-color: #17a2b8;
-    
-    /* Neutral Colors */
-    --dark-bg: #0d1117;
-    --darker-bg: #010409;
-    --card-bg: #21262d;
-    --border-color: #30363d;
-    --text-primary: #f0f6fc;
-    --text-secondary: #8b949e;
-    --text-muted: #656d76;
-    
-    /* Typography */
+    /* Use MLB XR System Colors from src/index.css for all MLB branding */
+    /* Example: color: var(--mlb-red-strike); */
     --font-family: 'MLB HEX Franklin', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     --font-size-xs: 0.75rem;
     --font-size-sm: 0.875rem;
@@ -38,7 +24,6 @@
     --font-size-3xl: 1.875rem;
     --font-size-4xl: 2.25rem;
     
-    /* Spacing */
     --spacing-xs: 0.25rem;
     --spacing-sm: 0.5rem;
     --spacing-md: 1rem;
@@ -46,21 +31,33 @@
     --spacing-xl: 2rem;
     --spacing-2xl: 3rem;
     
-    /* Shadows */
     --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.12);
     --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.15);
     --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.25);
     
-    /* Border Radius */
     --radius-sm: 0.25rem;
     --radius-md: 0.5rem;
     --radius-lg: 0.75rem;
     --radius-xl: 1rem;
     
-    /* Transitions */
     --transition-fast: 0.15s ease;
     --transition-base: 0.25s ease;
     --transition-slow: 0.35s ease;
+    /* MLB Color overrides for docs */
+    --primary-color: var(--mlb-navy);
+    --secondary-color: var(--mlb-red-strike);
+    --accent-color: var(--mlb-bright-orange);
+    --success-color: var(--mlb-bright-green-foul-ball);
+    --warning-color: var(--mlb-yellow);
+    --danger-color: var(--mlb-rust);
+    --info-color: var(--mlb-blueprint);
+    --dark-bg: var(--mlb-dark-cool-grey);
+    --darker-bg: var(--mlb-black);
+    --card-bg: var(--mlb-med-cool-grey);
+    --border-color: var(--mlb-light-cool-grey);
+    --text-primary: var(--mlb-white);
+    --text-secondary: var(--mlb-light-grey);
+    --text-muted: var(--mlb-med-grey);
 }
 
 body {

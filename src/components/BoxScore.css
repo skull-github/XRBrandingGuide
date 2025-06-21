@@ -1,4 +1,8 @@
-/* MLB BoxScore Overlay Styles - Dark Theme Matching Design */
+/*
+ * MLB BoxScore Overlay Styles - Dark Theme Matching Design
+ * NOTE: All color variables and font-face declarations are now in src/index.css for global use.
+ *       Do not duplicate :root or font-face here. Use var(--mlb-color-name) for colors.
+ */
 
 .boxscore-overlay {
   position: fixed;

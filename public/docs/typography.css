@@ -1,3 +1,8 @@
+/*
+ * MLB Typography System
+ * NOTE: Font-face declarations are centralized here for all modules. Use font-family from global variables in src/index.css.
+ */
+
 /* MLB HEX Franklin Font Declarations */
 @font-face {
     font-family: 'MLB HEX Franklin';

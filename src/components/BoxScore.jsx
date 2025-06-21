@@ -1,22 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { getTeamSpotColor } from '../utils/spotColorMapping';
+import './BoxScore.css';
+import iconScoreboard from '../assets/icons/icon_scoreboard.svg';
+import iconClose from '../assets/icons/icon_close.svg';
+import iconTimer from '../assets/icons/icon_timer.svg';
+import iconAlert from '../assets/icons/icon_alert_solid.svg';
+import iconInfo from '../assets/icons/icon_info_outline.svg';
 
 export function BoxScore({ gamePk, onClose, isVisible }) {
   const [boxScoreData, setBoxScoreData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [activeTab, setActiveTab] = useState('away'); // 'away' or 'home'
+  const [activeTab, setActiveTab] = useState('away');
   const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-    
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
 
   useEffect(() => {
     if (gamePk && isVisible) {
@@ -24,12 +20,20 @@ export function BoxScore({ gamePk, onClose, isVisible }) {
     }
   }, [gamePk, isVisible]);
 
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
   const fetchBoxScore = async () => {
     setLoading(true);
     setError(null);
     
     try {
-      // Fetch box score data from MLB API
       const response = await fetch(
         `https://statsapi.mlb.com/api/v1/game/${gamePk}/boxscore`
       );
@@ -39,6 +43,7 @@ export function BoxScore({ gamePk, onClose, isVisible }) {
       }
       
       const data = await response.json();
+      console.log('BoxScore API Response:', data); // Debug log
       setBoxScoreData(data);
     } catch (err) {
       setError(err.message);
@@ -49,7 +54,7 @@ export function BoxScore({ gamePk, onClose, isVisible }) {
   };
 
   const getTeamSpotLogo = (teamId) => {
-    return `https://img.mlbstatic.com/mlb-photos/image/upload/w_40,f_png,q_auto/v1/team/${teamId}/logo/spot/current`;
+    return `https://img.mlbstatic.com/mlb-photos/image/upload/w_120,f_png,q_auto/v1/team/${teamId}/logo/spot/current`;
   };
 
   const formatPlayerName = (player) => {
@@ -64,9 +69,7 @@ export function BoxScore({ gamePk, onClose, isVisible }) {
 
   const formatBattingStats = (stats) => {
     if (!stats || !stats.batting) {
-      return {
-        ab: 0, r: 0, h: 0, rbi: 0, bb: 0, so: 0, k: 0, lob: 0, avg: '.000', ops: '.000'
-      };
+      return { ab: 0, r: 0, h: 0, rbi: 0, bb: 0, so: 0, avg: '.000', ops: '.000' };
     }
     
     const batting = stats.batting;
@@ -86,9 +89,7 @@ export function BoxScore({ gamePk, onClose, isVisible }) {
 
   const formatPitchingStats = (stats) => {
     if (!stats || !stats.pitching) {
-      return {
-        ip: '0.0', h: 0, r: 0, er: 0, bb: 0, so: 0, hr: 0, whip: '0.00', era: '0.00'
-      };
+      return { ip: '0.0', h: 0, r: 0, er: 0, bb: 0, so: 0, hr: 0, whip: '0.00', era: '0.00' };
     }
     
     const pitching = stats.pitching;
@@ -105,475 +106,319 @@ export function BoxScore({ gamePk, onClose, isVisible }) {
     };
   };
 
-  const formatBenchStats = (stats) => {
-    if (!stats || !stats.batting) {
-      return {
-        avg: '.000', gp: 0, r: 0, h: 0, hr: 0, rbi: 0, sb: 0
-      };
+  const renderBattingTable = (batters, teamData) => {
+    if (!batters || batters.length === 0) {
+      return <div className="no-data">No batting data available</div>;
     }
-    
-    const batting = stats.batting;
-    return {
-      avg: batting.avg || '.000',
-      gp: batting.gamesPlayed || 0,
-      r: batting.runs || 0,
-      h: batting.hits || 0,
-      hr: batting.homeRuns || 0,
-      rbi: batting.rbi || 0,
-      sb: batting.stolenBases || 0
-    };
+
+    return (
+      <div className="stats-table-container">
+        <table className="stats-table">
+          <thead>
+            <tr>
+              <th className="name-column">First and Last Name</th>
+              <th className="pos-column">POS</th>
+              <th>AB</th>
+              <th>R</th>
+              <th>H</th>
+              <th>RBI</th>
+              <th>BB</th>
+              <th>SO</th>
+              <th>K</th>
+              <th>LOB</th>
+              <th>AVG</th>
+              <th>OPS</th>
+              <th className="lineup-column">LINEUP</th>
+            </tr>
+          </thead>
+          <tbody>
+            {batters.map((player, index) => {
+              const stats = formatBattingStats(player.stats);
+              return (
+                <tr key={`${player.person?.id || index}`}>
+                  <td className="name-cell">{formatPlayerName(player)}</td>
+                  <td className="pos-cell">{formatPosition(player.position)}</td>
+                  <td>{stats.ab}</td>
+                  <td>{stats.r}</td>
+                  <td>{stats.h}</td>
+                  <td>{stats.rbi}</td>
+                  <td>{stats.bb}</td>
+                  <td>{stats.so}</td>
+                  <td>{stats.k}</td>
+                  <td>{stats.lob}</td>
+                  <td>{stats.avg}</td>
+                  <td>{stats.ops}</td>
+                  <td className="lineup-cell">{player.battingOrder || (index + 1)}</td>
+                </tr>
+              );
+            })}
+          </tbody>
+          {teamData?.teamStats?.batting && (
+            <tfoot>
+              <tr className="totals-row">
+                <td className="totals-label"><strong>TOTALS</strong></td>
+                <td></td>
+                <td><strong>{teamData.teamStats.batting.atBats || 0}</strong></td>
+                <td><strong>{teamData.teamStats.batting.runs || 0}</strong></td>
+                <td><strong>{teamData.teamStats.batting.hits || 0}</strong></td>
+                <td><strong>{teamData.teamStats.batting.rbi || 0}</strong></td>
+                <td><strong>{teamData.teamStats.batting.baseOnBalls || 0}</strong></td>
+                <td><strong>{teamData.teamStats.batting.strikeOuts || 0}</strong></td>
+                <td><strong>{teamData.teamStats.batting.strikeOuts || 0}</strong></td>
+                <td><strong>{teamData.teamStats.batting.leftOnBase || 0}</strong></td>
+                <td><strong>{teamData.teamStats.batting.avg || '.000'}</strong></td>
+                <td><strong>{teamData.teamStats.batting.ops || '.000'}</strong></td>
+                <td></td>
+              </tr>
+            </tfoot>
+          )}
+        </table>
+      </div>
+    );
   };
 
-  const formatBullpenStats = (stats) => {
-    if (!stats || !stats.pitching) {
-      return {
-        era: '0.00', ip: '0.0', h: 0, bb: 0, so: 0
-      };
+  const renderPitchingTable = (pitchers, teamData) => {
+    if (!pitchers || pitchers.length === 0) {
+      return <div className="no-data">No pitching data available</div>;
     }
+
+    return (
+      <div className="stats-table-container">
+        <table className="stats-table">
+          <thead>
+            <tr>
+              <th className="name-column">First and Last Name</th>
+              <th className="pos-column">RH</th>
+              <th>IP</th>
+              <th>H</th>
+              <th>R</th>
+              <th>ER</th>
+              <th>BB</th>
+              <th>SO</th>
+              <th>HR</th>
+              <th></th>
+              <th>WHIP</th>
+              <th>ERA</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {pitchers.map((player, index) => {
+              const stats = formatPitchingStats(player.stats);
+              const pitchHand = player.person?.pitchHand?.code || 'R';
+              return (
+                <tr key={`${player.person?.id || index}`}>
+                  <td className="name-cell">{formatPlayerName(player)}</td>
+                  <td className="pos-cell">{pitchHand}H</td>
+                  <td>{stats.ip}</td>
+                  <td>{stats.h}</td>
+                  <td>{stats.r}</td>
+                  <td>{stats.er}</td>
+                  <td>{stats.bb}</td>
+                  <td>{stats.so}</td>
+                  <td>{stats.hr}</td>
+                  <td></td>
+                  <td>{stats.whip}</td>
+                  <td>{stats.era}</td>
+                  <td></td>
+                </tr>
+              );
+            })}
+          </tbody>
+          {teamData?.teamStats?.pitching && (
+            <tfoot>
+              <tr className="totals-row">
+                <td className="totals-label"><strong>TOTALS</strong></td>
+                <td></td>
+                <td><strong>{teamData.teamStats.pitching.inningsPitched || '0.0'}</strong></td>
+                <td><strong>{teamData.teamStats.pitching.hits || 0}</strong></td>
+                <td><strong>{teamData.teamStats.pitching.runs || 0}</strong></td>
+                <td><strong>{teamData.teamStats.pitching.earnedRuns || 0}</strong></td>
+                <td><strong>{teamData.teamStats.pitching.baseOnBalls || 0}</strong></td>
+                <td><strong>{teamData.teamStats.pitching.strikeOuts || 0}</strong></td>
+                <td><strong>{teamData.teamStats.pitching.homeRuns || 0}</strong></td>
+                <td></td>
+                <td><strong>{teamData.teamStats.pitching.whip || '0.00'}</strong></td>
+                <td><strong>{teamData.teamStats.pitching.era || '0.00'}</strong></td>
+                <td></td>
+              </tr>
+            </tfoot>
+          )}
+        </table>
+      </div>
+    );
+  };
+
+  const renderBenchTable = (bench) => {
+    if (!bench || bench.length === 0) {
+      return null;
+    }
+
+    return (
+      <div className="stats-table-container">
+        <table className="stats-table">
+          <thead>
+            <tr>
+              <th className="name-column">First and Last Name</th>
+              <th className="pos-column">RH</th>
+              <th>AVG</th>
+              <th>GP</th>
+              <th>R</th>
+              <th>H</th>
+              <th>HR</th>
+              <th>RBI</th>
+              <th>SB</th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {bench.map((player, index) => {
+              const seasonStats = player.seasonStats?.batting || {};
+              const batHand = player.person?.batSide?.code || 'R';
+              return (
+                <tr key={`bench-${player.person?.id || index}`}>
+                  <td className="name-cell">{formatPlayerName(player)}</td>
+                  <td className="pos-cell">{batHand}H</td>
+                  <td>{seasonStats.avg || '.000'}</td>
+                  <td>{seasonStats.gamesPlayed || 0}</td>
+                  <td>{seasonStats.runs || 0}</td>
+                  <td>{seasonStats.hits || 0}</td>
+                  <td>{seasonStats.homeRuns || 0}</td>
+                  <td>{seasonStats.rbi || 0}</td>
+                  <td>{seasonStats.stolenBases || 0}</td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+    );
+  };
+
+  const renderBullpenTable = (bullpen) => {
+    if (!bullpen || bullpen.length === 0) {
+      return null;
+    }
+
+    return (
+      <div className="stats-table-container">
+        <table className="stats-table">
+          <thead>
+            <tr>
+              <th className="name-column">First and Last Name</th>
+              <th className="pos-column">LH</th>
+              <th>ERA</th>
+              <th>IP</th>
+              <th>H</th>
+              <th>BB</th>
+              <th>SO</th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {bullpen.map((player, index) => {
+              const seasonStats = player.seasonStats?.pitching || {};
+              const pitchHand = player.person?.pitchHand?.code || 'L';
+              return (
+                <tr key={`bullpen-${player.person?.id || index}`}>
+                  <td className="name-cell">{formatPlayerName(player)}</td>
+                  <td className="pos-cell">{pitchHand}H</td>
+                  <td>{seasonStats.era || '0.00'}</td>
+                  <td>{seasonStats.inningsPitched || '0.0'}</td>
+                  <td>{seasonStats.hits || 0}</td>
+                  <td>{seasonStats.baseOnBalls || 0}</td>
+                  <td>{seasonStats.strikeOuts || 0}</td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+    );
+  };
+
+  const renderGameInfo = (gameData) => {
+    if (!gameData) return null;
+
+    const gameInfo = gameData.gameInfo || {};
+    const venue = gameData.gameData?.venue?.name || 'Unknown Venue';
+    const weather = gameInfo.weather || {};
+    const wind = gameInfo.wind || {};
+    const gameDate = gameData.gameData?.datetime?.originalDate || '';
+    const attendance = gameInfo.attendance || 0;
     
-    const pitching = stats.pitching;
-    return {
-      era: pitching.era || '0.00',
-      ip: pitching.inningsPitched || '0.0',
-      h: pitching.hits || 0,
-      bb: pitching.baseOnBalls || 0,
-      so: pitching.strikeOuts || 0
-    };
-  };
-
-  const renderBattingTable = (team, teamData) => {
-    if (!teamData || !teamData.batters) return null;
-
-    const batters = teamData.batters.map(batterId => {
-      const player = teamData.players[`ID${batterId}`];
-      return {
-        ...player,
-        stats: formatBattingStats(player.stats)
-      };
-    });
-
-    // Calculate team totals
-    const teamTotals = batters.reduce((totals, player) => {
-      const stats = player.stats;
-      return {
-        ab: totals.ab + stats.ab,
-        r: totals.r + stats.r,
-        h: totals.h + stats.h,
-        rbi: totals.rbi + stats.rbi,
-        bb: totals.bb + stats.bb,
-        so: totals.so + stats.so,
-        k: totals.k + stats.k,
-        lob: totals.lob + stats.lob
-      };
-    }, { ab: 0, r: 0, h: 0, rbi: 0, bb: 0, so: 0, k: 0, lob: 0 });
-
     return (
-      <div style={{ 
-        overflowX: 'auto',
-        minWidth: '100%',
-        borderRadius: '4px',
-        border: '1px solid rgba(255, 255, 255, 0.1)'
-      }}>
-        <div style={{ minWidth: '720px' }}>
-          {/* Header */}
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: '1fr 50px 40px 35px 35px 40px 40px 35px 35px 50px 50px',
-            gap: '4px',
-            backgroundColor: '#1a1a1a',
-            padding: '8px 12px',
-            fontSize: '10px',
-            fontWeight: '600',
-            color: '#ccc',
-            textAlign: 'center',
-            borderBottom: '1px solid rgba(255, 255, 255, 0.1)'
-          }}>
-            <div style={{ textAlign: 'left', minWidth: '140px' }}>BATTING</div>
-            <div>POS</div>
-            <div>AB</div>
-            <div>R</div>
-            <div>H</div>
-            <div>RBI</div>
-            <div>BB</div>
-            <div>SO</div>
-            <div>K</div>
-            <div>LOB</div>
-            <div>AVG</div>
-            <div>OPS</div>
+      <div className="game-info">
+        {gameInfo.pitchesStrikes && (
+          <div className="game-info-row">
+            <span>Pitches-strikes: {gameInfo.pitchesStrikes}</span>
           </div>
-
-          {/* Batting lineup */}
-          {batters.map((player, index) => (
-            <div
-              key={player.person.id}
-              style={{
-                display: 'grid',
-                gridTemplateColumns: '1fr 50px 40px 35px 35px 40px 40px 35px 35px 50px 50px',
-                gap: '4px',
-                padding: '6px 12px',
-                backgroundColor: index % 2 === 0 ? '#2a2a2a' : '#242424',
-                fontSize: '11px',
-                color: '#fff',
-                alignItems: 'center',
-                textAlign: 'center',
-                borderBottom: '1px solid rgba(255, 255, 255, 0.05)'
-              }}
-            >
-              <div style={{ 
-                fontWeight: '400',
-                textAlign: 'left',
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-                whiteSpace: 'nowrap',
-                minWidth: '140px'
-              }}>
-                {formatPlayerName(player)}
-              </div>
-              <div style={{ fontSize: '9px', color: '#ccc' }}>
-                {formatPosition(player.position)}
-              </div>
-              <div>{player.stats.ab}</div>
-              <div>{player.stats.r}</div>
-              <div>{player.stats.h}</div>
-              <div>{player.stats.rbi}</div>
-              <div>{player.stats.bb}</div>
-              <div>{player.stats.so}</div>
-              <div>{player.stats.k}</div>
-              <div>{player.stats.lob}</div>
-              <div style={{ fontSize: '9px' }}>{player.stats.avg}</div>
-              <div style={{ fontSize: '9px' }}>{player.stats.ops}</div>
-            </div>
-          ))}
-
-          {/* Team Totals */}
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: '1fr 50px 40px 35px 35px 40px 40px 35px 35px 50px 50px',
-            gap: '4px',
-            padding: '8px 12px',
-            backgroundColor: '#1a2a3a',
-            fontSize: '11px',
-            fontWeight: '600',
-            color: '#fff',
-            textAlign: 'center',
-            borderTop: '1px solid rgba(255, 255, 255, 0.2)'
-          }}>
-            <div style={{ textAlign: 'left', minWidth: '140px' }}>TOTALS</div>
-            <div>-</div>
-            <div>{teamTotals.ab}</div>
-            <div>{teamTotals.r}</div>
-            <div>{teamTotals.h}</div>
-            <div>{teamTotals.rbi}</div>
-            <div>{teamTotals.bb}</div>
-            <div>{teamTotals.so}</div>
-            <div>{teamTotals.k}</div>
-            <div>{teamTotals.lob}</div>
-            <div>-</div>
-            <div>-</div>
+        )}
+        {gameInfo.groundoutsFlyouts && (
+          <div className="game-info-row">
+            <span>Groundouts-flyouts: {gameInfo.groundoutsFlyouts}</span>
           </div>
+        )}
+        {gameInfo.umpires && (
+          <div className="game-info-row">
+            <span>Umpires: {gameInfo.umpires}</span>
+          </div>
+        )}
+        {weather.condition && weather.temp && (
+          <div className="game-info-row">
+            <span>Weather: {weather.temp}°F, {weather.condition}.</span>
+          </div>
+        )}
+        {wind.speed && wind.direction && (
+          <div className="game-info-row">
+            <span>Wind: {wind.speed} mph, {wind.direction}.</span>
+          </div>
+        )}
+        {gameInfo.firstPitch && (
+          <div className="game-info-row">
+            <span>First pitch: {gameInfo.firstPitch}.</span>
+          </div>
+        )}
+        {gameInfo.timeOfGame && (
+          <div className="game-info-row">
+            <span>T: {gameInfo.timeOfGame}.</span>
+          </div>
+        )}
+        {attendance > 0 && (
+          <div className="game-info-row">
+            <span>Att: {attendance.toLocaleString()}.</span>
+          </div>
+        )}
+        <div className="game-info-row">
+          <span>Venue: {venue}.</span>
         </div>
-      </div>
-    );
-  };
-
-  const renderPitchingTable = (team, teamData) => {
-    if (!teamData || !teamData.pitchers) return null;
-
-    const pitchers = teamData.pitchers.map(pitcherId => {
-      const player = teamData.players[`ID${pitcherId}`];
-      return {
-        ...player,
-        stats: formatPitchingStats(player.stats)
-      };
-    });
-
-    // Calculate team totals
-    const teamTotals = pitchers.reduce((totals, player) => {
-      const stats = player.stats;
-      return {
-        h: totals.h + stats.h,
-        r: totals.r + stats.r,
-        er: totals.er + stats.er,
-        bb: totals.bb + stats.bb,
-        so: totals.so + stats.so,
-        hr: totals.hr + stats.hr
-      };
-    }, { h: 0, r: 0, er: 0, bb: 0, so: 0, hr: 0 });
-
-    return (
-      <div style={{ 
-        marginTop: '20px',
-        overflowX: 'auto',
-        minWidth: '100%',
-        borderRadius: '4px',
-        border: '1px solid rgba(255, 255, 255, 0.1)'
-      }}>
-        <div style={{ minWidth: '760px' }}>
-          {/* Header */}
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: '1fr 50px 60px 35px 35px 35px 40px 35px 35px 50px 50px',
-            gap: '4px',
-            backgroundColor: '#1a1a1a',
-            padding: '8px 12px',
-            fontSize: '10px',
-            fontWeight: '600',
-            color: '#ccc',
-            textAlign: 'center',
-            borderBottom: '1px solid rgba(255, 255, 255, 0.1)'
-          }}>
-            <div style={{ textAlign: 'left', minWidth: '140px' }}>PITCHERS</div>
-            <div>POS</div>
-            <div>IP</div>
-            <div>H</div>
-            <div>R</div>
-            <div>ER</div>
-            <div>BB</div>
-            <div>SO</div>
-            <div>HR</div>
-            <div>WHIP</div>
-            <div>ERA</div>
+        {gameDate && (
+          <div className="game-info-row">
+            <span>{new Date(gameDate).toLocaleDateString('en-US', { 
+              year: 'numeric', 
+              month: 'long', 
+              day: 'numeric' 
+            })}</span>
           </div>
-
-          {pitchers.map((player, index) => (
-            <div
-              key={player.person.id}
-              style={{
-                display: 'grid',
-                gridTemplateColumns: '1fr 50px 60px 35px 35px 35px 40px 35px 35px 50px 50px',
-                gap: '4px',
-                padding: '6px 12px',
-                backgroundColor: index % 2 === 0 ? '#2a2a2a' : '#242424',
-                fontSize: '11px',
-                color: '#fff',
-                alignItems: 'center',
-                textAlign: 'center',
-                borderBottom: '1px solid rgba(255, 255, 255, 0.05)'
-              }}
-            >
-              <div style={{ 
-                fontWeight: '400',
-                textAlign: 'left',
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-                whiteSpace: 'nowrap',
-                minWidth: '140px'
-              }}>
-                {formatPlayerName(player)}
-              </div>
-              <div style={{ fontSize: '9px', color: '#ccc' }}>
-                {formatPosition(player.position)}
-              </div>
-              <div>{player.stats.ip}</div>
-              <div>{player.stats.h}</div>
-              <div>{player.stats.r}</div>
-              <div>{player.stats.er}</div>
-              <div>{player.stats.bb}</div>
-              <div>{player.stats.so}</div>
-              <div>{player.stats.hr}</div>
-              <div style={{ fontSize: '9px' }}>{player.stats.whip}</div>
-              <div style={{ fontSize: '9px' }}>{player.stats.era}</div>
-            </div>
-          ))}
-
-          {/* Team Totals */}
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: '1fr 50px 60px 35px 35px 35px 40px 35px 35px 50px 50px',
-            gap: '4px',
-            padding: '8px 12px',
-            backgroundColor: '#1a2a3a',
-            fontSize: '11px',
-            fontWeight: '600',
-            color: '#fff',
-            textAlign: 'center',
-            borderTop: '1px solid rgba(255, 255, 255, 0.2)'
-          }}>
-            <div style={{ textAlign: 'left', minWidth: '140px' }}>TOTALS</div>
-            <div>-</div>
-            <div>-</div>
-            <div>{teamTotals.h}</div>
-            <div>{teamTotals.r}</div>
-            <div>{teamTotals.er}</div>
-            <div>{teamTotals.bb}</div>
-            <div>{teamTotals.so}</div>
-            <div>{teamTotals.hr}</div>
-            <div>-</div>
-            <div>-</div>
-          </div>
-        </div>
-      </div>
-    );
-  };
-
-  const renderBenchTable = (team, teamData) => {
-    if (!teamData || !teamData.bench || teamData.bench.length === 0) return null;
-
-    const benchPlayers = teamData.bench.map(benchId => {
-      const player = teamData.players[`ID${benchId}`];
-      return {
-        ...player,
-        stats: formatBenchStats(player.seasonStats)
-      };
-    });
-
-    return (
-      <div style={{ 
-        marginTop: '20px',
-        overflowX: 'auto',
-        minWidth: '100%',
-        borderRadius: '4px',
-        border: '1px solid rgba(255, 255, 255, 0.1)'
-      }}>
-        <div style={{ minWidth: '620px' }}>
-          {/* Header */}
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: '1fr 60px 60px 40px 40px 40px 50px 50px 40px',
-            gap: '4px',
-            backgroundColor: '#1a1a1a',
-            padding: '8px 12px',
-            borderRadius: '4px 4px 0 0',
-            fontSize: '10px',
-            fontWeight: '600',
-            color: '#ccc',
-            textAlign: 'center',
-            borderBottom: '1px solid rgba(255, 255, 255, 0.1)'
-          }}>
-            <div style={{ textAlign: 'left', minWidth: '140px' }}>BENCH</div>
-            <div>POS</div>
-            <div>AVG</div>
-            <div>GP</div>
-            <div>R</div>
-            <div>H</div>
-            <div>HR</div>
-            <div>RBI</div>
-            <div>SB</div>
-          </div>
-
-          {benchPlayers.map((player, index) => (
-            <div
-              key={player.person.id}
-              style={{
-                display: 'grid',
-                gridTemplateColumns: '1fr 60px 60px 40px 40px 40px 50px 50px 40px',
-                gap: '4px',
-                padding: '6px 12px',
-                backgroundColor: index % 2 === 0 ? '#2a2a2a' : '#242424',
-                fontSize: '11px',
-                color: '#fff',
-                alignItems: 'center',
-                textAlign: 'center',
-                borderBottom: '1px solid rgba(255, 255, 255, 0.05)'
-              }}
-            >
-              <div style={{ 
-                fontWeight: '400',
-                textAlign: 'left',
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-                whiteSpace: 'nowrap',
-                minWidth: '140px'
-              }}>
-                {formatPlayerName(player)}
-              </div>
-              <div style={{ fontSize: '9px', color: '#ccc' }}>
-                {formatPosition(player.position)}
-              </div>
-              <div style={{ fontSize: '10px' }}>{player.stats.avg}</div>
-              <div>{player.stats.gp}</div>
-              <div>{player.stats.r}</div>
-              <div>{player.stats.h}</div>
-              <div>{player.stats.hr}</div>
-              <div>{player.stats.rbi}</div>
-              <div>{player.stats.sb}</div>
-            </div>
-          ))}
-        </div>
-      </div>
-    );
-  };
-
-  const renderBullpenTable = (team, teamData) => {
-    if (!teamData || !teamData.bullpen || teamData.bullpen.length === 0) return null;
-
-    const bullpenPlayers = teamData.bullpen.map(bullpenId => {
-      const player = teamData.players[`ID${bullpenId}`];
-      return {
-        ...player,
-        stats: formatBullpenStats(player.seasonStats)
-      };
-    });
-
-    return (
-      <div style={{ 
-        marginTop: '20px',
-        overflowX: 'auto',
-        minWidth: '100%',
-        borderRadius: '4px',
-        border: '1px solid rgba(255, 255, 255, 0.1)'
-      }}>
-        <div style={{ minWidth: '540px' }}>
-          {/* Header */}
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: '1fr 60px 60px 40px 40px 40px 40px',
-            gap: '4px',
-            backgroundColor: '#1a1a1a',
-            padding: '8px 12px',
-            borderRadius: '4px 4px 0 0',
-            fontSize: '10px',
-            fontWeight: '600',
-            color: '#ccc',
-            textAlign: 'center',
-            borderBottom: '1px solid rgba(255, 255, 255, 0.1)'
-          }}>
-            <div style={{ textAlign: 'left', minWidth: '140px' }}>BULLPEN</div>
-            <div>POS</div>
-            <div>ERA</div>
-            <div>IP</div>
-            <div>H</div>
-            <div>BB</div>
-            <div>SO</div>
-          </div>
-
-          {bullpenPlayers.map((player, index) => (
-            <div
-              key={player.person.id}
-              style={{
-                display: 'grid',
-                gridTemplateColumns: '1fr 60px 60px 40px 40px 40px 40px',
-                gap: '4px',
-                padding: '6px 12px',
-                backgroundColor: index % 2 === 0 ? '#2a2a2a' : '#242424',
-                fontSize: '11px',
-                color: '#fff',
-                alignItems: 'center',
-                textAlign: 'center',
-                borderBottom: '1px solid rgba(255, 255, 255, 0.05)'
-              }}
-            >
-              <div style={{ 
-                fontWeight: '400',
-                textAlign: 'left',
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-                whiteSpace: 'nowrap',
-                minWidth: '140px'
-              }}>
-                {formatPlayerName(player)}
-              </div>
-              <div style={{ fontSize: '9px', color: '#ccc' }}>
-                {formatPosition(player.position)}
-              </div>
-              <div style={{ fontSize: '10px' }}>{player.stats.era}</div>
-              <div>{player.stats.ip}</div>
-              <div>{player.stats.h}</div>
-              <div>{player.stats.bb}</div>
-              <div>{player.stats.so}</div>
-            </div>
-          ))}
-        </div>
+        )}
       </div>
     );
   };
@@ -581,242 +426,171 @@ export function BoxScore({ gamePk, onClose, isVisible }) {
   if (!isVisible) return null;
 
   return (
-    <div style={{
-      position: 'fixed',
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
-      backgroundColor: 'rgba(0, 0, 0, 0.9)',
-      zIndex: 2000,
-      display: 'flex',
-      alignItems: 'flex-start',
-      justifyContent: 'center',
-      padding: isMobile ? '5px' : '10px',
-      overflowY: 'auto'
-    }}>
-      <div style={{
-        backgroundColor: '#1a1a1a',
-        borderRadius: isMobile ? '8px' : '12px',
-        width: '100%',
-        maxWidth: '1400px',
-        minHeight: 'fit-content',
-        maxHeight: 'calc(100vh - 20px)',
-        overflow: 'hidden',
-        position: 'relative',
-        border: '1px solid rgba(255, 255, 255, 0.1)',
-        marginTop: isMobile ? '5px' : '10px'
-      }}>
+    <div className="boxscore-overlay">
+      <div className="boxscore-modal">
         {/* Header */}
-        <div style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          padding: isMobile ? '12px 16px' : '16px 20px',
-          borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
-          position: 'sticky',
-          top: 0,
-          backgroundColor: '#1a1a1a',
-          zIndex: 10
-        }}>
-          <h2 style={{ 
-            color: '#fff', 
-            margin: 0, 
-            fontSize: isMobile ? '16px' : '18px', 
-            fontWeight: '600' 
-          }}>
-            Box Score
-          </h2>
-          <button
+        <div className="boxscore-header">
+          <div className="boxscore-title">
+            <img 
+              src={iconScoreboard}
+              alt="Box Score" 
+              className="title-icon"
+            />
+            <h2>Box Score</h2>
+          </div>
+          <button 
+            className="close-button" 
             onClick={onClose}
-            style={{
-              background: 'none',
-              border: 'none',
-              color: '#fff',
-              fontSize: isMobile ? '20px' : '24px',
-              cursor: 'pointer',
-              padding: '5px 10px',
-              borderRadius: '4px',
-              transition: 'background-color 0.2s ease'
-            }}
-            onMouseEnter={(e) => e.target.style.backgroundColor = 'rgba(255, 255, 255, 0.1)'}
-            onMouseLeave={(e) => e.target.style.backgroundColor = 'transparent'}
+            aria-label="Close Box Score"
           >
-            ×
+            <img src={iconClose} alt="Close" />
           </button>
         </div>
 
-        {loading && (
-          <div style={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            height: '200px',
-            color: '#fff',
-            fontSize: '16px'
-          }}>
-            Loading box score...
-          </div>
-        )}
-
-        {error && (
-          <div style={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            height: '200px',
-            color: '#ff6b6b',
-            fontSize: '16px'
-          }}>
-            Error: {error}
-          </div>
-        )}
-
-        {boxScoreData && (
-          <div style={{ 
-            padding: isMobile ? '12px' : '20px',
-            overflowY: 'auto',
-            maxHeight: 'calc(100vh - 120px)'
-          }}>
-            {/* Team Selection Tabs */}
-            <div style={{
-              display: 'flex',
-              marginBottom: isMobile ? '16px' : '20px',
-              backgroundColor: '#2a2a2a',
-              borderRadius: '8px',
-              padding: '4px',
-              flexWrap: 'wrap',
-              gap: '4px'
-            }}>
-              <button
-                onClick={() => setActiveTab('away')}
-                style={{
-                  flex: '1 1 250px',
-                  minWidth: isMobile ? '120px' : '250px',
-                  padding: isMobile ? '10px 12px' : '12px 16px',
-                  border: 'none',
-                  borderRadius: '6px',
-                  backgroundColor: activeTab === 'away' ? getTeamSpotColor(boxScoreData.teams.away.team.id) : 'transparent',
-                  color: '#fff',
-                  fontWeight: '600',
-                  cursor: 'pointer',
-                  transition: 'all 0.2s ease',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: isMobile ? '6px' : '10px',
-                  fontSize: isMobile ? '12px' : '14px'
-                }}
-              >
-                <img 
-                  src={getTeamSpotLogo(boxScoreData.teams.away.team.id)} 
-                  alt="Away Team"
-                  width={isMobile ? '20' : '24'}
-                  height={isMobile ? '20' : '24'}
-                />
-                <span>{boxScoreData.teams.away.team.name} (Away)</span>
-              </button>
-              <button
-                onClick={() => setActiveTab('home')}
-                style={{
-                  flex: '1 1 250px',
-                  minWidth: isMobile ? '120px' : '250px',
-                  padding: isMobile ? '10px 12px' : '12px 16px',
-                  border: 'none',
-                  borderRadius: '6px',
-                  backgroundColor: activeTab === 'home' ? getTeamSpotColor(boxScoreData.teams.home.team.id) : 'transparent',
-                  color: '#fff',
-                  fontWeight: '600',
-                  cursor: 'pointer',
-                  transition: 'all 0.2s ease',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: isMobile ? '6px' : '10px',
-                  fontSize: isMobile ? '12px' : '14px'
-                }}
-              >
-                <img 
-                  src={getTeamSpotLogo(boxScoreData.teams.home.team.id)} 
-                  alt="Home Team"
-                  width={isMobile ? '20' : '24'}
-                  height={isMobile ? '20' : '24'}
-                />
-                <span>{boxScoreData.teams.home.team.name} (Home)</span>
-              </button>
+        {/* Content */}
+        <div className="boxscore-content">
+          {loading && (
+            <div className="loading-state">
+              <img 
+                src={iconTimer}
+                alt="Loading" 
+                className="loading-icon"
+              />
+              Loading box score...
             </div>
+          )}
 
-            {/* Box Score Content */}
-            <div style={{
-              backgroundColor: '#242424',
-              borderRadius: '8px',
-              padding: isMobile ? '12px' : '20px',
-              color: '#fff'
-            }}>
-              {activeTab === 'away' && (
-                <div>
-                  {renderBattingTable(boxScoreData.teams.away.team, boxScoreData.teams.away)}
-                  {renderPitchingTable(boxScoreData.teams.away.team, boxScoreData.teams.away)}
-                  {renderBenchTable(boxScoreData.teams.away.team, boxScoreData.teams.away)}
-                  {renderBullpenTable(boxScoreData.teams.away.team, boxScoreData.teams.away)}
+          {error && (
+            <div className="error-state">
+              <img 
+                src={iconAlert}
+                alt="Error" 
+                className="error-icon"
+              />
+              Error: {error}
+            </div>
+          )}
+
+          {boxScoreData && !loading && !error && (
+            <div className="boxscore-data">
+              {/* Team Selection Buttons */}
+              <div className="team-tabs">
+                <button
+                  className={`team-tab ${activeTab === 'away' ? 'active' : ''}`}
+                  onClick={() => setActiveTab('away')}
+                  style={{ 
+                    '--team-color': getTeamSpotColor(boxScoreData.teams.away.team.id)
+                  }}
+                >
+                  <img 
+                    src={getTeamSpotLogo(boxScoreData.teams.away.team.id)}
+                    alt={`${boxScoreData.teams.away.team.name} Logo`}
+                    className="team-logo"
+                  />
+                  <span className="team-name">{boxScoreData.teams.away.team.name}</span>
+                </button>
+                <button
+                  className={`team-tab ${activeTab === 'home' ? 'active' : ''}`}
+                  onClick={() => setActiveTab('home')}
+                  style={{ 
+                    '--team-color': getTeamSpotColor(boxScoreData.teams.home.team.id)
+                  }}
+                >
+                  <img 
+                    src={getTeamSpotLogo(boxScoreData.teams.home.team.id)}
+                    alt={`${boxScoreData.teams.home.team.name} Logo`}
+                    className="team-logo"
+                  />
+                  <span className="team-name">{boxScoreData.teams.home.team.name}</span>
+                </button>
+              </div>
+
+              {/* Team Stats */}
+              <div className="team-stats">
+                {activeTab === 'away' && (
+                  <div className="team-section">
+                    <div className="stats-section">
+                      <div className="section-header">
+                        <span className="section-label">BATTING</span>
+                      </div>
+                      {renderBattingTable(boxScoreData.teams.away.batters, boxScoreData.teams.away)}
+                    </div>
+                    <div className="stats-section">
+                      <div className="section-header">
+                        <span className="section-label">PITCHERS</span>
+                      </div>
+                      {renderPitchingTable(boxScoreData.teams.away.pitchers, boxScoreData.teams.away)}
+                    </div>
+                    {boxScoreData.teams.away.bench && boxScoreData.teams.away.bench.length > 0 && (
+                      <div className="stats-section">
+                        <div className="section-header">
+                          <span className="section-label">BENCH</span>
+                        </div>
+                        {renderBenchTable(boxScoreData.teams.away.bench)}
+                      </div>
+                    )}
+                    {boxScoreData.teams.away.bullpen && boxScoreData.teams.away.bullpen.length > 0 && (
+                      <div className="stats-section">
+                        <div className="section-header">
+                          <span className="section-label">BULLPEN</span>
+                        </div>
+                        {renderBullpenTable(boxScoreData.teams.away.bullpen)}
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {activeTab === 'home' && (
+                  <div className="team-section">
+                    <div className="stats-section">
+                      <div className="section-header">
+                        <span className="section-label">BATTING</span>
+                      </div>
+                      {renderBattingTable(boxScoreData.teams.home.batters, boxScoreData.teams.home)}
+                    </div>
+                    <div className="stats-section">
+                      <div className="section-header">
+                        <span className="section-label">PITCHERS</span>
+                      </div>
+                      {renderPitchingTable(boxScoreData.teams.home.pitchers, boxScoreData.teams.home)}
+                    </div>
+                    {boxScoreData.teams.home.bench && boxScoreData.teams.home.bench.length > 0 && (
+                      <div className="stats-section">
+                        <div className="section-header">
+                          <span className="section-label">BENCH</span>
+                        </div>
+                        {renderBenchTable(boxScoreData.teams.home.bench)}
+                      </div>
+                    )}
+                    {boxScoreData.teams.home.bullpen && boxScoreData.teams.home.bullpen.length > 0 && (
+                      <div className="stats-section">
+                        <div className="section-header">
+                          <span className="section-label">BULLPEN</span>
+                        </div>
+                        {renderBullpenTable(boxScoreData.teams.home.bullpen)}
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+
+              {/* Game Info */}
+              {renderGameInfo(boxScoreData)}
+
+              {/* Mobile scroll hint */}
+              {isMobile && (
+                <div className="mobile-scroll-hint">
+                  <img 
+                    src={iconInfo}
+                    alt="Info" 
+                    className="hint-icon"
+                  />
+                  Tip: Scroll horizontally within tables to view all stats
                 </div>
               )}
-
-              {activeTab === 'home' && (
-                <div>
-                  {renderBattingTable(boxScoreData.teams.home.team, boxScoreData.teams.home)}
-                  {renderPitchingTable(boxScoreData.teams.home.team, boxScoreData.teams.home)}
-                  {renderBenchTable(boxScoreData.teams.home.team, boxScoreData.teams.home)}
-                  {renderBullpenTable(boxScoreData.teams.home.team, boxScoreData.teams.home)}
-                </div>
-              )}
             </div>
-
-            {/* Game Info */}
-            {boxScoreData.gameInfo && (
-              <div style={{
-                marginTop: '20px',
-                padding: '16px',
-                backgroundColor: '#2a2a2a',
-                borderRadius: '8px',
-                fontSize: '12px',
-                color: '#ccc',
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-                gap: '12px'
-              }}>
-                <div>
-                  <strong style={{ color: '#fff' }}>Weather:</strong> {boxScoreData.gameInfo.weather || 'N/A'}
-                </div>
-                <div>
-                  <strong style={{ color: '#fff' }}>Wind:</strong> {boxScoreData.gameInfo.wind || 'N/A'}
-                </div>
-                <div>
-                  <strong style={{ color: '#fff' }}>First Pitch:</strong> {boxScoreData.gameInfo.firstPitch || 'N/A'}
-                </div>
-                <div>
-                  <strong style={{ color: '#fff' }}>Duration:</strong> {boxScoreData.gameInfo.gameDurationMinutes ? `${boxScoreData.gameInfo.gameDurationMinutes} minutes` : 'N/A'}
-                </div>
-              </div>
-            )}
-
-            {/* Mobile scroll hint */}
-            {isMobile && (
-              <div style={{
-                marginTop: '16px',
-                padding: '8px 12px',
-                backgroundColor: 'rgba(255, 255, 255, 0.05)',
-                borderRadius: '4px',
-                fontSize: '11px',
-                color: '#999',
-                textAlign: 'center',
-                display: 'block'
-              }}>
-                💡 Tip: Scroll horizontally within tables to view all stats
-              </div>
-            )}
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </div>
   );

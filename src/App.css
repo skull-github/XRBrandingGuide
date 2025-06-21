@@ -1,10 +1,15 @@
+/*
+ * App-wide Styles
+ * NOTE: For all color, font, and spacing variables, use those defined in src/index.css (:root).
+ */
+
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: var(--font-family, system-ui, Avenir, Helvetica, Arial, sans-serif);
   line-height: 1.5;
   font-weight: 400;
   color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #1a1a1a;
+  color: var(--mlb-white, rgba(255, 255, 255, 0.87));
+  background-color: var(--mlb-dark-cool-grey, #1a1a1a);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;

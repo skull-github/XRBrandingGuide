@@ -539,3 +539,44 @@ The MLB XR Branding Guide uses a consistent typography system optimized for both
 - **Desktop**: Full web sizes (50% of XR)
 - **Tablet**: 75% of web sizes
 - **Mobile**: 60% of web sizes
+
+## MLB XR System Colors
+
+The following color palette is used throughout the MLB XR Branding Guide. Use these CSS custom properties for consistent theming:
+
+```css
+:root {
+  /* Mono */
+  --mlb-white: #ffffff;
+  --mlb-black: #000000;
+  --mlb-dark-grey: #3c3b3b;
+  --mlb-med-grey: #696969;
+  --mlb-light-grey: #a9a6a6;
+  --mlb-dark-cool-grey: #142030;
+  --mlb-med-cool-grey: #32363c;
+  --mlb-light-cool-grey: #8d939d;
+
+  /* General */
+  --mlb-red-strike: #bc0022;
+  --mlb-bright-orange: #ffa500;
+  --mlb-yellow: #ffe500;
+  --mlb-bright-green-foul-ball: #00a615;
+  --mlb-bright-blue-hit: #4297ff;
+  --mlb-bright-violet-infield: #8c59e9;
+  --mlb-blue: #242790;
+  --mlb-navy: #041e42;
+
+  /* Vault */
+  --mlb-vintage-white: #fffef6;
+  --mlb-receipt: #a77497;
+  --mlb-blueprint: #c5e1f6;
+  --mlb-old-carbon: #f7b900;
+  --mlb-rust: #43423f;
+  --mlb-dirt: #9b8b71;
+  --mlb-sand: #e7dfcb;
+  --mlb-grass: #658369;
+  --mlb-golden: #f7b900;
+}
+```
+
+Each color is named for clarity and mapped to its HEX value as shown in the official MLB color reference.
